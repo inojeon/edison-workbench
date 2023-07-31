@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="RayCad::PointList" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEgIACEAgAQAAAAgCAABAQgAEAAIAEAIAACAAAAgBA=</HashCode>
+      <FileName>PointList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Arc" Collapsed="true">
+    <Position X="11.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KAEgAACAEAAABAAAAACAAAAAIEAAAIAAYAEAoAkACDA=</HashCode>
+      <FileName>Arc.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Arc2" Collapsed="true">
+    <Position X="16.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>aAEgAACCEDgAhAAAAAAABCRgIEAACCEAbAECoAkAmBA=</HashCode>
+      <FileName>Arc2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Atom" Collapsed="true">
+    <Position X="27.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAAASAAAAABAAAAAAAAAQABEAAAIAACAAAQAAAABA=</HashCode>
+      <FileName>Atom.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Bond" Collapsed="true">
+    <Position X="29.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAAACAAAAAAiAAAAAAAQAEEAAAAAAAAAAAIBAAQBA=</HashCode>
+      <FileName>Bond.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::BoundingBox2" Collapsed="true">
+    <Position X="45.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAgQAAgAAAFCAAAAAABAAAACAAAgAAAAAAAAIAABA=</HashCode>
+      <FileName>BoundingBox2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::BSpline" Collapsed="true">
+    <Position X="47" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAgAAACAQBwRAAAAAAAAAgAQCAAgQAAAEAAAAAAA=</HashCode>
+      <FileName>BSpline.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Circle" Collapsed="true">
+    <Position X="7.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KCEgAACAAAAAhAAAAAAAACRgIEgAAAEAZAECAAkAgBA=</HashCode>
+      <FileName>Circle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Geom" Collapsed="true">
+    <Position X="20.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MAEoAEDAAAAAgAQCAABAhAxgAEYAIAEEKAACAAAAghA=</HashCode>
+      <FileName>Geom.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Group" Collapsed="true">
+    <Position X="18.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAMgIECAAAAAAAJCAEAAEgwgAEIAIQGAYAACAABAABA=</HashCode>
+      <FileName>Group.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::CommandList" Collapsed="true">
+    <Position X="48.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAIQAAAKAAAAAAKAAAAAQAAAEAAACABAAAA=</HashCode>
+      <FileName>CommandList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Convert" Collapsed="true">
+    <Position X="43.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Convert.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Cylinder" Collapsed="true">
+    <Position X="32" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KAEAAACAACAABAAAAAAAAAAAGkAAAAAAIAQAAAgAABA=</HashCode>
+      <FileName>Cylinder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Dim" Collapsed="true">
+    <Position X="38.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>aCEmYDSgAgSKREggoEAjAAfgDEQAAAgANAIBAAiCEpg=</HashCode>
+      <FileName>Dim.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::DnaArm" Collapsed="true">
+    <Position X="9.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAAACAAgAAAAAwAAAAAAAAACAAAAAAAAEAAAAAQBA=</HashCode>
+      <FileName>DnaArm.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::ExtraData" Collapsed="true">
+    <Position X="14" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAAACABEBABABAAAAABAAAAAAAAAAAIAAAAQAAABA=</HashCode>
+      <FileName>ExtraData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Material" Collapsed="true">
+    <Position X="23" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEEAJACAAAAIAAAAAIAACAAACAAAAACAICAAAACABBA=</HashCode>
+      <FileName>Material.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::KRFTextParser" Collapsed="true">
+    <Position X="48.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AlACiAAEQSAASBykHAIoMIxCABAIgMIRgBwEACAAilQ=</HashCode>
+      <FileName>KRFTextParser.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::EndGroup" Collapsed="true">
+    <Position X="34.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Group.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Point" Collapsed="true">
+    <Position X="41" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEgAACIAAQAhAAAAAAAAAQgAEAAIAEAYAEAAAAAIBA=</HashCode>
+      <FileName>Point.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::KRFBinaryParser" Collapsed="true">
+    <Position X="47" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAAACIBYAhJRgEOgIAIIIFBBQAIMAABQAAAAcAABA=</HashCode>
+      <FileName>KRFBinaryParser.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::MemoryBlock" Collapsed="true">
+    <Position X="45.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABEIAQgHCgAACKAAgBAAACkBEBAAEIAEAgGEAuAAAA=</HashCode>
+      <FileName>MemoryBlock.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::LineSeg" Collapsed="true">
+    <Position X="25.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>OAEgAACAAAAAhABAAAAABARgAEBAIAEAYAACAAAAgBA=</HashCode>
+      <FileName>LineSeg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Matrix4" Collapsed="true">
+    <Position X="43.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BGAAAABAAAAAAAIAAAIBAAAAAAAAAEAAAAUAAgAAApA=</HashCode>
+      <FileName>Matrix4.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Mesh" Collapsed="true">
+    <Position X="36.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAGAEADAWAEAAAABACAgACAAAEBhQAAAJQQCACCBQBA=</HashCode>
+      <FileName>Mesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::MeshBuilder" Collapsed="true">
+    <Position X="47" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAEAAAGAAAAAIAAAAgAQAAAABACAAAAAAAAEAAAAA=</HashCode>
+      <FileName>MeshBuilder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::PLine" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEgAAAAAAAAgAAAAAIAAAxgAEAAIAAAIAACAAIAABA=</HashCode>
+      <FileName>PLine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Polygon" Collapsed="true">
+    <Position X="2.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEgAACAAAAAAAAAAAAAAAggAEAAAAAAIAACAAAAADA=</HashCode>
+      <FileName>Polygon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::ProteinTrajectory" Collapsed="true">
+    <Position X="20.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IA0AIBCBAgBABIAAgAAIgCgAAAIAAAQABAECAAIBABA=</HashCode>
+      <FileName>ProteinTrajectory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Sphere" Collapsed="true">
+    <Position X="27.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KAEAAACAAAAABAAAAAQAAAAAIEAAAAAAYAEAAAmAABA=</HashCode>
+      <FileName>Sphere.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Spline" Collapsed="true">
+    <Position X="5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAIAICAAAAhAAEAAAAAEVgAEAEIAAAJAACAABgABA=</HashCode>
+      <FileName>Spline.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Tag" Collapsed="true">
+    <Position X="43.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAABAAgBAAEAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Tag.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RayCad::Trim" Collapsed="true">
+    <Position X="45.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Trim.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="`anonymous-namespace'::tk::spline" Collapsed="true">
+    <Position X="48.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAIgAiCAAAAAAAUAAAEAACQARARAAAQAAAAAAAIAo=</HashCode>
+      <FileName>BSpline2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="`anonymous-namespace'::tk::internal::band_matrix" Collapsed="true">
+    <Position X="43.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACABAAACAAAEAAEQAAQBAAAAACCAQAAQAAAAAAAAA=</HashCode>
+      <FileName>BSpline2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GeomDict" Collapsed="true">
+    <Position X="45.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAEAAAAAABAAAAAEIAIEAAAAABAAAAACgAAAAAAAAA=</HashCode>
+      <FileName>GeomDict.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="RayCad::asteroids_char_t" Collapsed="true">
+    <Position X="43.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Font.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="RayCad::GeomEntity" Collapsed="true">
+    <Position X="45.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAQABAAAACAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Intersect.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="RayCad::Vector3" Collapsed="true">
+    <Position X="47" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAIQABABAEAAAAABACAAAAEAAAACgAACAIAA=</HashCode>
+      <FileName>Vector3.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="cad_type" Collapsed="true">
+    <Position X="43.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Def.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Kisti Cad</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+<body style="overflow:hidden;margin:0px;">
+	<div id="vrmoleapp" style="float:left;overflow:hidden;width:100%;height:100%;"></div>
+
+	<script src="../CadEditor/zui/external/jquery/jquery.js"></script>
+	<script src="../Core/jsbuild/kVisLib.js"></script>
+	<script src="../Core/jsbuild/kVisLibBind.js"></script>
+	
+    <script type="module">
+
+        import * as THREE from '../build/three.module.js';
+        import { Renderer } from './Renderer.js';
+        import { GeomRenderer } from './GeomRenderer.js';
+        import { tProtein } from '../ProteinRenderer/tProtein.js';
+        import Stats from './jsm/libs/stats.module.js';
+
+        var renderer;
+        var mouse = new THREE.Vector2(), SELECTED;
+        var scoord = new THREE.Vector2();
+
+        var cdiv = document.getElementById('vrmoleapp');
+
+        var stats = new Stats();
+        stats.showPanel(0);
+        document.body.appendChild(stats.dom);
+
+        function onDocumentMouseMove(event) {
+
+            event.preventDefault();
+
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+
+            //console.log("mouse move :"+mouse.x+" "+mouse.y);
+
+            scoord.x = mouse.x / cdiv.clientWidth;
+            scoord.y = mouse.y / cdiv.clientHeight;
+
+            //console.log("mouse move scoord :" + scoord.x + " " + scoord.y);
+
+        }
+
+
+
+
+        function onDocumentMouseDown(event) {
+
+            event.preventDefault();
+
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+
+            //console.log("mouse down :" + mouse.x + " " + mouse.y);
+
+            scoord.x = mouse.x / cdiv.clientWidth;
+            scoord.y = mouse.y / cdiv.clientHeight;
+
+            //console.log("mouse down scoord :" + scoord.x + " " + scoord.y);
+
+        }
+
+
+
+        kVisLib.Init(function () {
+
+            renderer = new Renderer(cdiv, false, true);
+            renderer.create3DOrthographicCamera(-100, 100, 100, -100, 0, 1000);
+            renderer.createPerspecriveCamera(100, 100, 100, 50, 1.5, 0.1, 1000);
+            //renderer.createOrbitControl();
+            renderer.createTrackballControl();
+            renderer.createCameraLight();
+
+            //cdiv.addEventListener('pointerdown', onDocumentMouseDown);
+            //cdiv.addEventListener('pointermove', onDocumentMouseMove);
+
+            window.addEventListener('resize', function () {
+                cdiv.style.width = window.innerWidth + "px";
+                cdiv.style.height = window.innerHeight + "px";
+                renderer.onWindowResize(window.innerWidth, window.innerHeight);
+            });
+
+            renderer.onWindowResize(window.innerWidth, window.innerHeight);
+
+            let geom_renderer = new GeomRenderer(kVisLib.api, renderer, '');
+        
+            // 검은 구체 : 원점
+            // 진파랑 '', 진빨강 : 실린더 시작, 끝
+            // 옅은 파랑 실린더, 구체 : 생성한 bond, atom
+            //geom_renderer.testGenSphereCylinder(false);
+            //geom_renderer.testGenSphereCylinder(true);
+
+            /*
+            static 함수니까
+            tProtein, tChain에 각각 만들면 된다
+            testMEAtomList.html에 예제가 있으니
+            atomlist, bondlist 가져오는 예제 보고 만들기
+            atomlist, bondlist를 받아 만드는 걸 geomRenderer에 추가하기
+
+            bond data는 좀 structure가 다르다
+            */
+
+            
+            var protein = new tProtein(kVisLib.api, geom_renderer);
+            protein.load('../_testdata/1w5e.json', '../_testdata/1w5e.krf',
+                function(){
+
+                    let vlist = [], vidx = 0, nlist = [], nidx = 0, ilist = [], iidx = 0, 
+                    vclist = [], color = new THREE.Color(0x000000), 
+                    lat_furfaces = 30, lon_furfaces = 30, num_furfaces = 30;
+
+                    let alist = [];
+                    let blist = [];
+                    
+                    protein.getMEAtomList(alist);
+                    protein.getMEBondList(blist);
+
+                    geom_renderer.generateMoleWithMultipleMesh(alist, blist);
+
+                });
+
+            
+            render();
+        });
+
+
+		function render() {
+			requestAnimationFrame(render);
+
+            stats.begin();
+            renderer.tick();
+            renderer.render();
+            stats.end();
+		}
+
+	</script>
+</body>
+</html>

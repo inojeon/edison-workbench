@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Kisti Cad</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+<body style="overflow:hidden;margin:0px;">
+	<div id="vrmoleapp" style="float:left;overflow:hidden;width:100%;height:100%;"></div>
+
+	<script src="../CadEditor/zui/external/jquery/jquery.js"></script>
+	<script src="../Core/jsbuild/kVisLib.js"></script>
+	<script src="../Core/jsbuild/kVisLibBind.js"></script>
+	<script type="module">
+
+        import * as THREE from '../build/three.module.js';
+        import { Renderer } from './Renderer.js';
+        import { GeomRenderer } from './GeomRenderer.js';
+        import { Colormap } from './Colormap.js';
+        import { ProteinTrajectory } from './ProteinTrajectory.js';
+        import { ptSplinePoint } from './ptSpline.js';
+        import { AtomDef } from './AtomDef.js';
+        import { CameraDef } from './CameraDef.js';
+
+        var renderer;
+        var mouse = new THREE.Vector2(), SELECTED;
+        var scoord = new THREE.Vector2();
+
+        var cdiv = document.getElementById('vrmoleapp');
+
+
+        var cm = new Colormap();
+        cm.addColor(0, 1, 0, 0);
+        cm.addColor(0.5, 0, 1, 0);
+        cm.addColor(1, 0, 0, 0);
+
+        var c1 = cm.get(0.1);
+        var c2 = cm.get(0.3);
+        var c3 = cm.get(1);
+        var c4 = cm.get(0.9);
+
+
+        
+
+        function onDocumentMouseMove(event) {
+
+            event.preventDefault();
+
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+
+            //console.log("mouse move :"+mouse.x+" "+mouse.y);
+
+            scoord.x = mouse.x / cdiv.clientWidth;
+            scoord.y = mouse.y / cdiv.clientHeight;
+
+            //console.log("mouse move scoord :" + scoord.x + " " + scoord.y);
+
+        }
+
+
+
+        function onDocumentMouseDown(event) {
+
+            event.preventDefault();
+
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+
+            //console.log("mouse down :" + mouse.x + " " + mouse.y);
+
+            scoord.x = mouse.x / cdiv.clientWidth;
+            scoord.y = mouse.y / cdiv.clientHeight;
+
+            //console.log("mouse down scoord :" + scoord.x + " " + scoord.y);
+
+        }
+
+
+
+		kVisLib.Init(function () {
+
+			renderer = new Renderer(cdiv);
+			renderer.createPerspecriveCamera(100, 100, 100, 50, 1.5, 0.1, 1000);
+            renderer.createOrbitControl();
+            renderer.createCameraLight();
+
+
+            //cdiv.addEventListener('pointerdown', onDocumentMouseDown);
+            //cdiv.addEventListener('pointermove', onDocumentMouseMove);
+
+            window.addEventListener('resize', function () {
+                cdiv.style.width = window.innerWidth + "px";
+                cdiv.style.height = window.innerHeight + "px";
+                renderer.onWindowResize(window.innerWidth, window.innerHeight);
+            });
+
+            renderer.onWindowResize(window.innerWidth, window.innerHeight);
+
+            var gg = new GeomRenderer(kVisLib.api, renderer, "../_resources/textures/point.png");
+
+            const fileUrl = '../_testdata/6xkq.krf' // provide file location
+
+            fetch(fileUrl)
+                .then(r => r.text())
+                .then(t => {
+                    gg.LoadFromString(t);
+                });
+
+
+            //var mesh = PT.generateMesh();
+            //gg.updateMesh(mesh, ps2, gg._group);
+
+
+
+
+            render();
+        });
+
+
+		function render() {
+			requestAnimationFrame(render);
+
+			renderer.tick();
+			renderer.render();
+		}
+
+
+
+
+	</script>
+</body>
+</html>

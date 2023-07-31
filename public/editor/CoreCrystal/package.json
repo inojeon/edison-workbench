@@ -1,0 +1,9 @@
+{
+  "name": "core-crystal",
+  "version": "0.0.0",
+  "description": "CoreCrystal",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  }
+}

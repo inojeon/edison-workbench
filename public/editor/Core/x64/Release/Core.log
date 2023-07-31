@@ -1,0 +1,207 @@
+﻿  pch.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(108,16): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(129,16): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(152,16): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(181,16): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(225,19): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(245,19): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(266,19): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.h(380,13): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\BSpline2.h(43,9): warning C4068: 알 수 없는 pragma 'GCC'
+C:\Raysoft\KISTI_CAD\src2\Core\BSpline2.h(44,9): warning C4068: 알 수 없는 pragma 'GCC'
+C:\Raysoft\KISTI_CAD\src2\Core\BSpline2.h(570,45): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\BSpline2.h(697,9): warning C4068: 알 수 없는 pragma 'GCC'
+C:\Raysoft\KISTI_CAD\src2\Core\MeshBuilder.h(68,1): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MeshBuilder.h(76,1): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Arc.cpp
+  Arc2.cpp
+  Atom.cpp
+  BSpline.cpp
+  Bond.cpp
+  BoundingBox2.cpp
+  CString.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Arc.cpp(74,59): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Circle.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Arc.cpp(86,43): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Arc2.cpp(123,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Arc2.cpp(135,32): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Atom.cpp(71,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Atom.cpp(87,33): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  CommandList.cpp
+  Convert.cpp
+  Cylinder.cpp
+  Dim.cpp
+  DnaArm.cpp
+  ExtraData.cpp
+  Font.cpp
+  Geom.cpp
+  GeomDict.cpp
+  Global.cpp
+  Group.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  Intersect.cpp
+  KRFBinaryParser.cpp
+  KRFTextParser.cpp
+  LineSeg.cpp
+  Material.cpp
+  Matrix4.cpp
+  MemoryBlock.cpp
+  Mesh.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Circle.cpp(153,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Circle.cpp(166,31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  MeshBuilder.cpp
+  PLine.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Bond.cpp(62,33): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Bond.cpp(84,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Font.cpp(108,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Font.cpp(109,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Font.cpp(139,25): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Point.cpp
+  PointList.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\CommandList.cpp(40,34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\GeomDict.cpp(79,24): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\GeomDict.cpp(89,36): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Polygon.cpp
+  ProteinTrajectory.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(21,26): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(115,33): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(126,22): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\DnaArm.cpp(35,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\DnaArm.cpp(51,33): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\DnaArm.cpp(66,22): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(143,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(148,32): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(169,31): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(172,32): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(189,31): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(216,23): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(227,23): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(288,23): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Geom.cpp(81,31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Geom.cpp(107,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Group.cpp(307,23): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  RayCad.cpp
+  Sphere.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(148,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Point.cpp(94,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(161,31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Point.cpp(107,31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PointList.cpp(38,31): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(65,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(65,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(65,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(66,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(66,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(66,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(67,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(67,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(67,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(68,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(68,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(68,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Spline.cpp
+  Tag.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Material.cpp(75,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Material.cpp(88,31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PointList.cpp(136,37): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PointList.cpp(151,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PointList.cpp(164,52): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PointList.cpp(167,33): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ProteinTrajectory.cpp(115,27): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ProteinTrajectory.cpp(162,42): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ProteinTrajectory.cpp(171,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ProteinTrajectory.cpp(185,39): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ProteinTrajectory.cpp(192,45): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Trim.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\Dim.cpp(344,30): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Dim.cpp(373,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Dim.cpp(382,111): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Dim.cpp(387,30): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Mesh.cpp(135,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Mesh.cpp(154,32): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Polygon.cpp(232,52): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Polygon.cpp(235,33): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Spline.cpp(81,37): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Spline.cpp(148,37): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(286,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(286,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(286,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(287,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(287,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(287,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(288,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(288,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(288,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.cpp(22,26): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(289,40): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(289,33): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Cylinder.cpp(39,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(289,26): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\MemoryBlock.cpp(118,26): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Cylinder.cpp(50,31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Util.cpp
+  Vector3.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\ExtraData.cpp(61,55): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ExtraData.cpp(63,50): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ExtraData.cpp(69,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Sphere.cpp(60,47): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ExtraData.cpp(79,35): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ExtraData.cpp(82,28): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Sphere.cpp(74,31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\ExtraData.cpp(88,33): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  distance.cpp
+C:\Raysoft\KISTI_CAD\src2\Core\KRFBinaryParser.cpp(15,24): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(93,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(93,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(93,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(94,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(94,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(94,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFBinaryParser.cpp(116,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFBinaryParser.cpp(130,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFTextParser.cpp(345,39): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(262,33): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(285,40): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(381,38): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(434,42): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(483,42): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFTextParser.cpp(1030,8): warning C4101: 'id' :참조되지 않은 지역 변수입니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(512,42): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFTextParser.cpp(1133,27): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(531,42): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFTextParser.cpp(1135,38): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(551,42): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(552,42): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Intersect.cpp(210,10): warning C4101: 'm' :참조되지 않은 지역 변수입니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Util.cpp(23,27): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(95,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\distance.cpp(88,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(95,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(95,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(96,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(96,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\PLine.cpp(96,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFTextParser.cpp(1496,44): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFBinaryParser.cpp(412,19): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFBinaryParser.cpp(486,19): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Util.cpp(95,28): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Util.cpp(157,28): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(314,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(314,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(314,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(315,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(315,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(315,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(316,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(316,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(316,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(317,41): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(317,34): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(317,27): warning C4244: '인수': 'cad_type'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(436,12): warning C4101: 'ix' :참조되지 않은 지역 변수입니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(436,16): warning C4101: 'iy' :참조되지 않은 지역 변수입니다.
+C:\Raysoft\KISTI_CAD\src2\Core\LineSeg.cpp(513,68): warning C4101: 'temp' :참조되지 않은 지역 변수입니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFBinaryParser.cpp(968,24): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\KRFBinaryParser.cpp(969,24): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Raysoft\KISTI_CAD\src2\Core\Dim.cpp(707,27): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Core.vcxproj -> C:\Raysoft\KISTI_CAD\src2\x64\Release\Core.lib

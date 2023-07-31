@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Kisti Cad</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+<body style="overflow:hidden;margin:0px;">
+	<div id="vrmoleapp" style="float:left;overflow:hidden;width:100%;height:100%;"></div>
+
+	<script src="../CadEditor/zui/external/jquery/jquery.js"></script>
+	<script src="../Core/jsbuild/kVisLib.js"></script>
+	<script src="../Core/jsbuild/kVisLibBind.js"></script>
+	<script type="module">
+
+        import * as THREE from '../build/three.module.js';
+        import { Renderer } from './Renderer.js';
+        import { GeomRenderer } from './GeomRenderer.js';
+        import { Colormap } from './Colormap.js';
+        import { VolumeData } from './VolumeData.js';
+        import { VolumeTexture } from './VolumeTexture.js';
+        import { VolumeMesh } from './VolumeMesh.js';
+
+        var renderer;
+        var mouse = new THREE.Vector2(), SELECTED;
+        var scoord = new THREE.Vector2();
+
+        var cdiv = document.getElementById('vrmoleapp');
+
+
+        function onDocumentMouseMove(event) {
+
+            event.preventDefault();
+
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+
+            //console.log("mouse move :"+mouse.x+" "+mouse.y);
+
+            scoord.x = mouse.x / cdiv.clientWidth;
+            scoord.y = mouse.y / cdiv.clientHeight;
+
+            //console.log("mouse move scoord :" + scoord.x + " " + scoord.y);
+
+        }
+
+
+
+        function onDocumentMouseDown(event) {
+
+            event.preventDefault();
+
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+
+            //console.log("mouse down :" + mouse.x + " " + mouse.y);
+
+            scoord.x = mouse.x / cdiv.clientWidth;
+            scoord.y = mouse.y / cdiv.clientHeight;
+
+            //console.log("mouse down scoord :" + scoord.x + " " + scoord.y);
+
+        }
+
+
+
+        kVisLib.Init(function () {
+
+            renderer = new Renderer(cdiv, false, true);
+            renderer.create3DOrthographicCamera(-100, 100, 100, -100, 0, 1000);
+            renderer.createPerspecriveCamera(100, 100, 100, 50, 1.5, 0.1, 1000);
+            renderer.createOrbitControl();
+            // renderer.createTrackballControl();
+            renderer.createCameraLight();
+
+            //cdiv.addEventListener('pointerdown', onDocumentMouseDown);
+            //cdiv.addEventListener('pointermove', onDocumentMouseMove);
+
+            window.addEventListener('resize', function () {
+                cdiv.style.width = window.innerWidth + "px";
+                cdiv.style.height = window.innerHeight + "px";
+                renderer.onWindowResize(window.innerWidth, window.innerHeight);
+            });
+
+            renderer.onWindowResize(window.innerWidth, window.innerHeight);
+
+
+
+            fetch('../_testdata/benzene-homo.cube')
+            //fetch('../_testdata/ch3cl-esp.cube')
+            //fetch('../_testdata/h-bn.cube')
+                .then(r => r.text())
+                .then(t => {
+                    var vdata = new VolumeData(t, "cube");
+                    console.log("vdata loaded with " + vdata.data.length + " data length");
+
+                    //let tsize = 256;
+                    let vtex_data = vdata.getUint8TexDataCustom2();
+
+                    let volume_texture = new VolumeTexture();
+                    volume_texture.setData(vtex_data, vdata.size.x, vdata.size.y, vdata.size.z);
+                    //volume_texture.setSample1();
+
+                    let volume_mesh = new VolumeMesh();
+                    let mesh = volume_mesh.create(volume_texture);
+                    volume_mesh.setTransformFromVolumeData(vdata);
+
+                    renderer._scene.add(mesh);
+                    renderer.setCallback(function () {
+                        mesh.material.uniforms.cameraPos.value.copy(renderer._camera.position);
+                        mesh.material.uniforms.frame.value++;
+                    });
+
+                    render();
+
+                });
+        });
+
+
+		function render() {
+			requestAnimationFrame(render);
+
+            renderer.tick();
+            renderer.render();
+		}
+
+
+
+
+	</script>
+</body>
+</html>

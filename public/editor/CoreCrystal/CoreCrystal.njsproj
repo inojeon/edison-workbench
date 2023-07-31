@@ -1,0 +1,72 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>CoreCrystal</Name>
+    <RootNamespace>CoreCrystal</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>4f07e7b8-436e-4d9d-8157-efdb0ae12666</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <StartWebBrowser>False</StartWebBrowser>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <StartWebBrowser>false</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="AtomDef.js" />
+    <Content Include="BondData.js" />
+    <Content Include="CrystalShape.js" />
+    <Content Include="fileCif.js" />
+    <Content Include="iBlock.js" />
+    <Content Include="iVector.js" />
+    <Content Include="LatticeAxis.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Boundary.js" />
+    <Content Include="CAtom.js" />
+    <Content Include="CBond.js" />
+    <Content Include="CStructure.js" />
+    <Content Include="aVector.js" />
+    <Content Include="iAtom.js" />
+    <Content Include="iBond.js" />
+    <Content Include="LatticePlanes.js" />
+    <Content Include="Loader.js" />
+    <Content Include="package.json" />
+    <Content Include="Plane.js" />
+    <Content Include="Polyhedron.js" />
+    <Content Include="README.md" />
+    <Content Include="Shader.js" />
+    <Content Include="SymmetryMatrix.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="test.html" />
+    <Content Include="testBond.html" />
+    <Content Include="testBoundary.html" />
+    <Content Include="testCrystal.html" />
+    <Content Include="testLatticeAxis.html" />
+    <Content Include="testLoader.html" />
+    <Content Include="testOneAtom.html" />
+    <Content Include="testUnitcell.html" />
+    <Content Include="testVector.html" />
+    <Content Include="testVector2.html" />
+    <Content Include="tVector.js" />
+    <Content Include="UnitCell.js" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+</Project>

@@ -1,0 +1,2 @@
+C:\Raysoft\KISTI_CAD\src2\Math\obj\Debug\Math.njsproj.CoreCompileInputs.cache
+C:\Raysoft\KISTI_CAD\src2\Math\bin\Microsoft.NodejsTools.WebRole.dll

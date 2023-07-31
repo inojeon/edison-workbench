@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Atom Geom</title>
+</head>
+
+<body>
+    <div id="vrmoleapp" style="float:left;overflow:hidden;width:100%;height:100%;"></div>
+
+    <script src="../Core/jsbuild/kVisLib.js"></script>
+    <script src="../Core/jsbuild/kVisLibBind.js"></script>
+
+    <script type="module">
+
+
+        var KMole = {};
+
+        import * as THREE from '../build/three.module.js';
+        import { Renderer } from '../Renderer/Renderer.js';
+        import { GeomMole } from '../Renderer/GeomMole.js';
+
+        
+
+
+        var renderer;
+        let cdiv = document.getElementById('vrmoleapp');
+
+        kVisLib.Init(function () {
+            window.addEventListener('resize', function () {
+                cdiv.style.width = window.innerWidth + "px";
+                cdiv.style.height = window.innerHeight + "px";
+                renderer.onWindowResize(window.innerWidth, window.innerHeight);
+            });
+
+
+            renderer = new Renderer(cdiv, false, true);
+            renderer.createPerspecriveCamera(100, 100, 100, 50, 1.5, 0.1, 1000);
+            renderer.create3DOrthographicCamera(-100, 100, 100, -100, 0, 1000);
+            renderer.createOrbitControl();
+            renderer.createCameraLight();
+            renderer.setLightMode(0);
+
+            renderer.onWindowResize(window.innerWidth, window.innerHeight);
+
+            renderer.LoadFont(function (font) {
+
+                GeomMole.init();
+
+                let geom = GeomMole.createAtomGeometryWithLetter("He", renderer._font);
+
+                let material = new THREE.MeshLambertMaterial({
+                    color: 0xff0000,
+                    vertexColors : true,
+                });
+
+                let mesh = new THREE.Mesh(geom, material);
+
+                renderer._scene.add(mesh);
+            });
+
+            render();
+        });
+
+        function render() {
+            requestAnimationFrame(render);
+
+            renderer.tick();
+            renderer.render();
+        }
+
+    </script>
+</body>
+
+</html>

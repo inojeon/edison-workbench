@@ -1,11 +1,14 @@
 export default function IndexPage() {
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="flex max-w-[980px] flex-col items-start gap-2">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Input page
-        </h1>
+    <section className="container grid items-center mt-4">
+      <div className="h-[calc(100vh-92px)] flex flex-col items-start gap-2">
+        <iframe
+          width="100%"
+          height="100%"
+          src="/editor/CrystalEditor/index.html"
+        ></iframe>
       </div>
+      <div className=" h-full"></div>
     </section>
   )
 }
