@@ -2,7 +2,7 @@ import { promises as fs } from "fs"
 import path from "path"
 import { NextRequest, NextResponse } from "next/server"
 
-import { presets } from "../../../input/data/presets"
+import { presets, samplePresets } from "../../../input/data/presets"
 
 export async function GET(request: NextRequest) {
   const fileId = request.url.split("/").slice(-1)[0]
@@ -10,7 +10,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "No exist File" }, { status: 401 })
   }
 
-  const findPreset = presets.find((pre) => pre.id == fileId)
+  const presetLists = [...presets, ...samplePresets]
+
+  const findPreset = presetLists.find((pre) => pre.id == fileId)
 
   if (!findPreset) {
     return NextResponse.json({ error: "No exist File" }, { status: 401 })
