@@ -1,9 +1,0 @@
-{
-  "name": "math",
-  "version": "0.0.0",
-  "description": "Math",
-  "main": "app.js",
-  "author": {
-    "name": ""
-  }
-}

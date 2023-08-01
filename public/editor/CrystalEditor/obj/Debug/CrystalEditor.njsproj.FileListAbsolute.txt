@@ -1,3 +1,0 @@
-C:\Raysoft\KISTI_CAD\src2\CrystalEditor\obj\Debug\CrystalEditor.njsproj.AssemblyReference.cache
-C:\Raysoft\KISTI_CAD\src2\CrystalEditor\obj\Debug\CrystalEditor.njsproj.CoreCompileInputs.cache
-C:\Raysoft\KISTI_CAD\src2\CrystalEditor\bin\Microsoft.NodejsTools.WebRole.dll

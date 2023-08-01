@@ -4,6 +4,14 @@ import { Metadata } from "next"
 import Image from "next/image"
 import { z } from "zod"
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
 import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
 import { UserNav } from "./components/user-nav"
@@ -29,20 +37,18 @@ export default async function TaskPage() {
   const tasks = await getTasks()
 
   return (
-    <>
-      <div className=" h-full flex-1 flex-col space-y-8 p-8 md:flex">
-        <div className="flex items-center justify-between space-y-2">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              Quantum Espresso Jobs
-            </h2>
-            <p className="text-muted-foreground">
-              작업 실행 이력을 조회 할 수 있습니다.
-            </p>
-          </div>
-        </div>
-        <DataTable data={tasks} columns={columns} />
-      </div>
-    </>
+    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Quantum Espresso Jobs</CardTitle>
+          <CardDescription>
+            작업 실행 이력을 조회 할 수 있습니다.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataTable data={tasks} columns={columns} />
+        </CardContent>
+      </Card>
+    </section>
   )
 }
