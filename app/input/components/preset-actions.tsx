@@ -12,25 +12,25 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui_tmp/alert-dialog"
+import { Button } from "@/components/ui_tmp/button"
 import {
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui_tmp/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { toast } from "@/components/ui/use-toast"
+} from "@/components/ui_tmp/dropdown-menu"
+import { Label } from "@/components/ui_tmp/label"
+import { Switch } from "@/components/ui_tmp/switch"
+import { toast } from "@/components/ui_tmp/use-toast"
 
 export function PresetActions() {
   const [open, setIsOpen] = React.useState(false)

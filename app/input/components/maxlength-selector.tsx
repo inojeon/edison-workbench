@@ -7,9 +7,9 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
+} from "@/components/ui_tmp/hover-card"
+import { Label } from "@/components/ui_tmp/label"
+import { Slider } from "@/components/ui_tmp/slider"
 
 interface MaxLengthSelectorProps {
   defaultValue: SliderProps["defaultValue"]

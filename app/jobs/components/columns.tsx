@@ -2,8 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui_tmp/badge"
+import { Checkbox } from "@/components/ui_tmp/checkbox"
 
 import { labels, priorities, statuses } from "../data/data"
 import { Job } from "../data/schema"
