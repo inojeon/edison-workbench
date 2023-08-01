@@ -23,6 +23,7 @@ export default function IndexPage() {
       <Separator />
       <div className="flex h-[calc(100vh-156px)] flex-col items-start gap-2 ">
         <iframe
+          id="cristalEditor"
           width="100%"
           height="100%"
           src="/editor/CrystalEditor/index.html"

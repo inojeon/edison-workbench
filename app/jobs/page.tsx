@@ -19,7 +19,7 @@ import { taskSchema } from "./data/schema"
 
 export const metadata: Metadata = {
   title: "Jobs",
-  description: "A task and issue tracker build using Tanstack Table.",
+  description: "시뮬레이션 작업 수행 이력 조회",
 }
 
 // Simulate a database read for tasks.

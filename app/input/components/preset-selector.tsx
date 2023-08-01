@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { PopoverProps } from "@radix-ui/react-popover"
+import useSWR from "swr"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -22,6 +22,11 @@ import {
 
 import { Preset, samplePresets } from "../data/presets"
 
+interface MolDataReturn {
+  ok: boolean
+  mol: string
+}
+
 interface PresetSelectorProps extends PopoverProps {
   presets: Preset[]
 }
@@ -29,7 +34,39 @@ interface PresetSelectorProps extends PopoverProps {
 export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
   const [open, setOpen] = React.useState(false)
   const [selectedPreset, setSelectedPreset] = React.useState<Preset>()
-  const router = useRouter()
+
+  const fetcher = (url: string) =>
+    fetch(url).then((res) => {
+      // console.log(res)
+      if (res.status == 401) {
+        return
+      }
+      return res.json()
+    })
+  const { data, error, isLoading } = useSWR<MolDataReturn>(
+    `/api/file/${selectedPreset?.id}`,
+    fetcher
+  )
+
+  React.useEffect(() => {
+    if (data?.ok) {
+      const frm: any = document.getElementById("cristalEditor")
+      if (frm) {
+        frm.contentWindow.crystalEditor.LoadMolFile(data.mol)
+      }
+    }
+  }, [data])
+
+  console.log(data)
+
+  // if (error) return <div>failed to load</div>
+  // if (isLoading) return <div>loading...</div>
+
+  const selectPreset = (preset: Preset) => {
+    console.log(preset)
+    setSelectedPreset(preset)
+    setOpen(false)
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
@@ -54,8 +91,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
               <CommandItem
                 key={preset.id}
                 onSelect={() => {
-                  setSelectedPreset(preset)
-                  setOpen(false)
+                  selectPreset(preset)
                 }}
               >
                 {preset.name}
@@ -92,9 +128,10 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
             ))}
           </CommandGroup>
           <CommandGroup className="pt-0">
-            <CommandItem onSelect={() => router.push("/examples")}>
+            <CommandItem>More examples</CommandItem>
+            {/* <CommandItem onSelect={() => router.push("/examples")}>
               More examples
-            </CommandItem>
+            </CommandItem> */}
           </CommandGroup>
         </Command>
       </PopoverContent>
