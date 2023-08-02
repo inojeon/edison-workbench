@@ -69,11 +69,12 @@ export function PresetActions() {
           </DialogHeader>
           <div className="py-6">
             <div className="grid gap-2">
-              <Label htmlFor="subject">Subject</Label>
-              <Input id="subject" placeholder="I need help with..." />
+              <Label htmlFor="subject">File Name</Label>
+              <Input id="subject" placeholder="mol_2.mol" />
             </div>
           </div>
           <DialogFooter>
+            <Button onClick={() => setIsOpen(false)}>Save</Button>
             <Button variant="secondary" onClick={() => setIsOpen(false)}>
               Close
             </Button>
