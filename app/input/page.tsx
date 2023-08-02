@@ -29,7 +29,6 @@ export default function IndexPage() {
           src="/editor/CrystalEditor/index.html"
         ></iframe>
       </div>
-      <div className=" h-full"></div>
     </section>
   )
 }

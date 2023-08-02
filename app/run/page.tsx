@@ -1,62 +1,63 @@
 import * as React from "react"
 
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { cn } from "@/lib/utils"
+import { Separator } from "@/components/ui/separator"
+import { Card } from "@/components/ui_tmp/card"
+
+import { BasicInformation } from "./components/basic-information"
+import { JobClear } from "./components/job-clear"
+import { JobExecte } from "./components/job-execte"
+import { Sidebar } from "./components/sidebar"
+
+function RunPageContainer({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "flex items-center justify-center [&>div]:w-full",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
 export default function IndexPage() {
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Create Job</CardTitle>
-          <CardDescription>
-            실행할 작업의 파라미터 정보를 입력하세요.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Name of your project" />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="framework">Framework</Label>
-                <Select>
-                  <SelectTrigger id="framework">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="next">Next.js</SelectItem>
-                    <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                    <SelectItem value="astro">Astro</SelectItem>
-                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+    <section className="container mt-4">
+      <Card className=" flex">
+        <div className="w-60 border-r pt-2">
+          <Sidebar />
+        </div>
+        <div className="w-full">
+          <div className="flex  flex-row items-center justify-between space-y-2 p-4 sm:space-y-0 md:h-16">
+            <h2 className="w-40 text-lg font-semibold">Create New Job</h2>
+            {/* {/* <div className="ml-auto flex w-full space-x-2 sm:justify-end"> */}
+            {/* <PresetSelector presets={presets} />
+          <PresetSave />
+          <PresetActions /> */}
+            <div className="flex gap-x-2">
+              <JobClear />
+              <JobExecte />
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
+          </div>
+          <Separator />
+          <div className="hidden items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
+            <div className="col-span-1 grid items-start gap-6 lg:col-span-1">
+              <RunPageContainer>
+                <BasicInformation />
+              </RunPageContainer>
+            </div>
+            <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
+              <div>ccc</div>
+            </div>
+            <div className="col-span-2 grid items-start gap-6 lg:col-span-2 lg:grid-cols-2 xl:col-span-1 xl:grid-cols-1">
+              <div>bbb</div>
+            </div>
+          </div>
+        </div>
       </Card>
     </section>
   )

@@ -19,50 +19,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Preset, samplePresets } from "@/app/input/data/presets"
 
-import { Preset, samplePresets } from "../data/presets"
-
-interface MolDataReturn {
-  ok: boolean
-  mol: string
-}
-
-interface PresetSelectorProps extends PopoverProps {
+interface InputfileSelectorProps extends PopoverProps {
   presets: Preset[]
 }
 
-export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
+export function InputfileSelector({
+  presets,
+  ...props
+}: InputfileSelectorProps) {
   const [open, setOpen] = React.useState(false)
-  const [selectedPreset, setSelectedPreset] = React.useState<Preset>()
+  const [selectedInputfile, setSelectedInputfile] = React.useState<Preset>()
 
-  const fetcher = (url: string) =>
-    fetch(url).then((res) => {
-      // console.log(res)
-      if (res.status == 401) {
-        return
-      }
-      return res.json()
-    })
-  const { data, error, isLoading } = useSWR<MolDataReturn>(
-    `/api/file/${selectedPreset?.id}`,
-    fetcher
-  )
-
-  React.useEffect(() => {
-    if (data?.ok) {
-      const frm: any = document.getElementById("cristalEditor")
-      if (frm) {
-        frm.contentWindow.crystalEditor.LoadMolFile(data.mol)
-      }
-    }
-  }, [data])
-
-  // if (error) return <div>failed to load</div>
-  // if (isLoading) return <div>loading...</div>
-
-  const selectPreset = (preset: Preset) => {
-    console.log(preset)
-    setSelectedPreset(preset)
+  const selectInputfile = (preset: Preset) => {
+    setSelectedInputfile(preset)
     setOpen(false)
   }
 
@@ -72,31 +43,31 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
         <Button
           variant="outline"
           role="combobox"
-          aria-label="Load a preset..."
+          aria-label="Select a inputfile..."
           aria-expanded={open}
-          className="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
+          className="flex-1 justify-between"
         >
-          {selectedPreset ? selectedPreset.name : "Load a preset..."}
+          {selectedInputfile ? selectedInputfile.name : "Load a preset..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandInput placeholder="Search presets..." />
-          <CommandEmpty>No presets found.</CommandEmpty>
+          <CommandInput placeholder="Search Inputfiles..." />
+          <CommandEmpty>No Inputfile found.</CommandEmpty>
           <CommandGroup heading="Repository">
             {presets.map((preset) => (
               <CommandItem
                 key={preset.id}
                 onSelect={() => {
-                  selectPreset(preset)
+                  selectInputfile(preset)
                 }}
               >
                 {preset.name}
                 <CheckIcon
                   className={cn(
                     "ml-auto h-4 w-4",
-                    selectedPreset?.id === preset.id
+                    selectedInputfile?.id === preset.id
                       ? "opacity-100"
                       : "opacity-0"
                   )}
@@ -109,7 +80,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
               <CommandItem
                 key={preset.id}
                 onSelect={() => {
-                  setSelectedPreset(preset)
+                  setSelectedInputfile(preset)
                   setOpen(false)
                 }}
               >
@@ -117,7 +88,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
                 <CheckIcon
                   className={cn(
                     "ml-auto h-4 w-4",
-                    selectedPreset?.id === preset.id
+                    selectedInputfile?.id === preset.id
                       ? "opacity-100"
                       : "opacity-0"
                   )}
