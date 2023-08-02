@@ -18,8 +18,15 @@ import { SciApp, sciApps } from "../data/sciApps"
 import { AppSelector } from "./app-selector"
 import { InputfileSelector } from "./inputfile-selector"
 
-export function BasicInformation() {
-  const [selectedApp, setSelectedApp] = useState<SciApp>()
+interface BasicInformationProps {
+  selectedApp: SciApp | undefined
+  setSelectedApp: React.Dispatch<React.SetStateAction<SciApp | undefined>>
+}
+
+export function BasicInformation({
+  selectedApp,
+  setSelectedApp,
+}: BasicInformationProps) {
   return (
     <Card>
       <CardHeader>
@@ -62,10 +69,6 @@ export function BasicInformation() {
           </div>
         )}
       </CardContent>
-      {/* <CardFooter className="justify-between space-x-2">
-        <Button variant="ghost">Cancel</Button>
-        <Button>Submit</Button>
-      </CardFooter> */}
     </Card>
   )
 }

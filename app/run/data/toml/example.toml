@@ -1,0 +1,31 @@
+[CONTROL]
+calculation = 'scf'
+pseudo_dir = './'
+restart_mode = 'from_scratch'
+prefix = 'output'
+
+[SYSTEM]
+nat = 2
+ntyp = 1
+ecutwfc = 20
+ecutrho = 160
+degauss = 0
+ibrav = 0
+nosym = ".TRUE."
+
+[ELECTRONS]
+conv_thr = 1e-06
+electron_maxstep = 200
+mixing_beta = 0.1
+mixing_mode = 'plain'
+scf_must_converge = ".TRUE."
+startingwfc = 'atomic+random'
+
+[K_POINTS_automatic]
+nk1 = 8
+nk2 = 8
+nk3 = 8
+sk1 = 1
+sk2 = 1
+sk3 = 1
+

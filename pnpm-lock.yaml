@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@faker-js/faker': ^8.0.2
+  '@hookform/resolvers': ^3.1.1
   '@ianvs/prettier-plugin-sort-imports': ^3.7.2
   '@radix-ui/react-accordion': ^1.1.2
   '@radix-ui/react-alert-dialog': ^1.0.4
@@ -60,6 +61,7 @@ specifiers:
 
 dependencies:
   '@faker-js/faker': 8.0.2
+  '@hookform/resolvers': 3.1.1_react-hook-form@7.45.2
   '@radix-ui/react-accordion': 1.1.2_180033b38e3ddc133633dfba0974276e
   '@radix-ui/react-alert-dialog': 1.0.4_180033b38e3ddc133633dfba0974276e
   '@radix-ui/react-aspect-ratio': 1.0.3_180033b38e3ddc133633dfba0974276e
@@ -403,6 +405,14 @@ packages:
 
   /@floating-ui/utils/0.1.1:
     resolution: {integrity: sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==}
+    dev: false
+
+  /@hookform/resolvers/3.1.1_react-hook-form@7.45.2:
+    resolution: {integrity: sha512-tS16bAUkqjITNSvbJuO1x7MXbn7Oe8ZziDTJdA9mMvsoYthnOOiznOTGBYwbdlYBgU+tgpI/BtTU3paRbCuSlg==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.45.2_react@18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.10:
