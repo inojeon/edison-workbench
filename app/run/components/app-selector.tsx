@@ -51,7 +51,7 @@ export function AppSelector({
           aria-expanded={open}
           className="flex-1 justify-between "
         >
-          {selectedApp ? selectedApp.name : "Load a preset..."}
+          {selectedApp ? selectedApp.name : "Select a Science App..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

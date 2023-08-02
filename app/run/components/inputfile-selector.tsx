@@ -47,7 +47,7 @@ export function InputfileSelector({
           aria-expanded={open}
           className="flex-1 justify-between"
         >
-          {selectedInputfile ? selectedInputfile.name : "Load a preset..."}
+          {selectedInputfile ? selectedInputfile.name : "Load a Inputfile..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
