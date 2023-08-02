@@ -6,19 +6,19 @@ import { PopoverProps } from "@radix-ui/react-popover"
 import useSWR from "swr"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui_tmp/button"
+import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui_tmp/command"
+} from "@/components/ui/command"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui_tmp/popover"
+} from "@/components/ui/popover"
 
 import { Preset, samplePresets } from "../data/presets"
 

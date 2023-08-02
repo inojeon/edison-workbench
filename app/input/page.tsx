@@ -1,4 +1,4 @@
-import { Separator } from "@/components/ui_tmp/separator"
+import { Separator } from "@/components/ui/separator"
 
 import { PresetActions } from "./components/preset-actions"
 import { PresetSave } from "./components/preset-save"

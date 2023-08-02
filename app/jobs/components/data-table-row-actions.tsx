@@ -3,7 +3,7 @@
 // import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 
-import { Button } from "@/components/ui_tmp/button"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui_tmp/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 
 export function DataTableRowActions() {
   // const task = taskSchema.parse(row.original)

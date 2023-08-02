@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui_tmp/card"
+} from "@/components/ui/card"
 
 import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"

@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Button } from "@/components/ui_tmp/button"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,25 +8,25 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui_tmp/card"
-import { Input } from "@/components/ui_tmp/input"
-import { Label } from "@/components/ui_tmp/label"
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui_tmp/select"
+} from "@/components/ui/select"
 
 export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Create project</CardTitle>
+          <CardTitle>Create Job</CardTitle>
           <CardDescription>
-            Deploy your new project in one-click.
+            실행할 작업의 파라미터 정보를 입력하세요.
           </CardDescription>
         </CardHeader>
         <CardContent>

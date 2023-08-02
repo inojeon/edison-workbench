@@ -12,25 +12,26 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui_tmp/alert-dialog"
-import { Button } from "@/components/ui_tmp/button"
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
 import {
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui_tmp/dialog"
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui_tmp/dropdown-menu"
-import { Label } from "@/components/ui_tmp/label"
-import { Switch } from "@/components/ui_tmp/switch"
-import { toast } from "@/components/ui_tmp/use-toast"
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { toast } from "@/components/ui/use-toast"
 
 export function PresetActions() {
   const [open, setIsOpen] = React.useState(false)
@@ -47,42 +48,29 @@ export function PresetActions() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={() => setIsOpen(true)}>
-            Content filter preferences
+            Save as a File
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onSelect={() => setShowDeleteDialog(true)}
             className="text-red-600"
           >
-            Delete preset
+            Delete Current File
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Dialog open={open} onOpenChange={setIsOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Content filter preferences</DialogTitle>
+            <DialogTitle>Save as a File</DialogTitle>
             <DialogDescription>
-              The content filter flags text that may violate our content policy.
-              It&apos;s powered by our moderation endpoint which is free to use
-              to moderate your OpenAI API traffic. Learn more.
+              작업중인 입력 파일을 다른 이름으로 저장합니다.
             </DialogDescription>
           </DialogHeader>
           <div className="py-6">
-            <h4 className="text-sm text-muted-foreground">
-              Playground Warnings
-            </h4>
-            <div className="flex items-start justify-between space-x-4 pt-3">
-              <Switch name="show" id="show" defaultChecked={true} />
-              <Label className="grid gap-1 font-normal" htmlFor="show">
-                <span className="font-semibold">
-                  Show a warning when content is flagged
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  A warning will be shown when sexual, hateful, violent or
-                  self-harm content is detected.
-                </span>
-              </Label>
+            <div className="grid gap-2">
+              <Label htmlFor="subject">Subject</Label>
+              <Input id="subject" placeholder="I need help with..." />
             </div>
           </div>
           <DialogFooter>

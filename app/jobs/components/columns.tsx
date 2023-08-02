@@ -2,8 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@/components/ui_tmp/badge"
-import { Checkbox } from "@/components/ui_tmp/checkbox"
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 
 import { labels, priorities, statuses } from "../data/data"
 import { Job } from "../data/schema"
@@ -54,7 +54,7 @@ export const columns: ColumnDef<Job>[] = [
       return (
         <div className="flex space-x-2">
           {/* <Badge variant="outline">{row.getValue("appName")}</Badge> */}
-          <span className="max-w-[300px] truncate font-medium">
+          <span className="max-w-[400px] truncate font-medium">
             {row.getValue("name")}
           </span>
         </div>
@@ -76,7 +76,7 @@ export const columns: ColumnDef<Job>[] = [
       }
 
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex w-[80px] items-center">
           {status.icon && (
             <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
@@ -95,7 +95,7 @@ export const columns: ColumnDef<Job>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">
+        <div className="flex w-[105px] items-center">
           <span>{row.getValue("startDate")}</span>
         </div>
       )
@@ -111,7 +111,7 @@ export const columns: ColumnDef<Job>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">
+        <div className="flex w-[105px] items-center">
           <span>{row.getValue("endDate")}</span>
         </div>
       )
