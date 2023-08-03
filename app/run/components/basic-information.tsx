@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -56,6 +57,11 @@ export function BasicInformation({
             setSelectedApp={setSelectedApp}
           />
         </div>
+
+        <div className="grid gap-2">
+          {/* <Label htmlFor="numCores">엠바고?</Label>
+           */}
+        </div>
         {selectedApp?.type === "parallel" && (
           <div className="grid gap-2">
             <Label htmlFor="numCores">Num Cores</Label>
@@ -68,6 +74,15 @@ export function BasicInformation({
             <InputfileSelector presets={presets} />
           </div>
         )}
+        <div className="flex items-center space-x-2">
+          <Checkbox id="terms" disabled checked />
+          <label
+            htmlFor="terms"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            실행한 데이터는 중앙센터에서 가져갑니다.
+          </label>
+        </div>
       </CardContent>
     </Card>
   )

@@ -10,39 +10,39 @@ import {
   CommandSeparator,
 } from "@/components/ui/command"
 
-export function HistoryJobs() {
+export function ResultData() {
   return (
     <Command className="w-full rounded-lg border">
       <CommandInput placeholder="Search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="최근 실행 작업">
+        <CommandGroup heading="result">
           <CommandItem className="ml-2">
             <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>Job #0001</span>
+            <span>simulation.log</span>
           </CommandItem>
           <CommandItem className="ml-2">
             <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>Job #0002</span>
+            <span>simulation.out</span>
           </CommandItem>
           <CommandItem className="ml-2">
             <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>Job #0003</span>
+            <span>bands.out</span>
+          </CommandItem>
+          <CommandItem className="ml-2">
+            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
+            <span>bands.log</span>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />
-        <CommandGroup heading="튜토리얼">
+        <CommandGroup heading="Logs">
           <CommandItem className="ml-2">
             <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>Tutorial 1</span>
+            <span>std.out</span>
           </CommandItem>
           <CommandItem className="ml-2">
             <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>Tutorial 2</span>
-          </CommandItem>
-          <CommandItem className="ml-2">
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>Tutorial 3</span>
+            <span>std.err</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>
