@@ -44,7 +44,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
       return res.json()
     })
   const { data, error, isLoading } = useSWR<MolDataReturn>(
-    `/api/file/${selectedPreset?.id}`,
+    selectedPreset ? `/api/file/${selectedPreset?.id}` : null,
     fetcher
   )
 

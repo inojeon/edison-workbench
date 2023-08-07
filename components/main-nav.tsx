@@ -41,10 +41,6 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    // "transition-colors hover:text-foreground/80",
-                    // pathname?.startsWith(item.href)
-                    //   ? "text-foreground font-bold"
-                    //   : "text-foreground/60"
                     pathname?.startsWith(item.href)
                       ? "text-foreground"
                       : "text-foreground/60",
