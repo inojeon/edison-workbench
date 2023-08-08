@@ -37,7 +37,6 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
 
   const fetcher = (url: string) =>
     fetch(url).then((res) => {
-      // console.log(res)
       if (res.status == 401) {
         return
       }
@@ -57,11 +56,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
     }
   }, [data])
 
-  // if (error) return <div>failed to load</div>
-  // if (isLoading) return <div>loading...</div>
-
   const selectPreset = (preset: Preset) => {
-    console.log(preset)
     setSelectedPreset(preset)
     setOpen(false)
   }

@@ -13,10 +13,7 @@ export default function IndexPage() {
         <div className="ml-auto flex w-full space-x-2 sm:justify-end">
           <PresetSelector presets={presets} />
           <PresetSave />
-          <div className="hidden space-x-2 md:flex">
-            {/* <CodeViewer />
-            <PresetShare /> */}
-          </div>
+          <div className="hidden space-x-2 md:flex"></div>
           <PresetActions />
         </div>
       </div>

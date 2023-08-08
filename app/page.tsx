@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import LoginTest from "@/components/login-test"
 
 export default function IndexPage() {
   return (
@@ -12,6 +13,11 @@ export default function IndexPage() {
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground">QE</p>
       </div>
+
+      <div className="flex gap-x-4">
+        <LoginTest />
+      </div>
+
       <div className="flex gap-4">
         <Link
           href={siteConfig.links.docs}
