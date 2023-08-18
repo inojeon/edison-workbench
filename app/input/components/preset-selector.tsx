@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { use, useEffect, useState } from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { PopoverProps } from "@radix-ui/react-popover"
 import useSWR from "swr"
@@ -20,44 +20,84 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { Preset, samplePresets } from "../data/presets"
+// import { Preset, samplePresets } from "../data/presets"
 
 interface MolDataReturn {
   ok: boolean
   mol: string
 }
 
-interface PresetSelectorProps extends PopoverProps {
-  presets: Preset[]
+interface Inputfile {
+  name: string
+  type: string
 }
 
-export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
-  const [open, setOpen] = React.useState(false)
-  const [selectedPreset, setSelectedPreset] = React.useState<Preset>()
+// interface PresetSelectorProps extends PopoverProps {
+//   presets: Preset[]
+// }
 
-  const fetcher = (url: string) =>
-    fetch(url).then((res) => {
-      if (res.status == 401) {
-        return
-      }
-      return res.json()
-    })
-  const { data, error, isLoading } = useSWR<MolDataReturn>(
-    selectedPreset ? `/api/file/${selectedPreset?.id}` : null,
-    fetcher
-  )
+interface InputFilesRes {
+  ok: boolean
+  filePath: string
+  fileLists: Inputfile[]
+  message?: string
+}
 
-  React.useEffect(() => {
-    if (data?.ok) {
-      const frm: any = document.getElementById("cristalEditor")
-      if (frm) {
-        frm.contentWindow.crystalEditor.LoadMolFile(data.mol)
-      }
-    }
-  }, [data])
+const getInputfiles = async (): Promise<InputFilesRes> => {
+  const data = await fetch("/api/input?exe=mol")
+  const inputfileRes = await data.json()
 
-  const selectPreset = (preset: Preset) => {
-    setSelectedPreset(preset)
+  return inputfileRes
+}
+
+export function PresetSelector({ ...props }) {
+  const [open, setOpen] = useState(false)
+
+  const [inputfileRes, setInputfileRes] = useState<InputFilesRes>()
+
+  // const inputfileRes = use(getInputfiles())
+
+  console.log(inputfileRes)
+  const [selectedInputfile, setSelectedInputfile] = useState<Inputfile>()
+
+  useEffect(() => {
+    fetch("/api/input?exe=mol")
+      .then((res) => res.json())
+      .then((data) => {
+        setInputfileRes(data)
+        // setLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    fetch(`/api/input/${selectedInputfile?.name}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if (data?.ok) {
+          console.log(data.content)
+          const frm: any = document.getElementById("cristalEditor")
+          if (frm) {
+            frm.contentWindow.crystalEditor.LoadMolFile(data.content)
+          }
+        }
+        // setInputfileRes(data)
+        // setLoading(false)
+      })
+    console.log(selectedInputfile)
+  }, [selectedInputfile])
+
+  // useEffect(() => {
+  //   if (data?.ok) {
+  //     const frm: any = document.getElementById("cristalEditor")
+  //     if (frm) {
+  //       frm.contentWindow.crystalEditor.LoadMolFile(data.mol)
+  //     }
+  //   }
+  // }, [data])
+
+  const selectInputfile = (inputfile: Inputfile) => {
+    setSelectedInputfile(inputfile)
     setOpen(false)
   }
 
@@ -71,7 +111,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
           aria-expanded={open}
           className="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
         >
-          {selectedPreset ? selectedPreset.name : "Load a preset..."}
+          {selectedInputfile ? selectedInputfile.name : "Select a Inputfile"}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -80,45 +120,28 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
           <CommandInput placeholder="Search presets..." />
           <CommandEmpty>No presets found.</CommandEmpty>
           <CommandGroup heading="Repository">
-            {presets.map((preset) => (
-              <CommandItem
-                key={preset.id}
-                onSelect={() => {
-                  selectPreset(preset)
-                }}
-              >
-                {preset.name}
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    selectedPreset?.id === preset.id
-                      ? "opacity-100"
-                      : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandGroup heading="Samples">
-            {samplePresets.map((preset) => (
-              <CommandItem
-                key={preset.id}
-                onSelect={() => {
-                  setSelectedPreset(preset)
-                  setOpen(false)
-                }}
-              >
-                {preset.name}
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    selectedPreset?.id === preset.id
-                      ? "opacity-100"
-                      : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
+            {inputfileRes &&
+              inputfileRes.fileLists.map((inputfile) => (
+                <CommandItem
+                  key={inputfile.name}
+                  onSelect={() => {
+                    selectInputfile({
+                      name: inputfile.name,
+                      type: inputfile.type,
+                    })
+                  }}
+                >
+                  {inputfile.name}
+                  <CheckIcon
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      selectedInputfile?.name === inputfile.name
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
+                  />
+                </CommandItem>
+              ))}
           </CommandGroup>
           <CommandGroup className="pt-0">
             <CommandItem>More examples</CommandItem>
