@@ -12,11 +12,11 @@ export async function GET(request: NextRequest) {
         })
     )
   } else {
-    res = await fetch(`${process.env.API_SEVER_URL}/inputfiles?`)
+    res = await fetch(`${process.env.API_SEVER_URL}/inputfiles`)
   }
   const data = await res.json()
 
-  // console.log(data)
+  console.log(data)
 
   return NextResponse.json(data)
 }

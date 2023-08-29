@@ -1,10 +1,9 @@
 "use client"
 
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
-import { PopoverProps } from "@radix-ui/react-popover"
-import useSWR from "swr"
 
+import { loadMolFile } from "@/lib/cristalEditor"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,21 +19,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-// import { Preset, samplePresets } from "../data/presets"
-
-interface MolDataReturn {
-  ok: boolean
-  mol: string
-}
-
 interface Inputfile {
   name: string
   type: string
 }
-
-// interface PresetSelectorProps extends PopoverProps {
-//   presets: Preset[]
-// }
 
 interface InputFilesRes {
   ok: boolean
@@ -43,21 +31,9 @@ interface InputFilesRes {
   message?: string
 }
 
-const getInputfiles = async (): Promise<InputFilesRes> => {
-  const data = await fetch("/api/input?exe=mol")
-  const inputfileRes = await data.json()
-
-  return inputfileRes
-}
-
 export function PresetSelector({ ...props }) {
   const [open, setOpen] = useState(false)
-
   const [inputfileRes, setInputfileRes] = useState<InputFilesRes>()
-
-  // const inputfileRes = use(getInputfiles())
-
-  console.log(inputfileRes)
   const [selectedInputfile, setSelectedInputfile] = useState<Inputfile>()
 
   useEffect(() => {
@@ -65,36 +41,21 @@ export function PresetSelector({ ...props }) {
       .then((res) => res.json())
       .then((data) => {
         setInputfileRes(data)
-        // setLoading(false)
       })
   }, [])
 
   useEffect(() => {
-    fetch(`/api/input/${selectedInputfile?.name}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        if (data?.ok) {
-          console.log(data.content)
-          const frm: any = document.getElementById("cristalEditor")
-          if (frm) {
-            frm.contentWindow.crystalEditor.LoadMolFile(data.content)
+    if (selectedInputfile?.name) {
+      fetch(`/api/input/${selectedInputfile.name}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+          if (data?.ok) {
+            loadMolFile(data.content)
           }
-        }
-        // setInputfileRes(data)
-        // setLoading(false)
-      })
-    console.log(selectedInputfile)
+        })
+    }
   }, [selectedInputfile])
-
-  // useEffect(() => {
-  //   if (data?.ok) {
-  //     const frm: any = document.getElementById("cristalEditor")
-  //     if (frm) {
-  //       frm.contentWindow.crystalEditor.LoadMolFile(data.mol)
-  //     }
-  //   }
-  // }, [data])
 
   const selectInputfile = (inputfile: Inputfile) => {
     setSelectedInputfile(inputfile)
@@ -117,8 +78,8 @@ export function PresetSelector({ ...props }) {
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandInput placeholder="Search presets..." />
-          <CommandEmpty>No presets found.</CommandEmpty>
+          <CommandInput placeholder="Search inputfiles..." />
+          <CommandEmpty>No inputfile found.</CommandEmpty>
           <CommandGroup heading="Repository">
             {inputfileRes &&
               inputfileRes.fileLists.map((inputfile) => (
@@ -145,9 +106,6 @@ export function PresetSelector({ ...props }) {
           </CommandGroup>
           <CommandGroup className="pt-0">
             <CommandItem>More examples</CommandItem>
-            {/* <CommandItem onSelect={() => router.push("/examples")}>
-              More examples
-            </CommandItem> */}
           </CommandGroup>
         </Command>
       </PopoverContent>

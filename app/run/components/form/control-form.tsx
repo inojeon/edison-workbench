@@ -39,6 +39,8 @@ export function ControlForm() {
     defaultValues,
   })
 
+  console.log(form.getValues())
+
   function onSubmit(data: ControlFormValues) {
     toast({
       title: "You submitted the following values:",
