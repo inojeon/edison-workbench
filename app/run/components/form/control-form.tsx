@@ -39,7 +39,7 @@ export function ControlForm() {
     defaultValues,
   })
 
-  console.log(form.getValues())
+  // console.log(form.getValues())
 
   function onSubmit(data: ControlFormValues) {
     toast({

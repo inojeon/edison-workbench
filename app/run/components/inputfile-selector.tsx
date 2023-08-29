@@ -30,7 +30,14 @@ interface InputFilesRes {
   message?: string
 }
 
-export function InputfileSelector({ ...props }) {
+interface InputfileSelectorProps {
+  selectInputFile: (filePath: string) => void
+}
+
+export function InputfileSelector({
+  selectInputFile,
+  ...props
+}: InputfileSelectorProps) {
   const [open, setOpen] = useState(false)
   const [inputfileRes, setInputfileRes] = useState<InputFilesRes>()
   const [selectedInputfile, setSelectedInputfile] = useState<Inputfile>()
@@ -50,6 +57,7 @@ export function InputfileSelector({ ...props }) {
   const selectInputfile = (inputfile: Inputfile) => {
     setSelectedInputfile(inputfile)
     setOpen(false)
+    selectInputFile(`${inputfileRes?.filePath}/${inputfile.name}`)
   }
 
   return (
