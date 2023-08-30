@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -46,9 +45,13 @@ export function BasicInformation({
       ...prev,
       inputFiles: [
         ...prev.inputFiles,
+        // {
+        //   path: filePath,
+        //   option: "--mol",
+        // },
         {
-          path: filePath,
-          option: "--mol",
+          path: "/home/admin/repository/input.xsf",
+          option: "--xsf",
         },
       ],
     }))

@@ -2,7 +2,9 @@
 
 import * as React from "react"
 
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { toast } from "@/components/ui/use-toast"
 
 import { BasicInformation } from "./basic-information"
 import EnterInputParameter from "./enter-inputparameter"
@@ -34,11 +36,28 @@ const initJobDetail: JobDetail = {
 export default function CreateNewJob() {
   const [jobDetail, setJobDetail] = React.useState<JobDetail>(initJobDetail)
 
-  const changeProgramName = (programName: string) => {
+  const getInputParameter = (inputParameter: any) => {
     setJobDetail((prev) => ({
       ...prev,
-      programName,
+      inputParameter,
     }))
+  }
+  const submitJob = () => {
+    fetch(`/api/jobs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(jobDetail),
+    })
+      .then((res) => res.json())
+      .then((resdata) => {
+        console.log(resdata)
+        // setDstRunObject(resdata)
+        toast({
+          title: "설정 저장이 성공적으로 완료되었습니다.",
+        })
+      })
   }
 
   console.log(jobDetail)
@@ -48,7 +67,8 @@ export default function CreateNewJob() {
         <h2 className="w-40 text-lg font-semibold">Create New Job</h2>
         <div className="flex gap-x-2">
           <JobClear />
-          <JobExecte />
+          <Button onClick={submitJob}>Submit</Button>
+          {/* <JobExecte /> */}
         </div>
       </div>
       <Separator />
@@ -59,7 +79,10 @@ export default function CreateNewJob() {
         <div className="col-span-2 grid items-start gap-6 lg:col-span-1 xl:col-span-2">
           {jobDetail.programName !== "" && (
             <div className="flex items-center justify-center [&>div]:w-full">
-              <EnterInputParameter />
+              <EnterInputParameter
+                program_name={jobDetail.programName}
+                getInputParameter={getInputParameter}
+              />
             </div>
           )}
         </div>

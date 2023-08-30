@@ -29,7 +29,6 @@ export function HistoryJobs() {
     fetch("/api/jobs")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setCurrentJobs(data)
       })
   }, [])

@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+
 import {
   Card,
   CardContent,
@@ -8,12 +10,35 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import { ControlForm } from "./form/control-form"
-import { ElectronForm } from "./form/electrons-form"
-import { KPointAutometicForm } from "./form/k-points-autometic"
-import { SystemForm } from "./form/system-form"
+import InputsForm from "./form/inputs-form"
 
-export default function EnterInputParameter() {
+interface EnterInputParameterProps {
+  program_name: string
+  getInputParameter: (inputParameter: string) => void
+}
+
+export default function EnterInputParameter({
+  program_name,
+  getInputParameter,
+}: EnterInputParameterProps) {
+  const [inputSchema, setInputSchema] = useState()
+  const [sampleInput, setSampleInput] = useState()
+  useEffect(() => {
+    if (program_name !== "") {
+      fetch(`/api/program/${program_name}/inputschema`)
+        .then((res) => res.json())
+        .then((data: any) => {
+          setInputSchema(data)
+        })
+      fetch(`/api/program/${program_name}/sampleinput`)
+        .then((res) => res.json())
+        .then((data: any) => {
+          setSampleInput(data)
+        })
+    }
+  }, [])
+  // console.log(inputSchema)
+
   return (
     <Card>
       <CardHeader>
@@ -23,30 +48,13 @@ export default function EnterInputParameter() {
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6 xl:grid-cols-2">
-        <div>
-          <CardTitle>Contrl</CardTitle>
-          <div className="pl-4">
-            <ControlForm />
-          </div>
-        </div>
-        <div>
-          <CardTitle>System</CardTitle>
-          <div className="pl-4">
-            <SystemForm />
-          </div>
-        </div>
-        <div>
-          <CardTitle>Electron</CardTitle>
-          <div className="pl-4">
-            <ElectronForm />
-          </div>
-        </div>
-        <div>
-          <CardTitle>K Point Autometic</CardTitle>
-          <div>
-            <KPointAutometicForm />
-          </div>
-        </div>
+        {inputSchema && sampleInput && (
+          <InputsForm
+            inputSchema={inputSchema}
+            sampleInput={sampleInput}
+            getInputParameter={getInputParameter}
+          />
+        )}
       </CardContent>
     </Card>
   )
