@@ -8,13 +8,14 @@ import { ResultData } from "./result-data"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   // playlists: Playlist[]
+  jobName: string
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ jobName, className }: SidebarProps) {
   return (
     <div className={cn("pb-12", className)}>
       <div className="px-3 py-2">
-        <h2 className="mb-2  tracking-tight">Job 0001</h2>
+        <h2 className="mb-2  tracking-tight">{jobName}</h2>
         <div className="mt-4 space-y-1">
           <Button variant="secondary" className="w-full justify-center">
             Summary
