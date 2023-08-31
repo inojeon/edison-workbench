@@ -26,23 +26,23 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "Success",
-    label: "Success",
+    value: "COMPLETED",
+    label: "Completed",
     icon: CheckCircledIcon,
   },
   {
-    value: "Failed",
+    value: "FAILED",
     label: "Failed",
     icon: QuestionMarkCircledIcon,
   },
   {
-    value: "Running",
+    value: "RUNNING",
     label: "Running",
     icon: StopwatchIcon,
   },
   {
-    value: "Initialized",
-    label: "Initialized",
+    value: "PENDING",
+    label: "Pending",
     icon: CircleIcon,
   },
 ]

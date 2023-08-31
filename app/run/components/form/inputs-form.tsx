@@ -1,5 +1,6 @@
 "use clinet"
 
+import { useEffect } from "react"
 import * as TOML from "@iarna/toml"
 import { JSONSchema4 } from "json-schema"
 import { useForm } from "react-hook-form"
@@ -43,9 +44,10 @@ export default function InputsForm({
   const form = useForm<z.infer<typeof qeTestSchema>>({
     // resolver: zodResolver(qeTestSchema),
     defaultValues: sampleInput,
+    reValidateMode: "onChange",
   })
 
-  // console.log(qeTestSchema)
+  console.log(form.getValues())
 
   function onSubmit(data: z.infer<typeof qeTestSchema>) {
     console.log(TOML.stringify(data))
@@ -77,7 +79,7 @@ export default function InputsForm({
             )
         )}
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Save</Button>
       </form>
     </Form>
   )

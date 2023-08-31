@@ -2,10 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 
-import { labels, priorities, statuses } from "../data/data"
+import { statuses } from "../data/data"
 import { Job } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
@@ -44,7 +43,7 @@ export const columns: ColumnDef<Job>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "jobName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
@@ -55,7 +54,7 @@ export const columns: ColumnDef<Job>[] = [
         <div className="flex space-x-2">
           {/* <Badge variant="outline">{row.getValue("appName")}</Badge> */}
           <span className="max-w-[400px] truncate font-medium">
-            {row.getValue("name")}
+            {row.getValue("jobName")}
           </span>
         </div>
       )
@@ -112,7 +111,9 @@ export const columns: ColumnDef<Job>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[105px] items-center">
-          <span>{row.getValue("endDate")}</span>
+          <span>
+            {row.getValue("endDate") == null ? "-" : row.getValue("endDate")}
+          </span>
         </div>
       )
     },
@@ -122,6 +123,6 @@ export const columns: ColumnDef<Job>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions />,
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ]

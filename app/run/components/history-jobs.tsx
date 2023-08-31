@@ -13,7 +13,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command"
 
-interface SetCurrentJob {
+export interface SetCurrentJob {
   jobName: string
   jobId: number
   status: string

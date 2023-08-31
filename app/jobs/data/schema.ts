@@ -10,12 +10,12 @@ export const taskSchema = z.object({
   priority: z.string(),
 })
 export const jobSchema = z.object({
-  jobId: z.string(),
-  name: z.string(),
+  jobId: z.number().int(),
+  jobName: z.string(),
   status: z.string(),
   startDate: z.string(),
-  endDate: z.string(),
-  appName: z.string(),
+  endDate: z.string().nullable(),
+  // appName: z.string(),
 })
 
 export type Task = z.infer<typeof taskSchema>

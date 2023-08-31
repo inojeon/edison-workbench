@@ -1,7 +1,3 @@
-"use client"
-
-import { useState } from "react"
-
 import { Card } from "@/components/ui/card"
 
 import CreateNewJob from "./components/create-new-job"

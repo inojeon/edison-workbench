@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { ToastAction } from "@/components/ui/toast"
 import { toast } from "@/components/ui/use-toast"
 
 import { BasicInformation } from "./basic-information"
@@ -25,7 +26,7 @@ export interface JobDetail {
 }
 
 const initJobDetail: JobDetail = {
-  programName: "qe_test",
+  programName: "",
   inputFiles: [],
   inputParameter: "",
   jobName: "test1",
@@ -56,6 +57,7 @@ export default function CreateNewJob() {
         // setDstRunObject(resdata)
         toast({
           title: "설정 저장이 성공적으로 완료되었습니다.",
+          action: <ToastAction altText="Go to Result">View result</ToastAction>,
         })
       })
   }
