@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
-  const res = await fetch(`${process.env.API_SEVER_URL}/jobs`)
+  const res = await fetch(
+    `${process.env.API_SEVER_URL}${request.url.split("/api")[1]}`
+  )
+
+  console.log(request.url.split("/api"))
   const data = await res.json()
   return NextResponse.json(data)
 }

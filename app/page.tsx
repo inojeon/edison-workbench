@@ -14,10 +14,6 @@ export default function IndexPage() {
         <p className="max-w-[700px] text-lg text-muted-foreground">QE</p>
       </div>
 
-      <div className="flex gap-x-4">
-        <LoginTest />
-      </div>
-
       <div className="flex gap-4">
         <Link
           href={siteConfig.links.docs}

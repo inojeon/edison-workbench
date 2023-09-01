@@ -24,7 +24,7 @@ export default function JobsTable() {
         setJobLists(data)
       })
   }, [])
-  console.log(jobLists)
+  // console.log(jobLists)
   return jobLists.length !== 0 ? (
     <DataTable data={jobLists} columns={columns} />
   ) : (
