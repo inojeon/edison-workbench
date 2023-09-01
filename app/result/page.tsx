@@ -39,9 +39,7 @@ export default function IndexPage() {
   return (
     <section className="container mt-4">
       <Card className=" flex  h-[calc(100vh-96px)]">
-        <div className=" w-60 border-r pt-2">
-          <Sidebar />
-        </div>
+        <div className=" w-60 border-r pt-2">{/* <Sidebar /> */}</div>
         <div className="w-full  overflow-auto">
           <div className=" flex flex-row items-center justify-between space-y-2 p-4 sm:space-y-0 md:h-16">
             <h2 className=" text-lg font-semibold">

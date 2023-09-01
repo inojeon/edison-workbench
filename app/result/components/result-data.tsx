@@ -1,4 +1,8 @@
-import { ClipboardCopyIcon } from "@radix-ui/react-icons"
+import {
+  ArchiveIcon,
+  ClipboardCopyIcon,
+  FileTextIcon,
+} from "@radix-ui/react-icons"
 
 import {
   Command,
@@ -10,40 +14,42 @@ import {
   CommandSeparator,
 } from "@/components/ui/command"
 
-export function ResultData() {
+interface ResultDataProps {
+  fileLists: {
+    type: string
+    name: string
+  }[]
+  setSelectReusltFile: React.Dispatch<React.SetStateAction<string | null>>
+}
+
+export function ResultData({
+  fileLists,
+  setSelectReusltFile,
+}: ResultDataProps) {
   return (
     <Command className="w-full rounded-lg border">
       <CommandInput placeholder="Search..." />
-      <CommandList>
+      <CommandList className="max-h-[500px]">
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="result">
-          <CommandItem className="ml-2">
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>simulation.log</span>
-          </CommandItem>
-          <CommandItem className="ml-2">
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>simulation.out</span>
-          </CommandItem>
-          <CommandItem className="ml-2">
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>bands.out</span>
-          </CommandItem>
-          <CommandItem className="ml-2">
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>bands.log</span>
-          </CommandItem>
-        </CommandGroup>
-        <CommandSeparator />
-        <CommandGroup heading="Logs">
-          <CommandItem className="ml-2">
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>std.out</span>
-          </CommandItem>
-          <CommandItem className="ml-2">
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" />
-            <span>std.err</span>
-          </CommandItem>
+          {fileLists.map((file, key) => (
+            <CommandItem
+              key={key}
+              className="ml-2"
+              onSelect={() => {
+                if (file.type == "file") {
+                  setSelectReusltFile(file.name)
+                }
+              }}
+            >
+              {file.type == "file" ? (
+                <FileTextIcon className="mr-2 h-4 w-4" />
+              ) : (
+                <ArchiveIcon className="mr-2 h-4 w-4" />
+              )}
+              <span>{file.name}</span>
+            </CommandItem>
+          ))}
         </CommandGroup>
       </CommandList>
     </Command>
