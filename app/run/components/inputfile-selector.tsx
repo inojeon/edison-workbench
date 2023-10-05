@@ -43,7 +43,7 @@ export function InputfileSelector({
   const [selectedInputfile, setSelectedInputfile] = useState<Inputfile>()
 
   useEffect(() => {
-    fetch("/api/input?exe=mol")
+    fetch("/api/input?exe=cif")
       .then((res) => res.json())
       .then((data) => {
         setInputfileRes(data)

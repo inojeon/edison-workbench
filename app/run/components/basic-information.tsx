@@ -45,13 +45,9 @@ export function BasicInformation({
       ...prev,
       inputFiles: [
         ...prev.inputFiles,
-        // {
-        //   path: filePath,
-        //   option: "--mol",
-        // },
         {
-          path: "/home/admin/repository/input.xsf",
-          option: "--xsf",
+          path: filePath,
+          option: "--cif",
         },
       ],
     }))
@@ -123,7 +119,7 @@ export function BasicInformation({
         )}
         {selectedApp && (
           <div className="grid gap-2">
-            <Label htmlFor="molSelect">Select Mol File</Label>
+            <Label htmlFor="cifSelect">Select Cif File</Label>
             <InputfileSelector selectInputFile={selectInputFile} />
           </div>
         )}

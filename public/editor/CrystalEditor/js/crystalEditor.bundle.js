@@ -164,6 +164,483 @@ __webpack_require__.d(three_module_namespaceObject, {
   knz: () => (sRGBEncoding)
 });
 
+;// CONCATENATED MODULE: ./Renderer/log.js
+var log_mode = 3;
+
+// type : 0 -> error
+// type : 1 -> warning
+// type : 2 -> 기타
+
+/**
+ * 로그 메시지를 출력한다.
+ * @param {Number} type 로그 타입
+ * @param {String} message 로그 메시지
+ */
+function rayLog(type, message) {
+  if (type >= log_mode) return;
+  console.log(message);
+}
+
+/**
+ * 로드 모드를 설정한다.
+ * @param {Number} mode 로그 모드
+ */
+function rayLogSetMode(mode) {
+  log_mode = mode;
+}
+;// CONCATENATED MODULE: ./CoreCrystal/AtomDef.js
+/**
+ * @file 원소의 정보를 정의한 클래스
+ * @version 0.1
+ */
+var AtomDef = {};
+AtomDef._atomDefList = [];
+AtomDef._atomNumList = [];
+
+/**
+ * index에 해당하는 원자 정보를 반환한다
+ * @param {Number} index 원자 인덱스
+ * @returns {CAtomDef} 원자 인덱스에 해당하는 정의
+ */
+AtomDef.GetDefWithNumber = function (index) {
+  return AtomDef._atomNumList[index];
+};
+
+/**
+ * id에 해당하는 원자 정보를 반환한다
+ * @param {String} id 원자 아이디
+ * @returns {CAtomDef} 원자 아이디에 해당하는 정의
+ */
+AtomDef.GetDefWithID = function (id) {
+  return AtomDef._atomDefList[id.toUpperCase()];
+};
+
+/**
+ * 한 원소의 특성을 정의한 클래스다. 이름, 반지름, 질량 등이 정의된다.
+ * */
+class CAtomDef {
+  /**
+   * 원소를 정의한다
+   * @param {Number} number 원소 번호
+   * @param {String} atom 원소 기호
+   * @param {String} kname 원소 이름 (한글)
+   * @param {String} name 원소 이름 (영문)
+   * @param {Number} r 컬러 R
+   * @param {Number} g 컬러 G
+   * @param {Number} b 컬러 B
+   * @param {Number} radius 반지름
+   * @param {Number} metal 메탈
+   * @param {Number} group 그룹
+   * @param {Number} period 주기율
+   */
+  constructor(number, atom, kname, name, r, g, b, radius, metal, group, period) {
+    /// AtomDef의 ID이다. string
+    this._id = atom.toUpperCase();
+
+    /// 원소의 이름. string
+    this._atom_id = atom;
+
+    /// 원소의 반지름. 
+    this._radius = (radius + 100) / 500 * 1.;
+    this._empirical_radius = radius;
+
+    /// 원소의 이름. 영문
+    this._name = name;
+
+    /// 원소의 이름. 한글
+    this._korean_name = kname;
+
+    /// 원소의 컬러
+    this._color = [0, 0, 0];
+
+    /// 원소의 디퓨즈 컬러
+    this._diffuseColor = [0, 0, 0];
+
+    /// 원소의 emissive 컬러
+    this._emissiveColor = [0, 0, 0];
+
+    /// 원소의 specular 컬러
+    this._specularColor = [1, 1, 1];
+    this.setColor(r / 255, g / 255, b / 255);
+    this.setDefaultColor(r / 255, g / 255, b / 255);
+
+    /// 원소의 Ambient 컬러
+    this._ambientColor = [0.0, 0.0, 0.0];
+
+    /// 원소의 specular power
+    this._specularPower = 15;
+
+    /// 원소의 원자수
+    this._atom_number = number;
+
+    /// 메탈
+    this._metal = metal;
+
+    /// 원소의 주기
+    this._period = period;
+
+    /// 원소의 그룹
+    this._group = group;
+
+    /// 가질 수 있는 본드의 수
+    this._vsepr_type = 0;
+
+    /// lone pair 의 수
+    this._vsepr_lpair = 0;
+
+    /// 원소 결합시 각도
+    this._vsepr_angle = 0;
+
+    /// 원소 크기
+    this._atom_vis_size = 1;
+
+    /// 원소 가시화 여부
+    this._visible = true;
+  }
+
+  /**
+   * 색상을 정의한다
+   * @param {Number} r red
+   * @param {Number} g green
+   * @param {Number} b blue
+   */
+  setColor(r, g, b) {
+    this._color = [r, g, b];
+    this._diffuseColor = [r, g, b];
+    this._emissiveColor = [r * 0.1, g * 0.1, b * 0.1];
+    this._specularColor = [1, 1, 1];
+  }
+  /**
+   * 기본 컬러를 정의한다
+   * @param {Number} r red
+   * @param {Number} g green
+   * @param {Number} b blue
+   */
+  setDefaultColor(r, g, b) {
+    this._defColor = [r, g, b];
+  }
+  /**
+   * 기본 원소 문자 크기를 정의한다
+   * @param {Number} size 크기
+   */
+  setNameSize(size) {
+    this._atom_vis_size = size;
+  }
+}
+;
+
+/**
+ * 원소의 VSEPR 값을 정의
+ * @param {String} atom 원소 기호
+ * @param {String} type 타입
+ * @param {Function} lone_pair long pair
+ * @param {Function} angle 각도
+ */
+function setAtomVSEPR(atom, type, lone_pair, angle) {
+  var atom_def = AtomDef._atomDefList[atom.toUpperCase()];
+  if (!atom_def) return;
+  atom_def._vsepr_type = type;
+  atom_def._vsepr_lpair = lone_pair;
+  atom_def._vsepr_angle = angle;
+}
+
+/**
+ * 원소의 메탈 값을 정의
+ * @param {String} atom 원소
+ * @param {Number} metal 메탈 값
+ */
+function setAtomMetal(atom, metal) {
+  var atom_def = AtomDef._atomDefList[atom.toUpperCase()];
+  if (!atom_def) return;
+  atom_def._metal = metal;
+}
+
+/**
+* 원소의 Isotope 값을 설정
+* @param {String} isotope 원소의 isotope
+* @param {String} atom
+*/
+function addIsotope(isotope, atom) {}
+
+/**
+ * 원소의 정보를 정의한다
+ * @param {Number} number
+ * @param {String} atom
+ * @param {String} kname
+ * @param {String} name
+ * @param {Number} r
+ * @param {Number} g
+ * @param {Number} b
+ * @param {Number} radius
+ * @param {Number} metal
+ * @param {String} group
+ * @param {Number} period
+ */
+function setAtomData(number, atom, kname, name, r, g, b, radius, metal, group, period) {
+  var atom_def = new CAtomDef(number, atom, kname, name, r, g, b, radius, metal, group, period);
+  AtomDef._atomDefList[atom.toUpperCase()] = atom_def;
+  AtomDef._atomNumList[number] = atom_def;
+}
+
+///////////////////
+// setAtomData
+///////////////////
+
+setAtomData(1, "H", "수소", "Hydrogen", 180, 180, 180, 25, 0, 1, 1);
+setAtomData(2, "He", "헬륨", "Helium", 217, 235, 235, 120, 0, 18, 1);
+setAtomData(3, "Li", "리튬", "Lithium", 204, 128, 255, 145, 0, 1, 2);
+setAtomData(4, "Be", "베릴륨", "Beryllium", 194, 255, 0, 105, 0, 2, 2);
+setAtomData(5, "B", "붕소", "Boron", 255, 181, 181, 85, 0, 13, 2);
+setAtomData(6, "C", "탄소", "Carbon", 94, 94, 94, 70, 0, 14, 2);
+setAtomData(7, "N", "질소", "Nitrogen", 48, 80, 248, 65, 0, 15, 2);
+setAtomData(8, "O", "산소", "Oxygen", 255, 13, 13, 60, 0, 16, 2);
+setAtomData(9, "F", "플루오린", "Fluorine", 144, 224, 80, 50, 0, 17, 2);
+setAtomData(10, "Ne", "네온", "Neon", 179, 227, 245, 160, 0, 18, 2);
+setAtomData(11, "Na", "나트륨", "Sodium", 171, 92, 242, 180, 0, 1, 3);
+setAtomData(12, "Mg", "마그네슘", "Magnesium", 138, 255, 0, 150, 0, 2, 3);
+setAtomData(13, "Al", "알루미늄", "Aluminium", 191, 166, 166, 125, 0, 13, 3);
+setAtomData(14, "Si", "규소", "Silicon", 240, 200, 160, 110, 0, 14, 3);
+setAtomData(15, "P", "인", "Phosphorus", 255, 128, 0, 100, 0, 15, 3);
+setAtomData(16, "S", "황", "Sulfur", 255, 255, 48, 100, 0, 16, 3);
+setAtomData(17, "Cl", "염소", "Chlorine", 31, 240, 31, 100, 0, 17, 3);
+setAtomData(18, "Ar", "아르곤", "Argon", 128, 209, 227, 71, 0, 18, 3);
+setAtomData(19, "K", "칼륨", "Potassium", 143, 64, 212, 220, 0, 1, 4);
+setAtomData(20, "Ca", "칼슘", "Calcium", 61, 255, 0, 180, 0, 2, 4);
+setAtomData(21, "Sc", "스칸듐", "Scandium", 170, 170, 170, 160, 0, 3, 4);
+setAtomData(22, "Ti", "티타늄", "Titanium", 191, 194, 199, 140, 0, 4, 4);
+setAtomData(23, "V", "바나듐", "Vanadium", 166, 166, 171, 135, 0, 5, 4);
+setAtomData(24, "Cr", "크롬", "Chromium", 138, 153, 199, 140, 0, 6, 4);
+setAtomData(25, "Mn", "망가니즈", "Manganese", 156, 122, 199, 140, 0, 7, 4);
+setAtomData(26, "Fe", "철", "Iron", 224, 102, 51, 140, 0, 8, 4);
+setAtomData(27, "Co", "코발트", "Cobalt", 240, 144, 160, 135, 0, 9, 4);
+setAtomData(28, "Ni", "니켈", "Nickel", 80, 208, 80, 135, 0, 10, 4);
+setAtomData(29, "Cu", "구리", "Copper", 200, 128, 51, 135, 0, 11, 4);
+setAtomData(30, "Zn", "아연", "Zinc", 125, 128, 176, 135, 0, 12, 4);
+setAtomData(31, "Ga", "갈륨", "Gallium", 194, 143, 143, 130, 0, 13, 4);
+setAtomData(32, "Ge", "게르마늄", "Germanium", 102, 143, 143, 125, 0, 14, 4);
+setAtomData(33, "As", "비소", "Arsenic", 189, 128, 227, 115, 0, 15, 4);
+setAtomData(34, "Se", "셀레늄", "Selenium", 255, 161, 0, 115, 0, 16, 4);
+setAtomData(35, "Br", "브로민", "Bromine", 166, 41, 41, 115, 0, 17, 4);
+setAtomData(36, "Kr", "크립톤", "Krypton", 92, 184, 209, 115, 0, 18, 4);
+setAtomData(37, "Rb", "루비듐", "Rubidium", 112, 46, 176, 235, 0, 1, 5);
+setAtomData(38, "Sr", "스트론튬", "Strontium", 0, 255, 0, 200, 0, 2, 5);
+setAtomData(39, "Y", "이트륨", "Yttrium", 148, 255, 255, 180, 0, 3, 5);
+setAtomData(40, "Zr", "지르코늄", "Zirconium", 148, 224, 224, 155, 0, 4, 5);
+setAtomData(41, "Nb", "나이오븀", "Niobium", 115, 194, 201, 145, 0, 5, 5);
+setAtomData(42, "Mo", "몰리브데넘", "Molybdenum", 84, 181, 181, 145, 0, 6, 5);
+setAtomData(43, "Tc", "테크네튬", "Technetium", 59, 158, 158, 135, 0, 7, 5);
+setAtomData(44, "Ru", "루테늄", "Ruthenium", 36, 143, 143, 130, 0, 8, 5);
+setAtomData(45, "Rh", "로듐", "Rhodium", 10, 125, 140, 135, 0, 9, 5);
+setAtomData(46, "Pd", "팔라듐", "Palladium", 0, 105, 133, 140, 0, 10, 5);
+setAtomData(47, "Ag", "은", "Silver", 192, 192, 192, 160, 0, 11, 5);
+setAtomData(48, "Cd", "카드뮴", "Cadmium", 255, 217, 143, 155, 0, 12, 5);
+setAtomData(49, "In", "인듐", "Indium", 166, 117, 115, 155, 0, 13, 5);
+setAtomData(50, "Sn", "주석", "Tin", 102, 128, 128, 145, 0, 14, 5);
+setAtomData(51, "Sb", "안티모니", "Antimony", 158, 99, 181, 145, 0, 15, 5);
+setAtomData(52, "Te", "텔루륨", "Tellurium", 212, 122, 0, 140, 0, 16, 5);
+setAtomData(53, "I", "아이오딘", "Iodine", 148, 0, 148, 140, 0, 17, 5);
+setAtomData(54, "Xe", "제논", "Xenon", 66, 158, 176, 140, 0, 18, 5);
+setAtomData(55, "Cs", "세슘", "Caesium", 87, 23, 143, 260, 0, 1, 6);
+setAtomData(56, "Ba", "바륨", "Barium", 0, 201, 0, 215, 0, 2, 6);
+
+// Lantan Group - Period/Group Modified for Table.
+setAtomData(57, "La", "란타넘", "Lanthanum", 112, 212, 255, 195, 0, 3, 8);
+setAtomData(58, "Ce", "세륨", "Cerium", 255, 255, 199, 185, 0, 4, 8);
+setAtomData(59, "Pr", "프라세오디뮴", "Praseodymium", 217, 255, 199, 185, 0, 5, 8);
+setAtomData(60, "Nd", "네오디뮴", "Neodymium", 199, 255, 199, 185, 0, 6, 8);
+setAtomData(61, "Pm", "프로메튬", "Promethium", 163, 255, 199, 185, 0, 7, 8);
+setAtomData(62, "Sm", "사마륨", "Samarium", 143, 255, 199, 185, 0, 8, 8);
+setAtomData(63, "Eu", "유로퓸", "Europium", 97, 255, 199, 185, 0, 9, 8);
+setAtomData(64, "Gd", "가돌리늄", "Gadolinium", 69, 255, 199, 180, 0, 10, 8);
+setAtomData(65, "Tb", "터븀", "Terbium", 48, 255, 199, 175, 0, 11, 8);
+setAtomData(66, "Dy", "디스프로슘", "Dysprosium", 31, 255, 199, 175, 0, 12, 8);
+setAtomData(67, "Ho", "홀뮴", "Holmium", 0, 255, 156, 175, 0, 13, 8);
+setAtomData(68, "Er", "어븀", "Erbium", 0, 230, 117, 175, 0, 14, 8);
+setAtomData(69, "Tm", "툴륨", "Thulium", 0, 212, 82, 175, 0, 15, 8);
+setAtomData(70, "Yb", "이터븀", "Ytterbium", 0, 191, 56, 175, 0, 16, 8);
+setAtomData(71, "Lu", "루테튬", "Lutetium", 0, 171, 36, 175, 0, 17, 8);
+// end of Lantan Group
+
+setAtomData(72, "Hf", "하프늄", "Hafnium", 77, 194, 255, 155, 0, 4, 6);
+setAtomData(73, "Ta", "탄탈럼", "Tantalum", 77, 166, 255, 145, 0, 5, 6);
+setAtomData(74, "W", "텅스텐", "Tungsten", 33, 148, 214, 135, 0, 6, 6);
+setAtomData(75, "Re", "레늄", "Rhenium", 38, 125, 171, 135, 0, 7, 6);
+setAtomData(76, "Os", "오스뮴", "Osmium", 38, 102, 150, 130, 0, 8, 6);
+setAtomData(77, "Ir", "이리듐", "Iridium", 23, 84, 135, 135, 0, 9, 6);
+setAtomData(78, "Pt", "백금", "Platinum", 208, 208, 224, 135, 0, 10, 6);
+setAtomData(79, "Au", "금", "Gold", 255, 209, 35, 135, 0, 11, 6);
+setAtomData(80, "Hg", "수은", "Mercury", 184, 184, 208, 150, 0, 12, 6);
+setAtomData(81, "Tl", "탈륨", "Thallium", 166, 84, 77, 190, 0, 13, 6);
+setAtomData(82, "Pb", "납", "Lead", 87, 89, 97, 180, 0, 14, 6);
+setAtomData(83, "Bi", "비스무트", "Bismuth", 158, 79, 181, 160, 0, 15, 6);
+setAtomData(84, "Po", "폴로늄", "Polonium", 171, 92, 0, 190, 0, 16, 6);
+setAtomData(85, "At", "아스타틴", "Astatine", 117, 79, 69, 190, 0, 17, 6);
+setAtomData(86, "Rn", "라돈", "Radon", 66, 130, 150, 190, 0, 18, 6);
+setAtomData(87, "Fr", "프랑슘", "Francium", 66, 0, 102, 190, 0, 1, 7);
+setAtomData(88, "Ra", "라듐", "Radium", 0, 125, 0, 215, 0, 2, 7);
+
+// Actin Group - Period/Group Modified for Table.
+setAtomData(89, "Ac", "악티늄", "Actinium", 112, 171, 250, 195, 0, 3, 9);
+setAtomData(90, "Th", "토륨", "Thorium", 0, 186, 255, 180, 0, 4, 9);
+setAtomData(91, "Pa", "프로트악티늄", "Protactinium", 0, 161, 255, 180, 0, 5, 9);
+setAtomData(92, "U", "우라늄", "Uranium", 0, 143, 255, 175, 0, 6, 9);
+setAtomData(93, "Np", "넵투늄", "Neptunium", 0, 128, 255, 175, 0, 7, 9);
+setAtomData(94, "Pu", "플루토늄", "Plutonium", 0, 107, 255, 175, 0, 8, 9);
+setAtomData(95, "Am", "아메리슘", "Americium", 84, 92, 242, 175, 0, 9, 9);
+setAtomData(96, "Cm", "퀴륨", "Curium", 120, 92, 227, 175, 0, 10, 9);
+setAtomData(97, "Bk", "버클륨", "Berkelium", 138, 79, 227, 175, 0, 11, 9);
+setAtomData(98, "Cf", "캘리포늄", "Californium", 161, 54, 212, 175, 0, 12, 9);
+setAtomData(99, "Es", "아인슈타이늄", "Einsteinium", 179, 31, 212, 175, 0, 13, 9);
+setAtomData(100, "Fm", "페르뮴", "Fermium", 179, 31, 186, 175, 0, 14, 9);
+setAtomData(101, "Md", "멘델레븀", "Mendelevium", 179, 13, 166, 175, 0, 15, 9);
+setAtomData(102, "No", "노벨륨", "Nobelium", 189, 13, 135, 175, 0, 16, 9);
+setAtomData(103, "Lr", "로렌슘", "Lawrencium", 199, 0, 102, 175, 0, 17, 9);
+// end of Actin Group
+
+setAtomData(104, "Rf", "러더포듐", "Rutherfordium", 204, 0, 89, 175, 0, 4, 7);
+setAtomData(105, "Db", "더브늄", "Dubnium", 209, 0, 79, 175, 0, 5, 7);
+setAtomData(106, "Sg", "시보귬", "Seaborgium", 217, 0, 69, 175, 0, 6, 7);
+setAtomData(107, "Bh", "보륨", "Bohrium", 224, 0, 56, 175, 0, 7, 7);
+setAtomData(108, "Hs", "하슘", "Hassium", 230, 0, 46, 175, 0, 8, 7);
+setAtomData(109, "Mt", "마이트너륨", "Meitnerium", 235, 0, 38, 175, 0, 9, 7);
+setAtomData(110, "Ds", "다름슈타튬", "Darmstadtium", 128, 128, 128, 175, 0, 10, 7);
+setAtomData(111, "Rg", "뢴트게늄", "Roentgenium", 128, 128, 128, 175, 0, 11, 7);
+setAtomData(112, "Cn", "코페르니슘", "Copernicium", 128, 128, 128, 175, 0, 12, 7);
+setAtomData(113, "Nh", "니호늄", "Nihonium", 128, 128, 128, 175, 0, 13, 7);
+setAtomData(114, "Fl", "플레로븀", "Flerovium", 128, 128, 128, 175, 0, 14, 7);
+setAtomData(115, "Mc", "모스코븀", "Moscovium", 128, 128, 128, 175, 0, 15, 7);
+setAtomData(116, "Lv", "리버모륨", "Livermorium", 128, 128, 128, 175, 0, 16, 7);
+setAtomData(117, "Ts", "테네신", "Tennessine", 128, 128, 128, 175, 0, 17, 7);
+setAtomData(118, "Og", "오가네손", "Oganesson", 128, 128, 128, 175, 0, 18, 7);
+setAtomData(199, "?", "미정", "?", 28, 28, 28, 100, 0, 0, 0);
+setAtomData(200, "@", "@Anchor", "Anchor", 256, 0, 0, 10, 0, 0, 0);
+setAtomData(201, "#", "#Upvector", "Upvector", 0, 0, 255, 10, 0, 0, 0);
+setAtomData(211, "+1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(212, "+2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(213, "+3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(214, "+4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(215, "+5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(216, "+6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(217, "+7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(218, "+8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(219, "+9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(221, "-1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(222, "-2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(223, "-3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(224, "-4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(225, "-5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(226, "-6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(227, "-7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(228, "-8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+setAtomData(229, "-9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+
+// 0 : 비금속
+// 1 : 알카리 금속
+// 2 : 알카리 포금속
+// 3 : 전이 금속
+// 4 : 전이 후 금속
+// 5 : 준금속
+// 6 : 비활성 기체
+
+setAtomMetal("He", 6);
+setAtomMetal("Ne", 6);
+setAtomMetal("Ar", 6);
+setAtomMetal("Kr", 6);
+setAtomMetal("Xe", 6);
+setAtomMetal("Rn", 6);
+setAtomMetal("B", 5);
+setAtomMetal("Si", 5);
+setAtomMetal("Ge", 5);
+setAtomMetal("As", 5);
+setAtomMetal("Sb", 5);
+setAtomMetal("Te", 5);
+setAtomMetal("At", 5);
+setAtomMetal("Li", 1);
+setAtomMetal("Na", 1);
+setAtomMetal("K", 1);
+setAtomMetal("Rb", 1);
+setAtomMetal("Cs", 1);
+setAtomMetal("Fr", 1);
+setAtomMetal("Uue", 1);
+setAtomMetal("Be", 2);
+setAtomMetal("Mg", 2);
+setAtomMetal("Ca", 2);
+setAtomMetal("Sr", 2);
+setAtomMetal("Ba", 2);
+setAtomMetal("Ra", 2);
+setAtomMetal("Sc", 3);
+setAtomMetal("Ti", 3);
+setAtomMetal("V", 3);
+setAtomMetal("Cr", 3);
+setAtomMetal("Mn", 3);
+setAtomMetal("Fe", 3);
+setAtomMetal("Co", 3);
+setAtomMetal("Ni", 3);
+setAtomMetal("Cu", 3);
+setAtomMetal("Zn", 3);
+setAtomMetal("Y", 3);
+setAtomMetal("Zr", 3);
+setAtomMetal("Nb", 3);
+setAtomMetal("Mo", 3);
+setAtomMetal("Tc", 3);
+setAtomMetal("Ru", 3);
+setAtomMetal("Rh", 3);
+setAtomMetal("Pd", 3);
+setAtomMetal("Ag", 3);
+setAtomMetal("Cd", 3);
+setAtomMetal("Rf", 3);
+setAtomMetal("Db", 3);
+setAtomMetal("Sg", 3);
+setAtomMetal("Bh", 3);
+setAtomMetal("Hs", 3);
+setAtomMetal("Cn", 3);
+setAtomMetal("Hf", 3);
+setAtomMetal("Ta", 3);
+setAtomMetal("W", 3);
+setAtomMetal("Re", 3);
+setAtomMetal("Os", 3);
+setAtomMetal("Ir", 3);
+setAtomMetal("Pt", 3);
+setAtomMetal("Au", 3);
+setAtomMetal("Hg", 3);
+setAtomMetal("Al", 4);
+setAtomMetal("Ga", 4);
+setAtomMetal("In", 4);
+setAtomMetal("Sn", 4);
+setAtomMetal("Tl", 4);
+setAtomMetal("Pb", 4);
+setAtomMetal("Bi", 4);
+setAtomMetal("Po", 4);
+setAtomVSEPR("C", 4, 0, 109.5);
+setAtomVSEPR("Ge", 4, 0, 109.5);
+setAtomVSEPR("N", 4, 1, 109.5);
+setAtomVSEPR("P", 4, 1, 109.5);
+setAtomVSEPR("O", 4, 2, 109.5);
+setAtomVSEPR("S", 4, 2, 109.5);
+setAtomVSEPR("Se", 4, 2, 109.5);
+setAtomVSEPR("Te", 4, 2, 109.5);
+setAtomVSEPR("Po", 4, 2, 109.5);
+setAtomVSEPR("B", 3, 0, 120);
+setAtomVSEPR("Al", 3, 0, 120);
+setAtomVSEPR("Ga", 3, 0, 120);
+setAtomVSEPR("As", 1, 0, 0);
+setAtomVSEPR("F", 1, 0, 0);
+setAtomVSEPR("Cl", 1, 0, 0);
+setAtomVSEPR("Br", 1, 0, 0);
+setAtomVSEPR("I", 1, 0, 0);
+setAtomVSEPR("At", 1, 0, 0);
+setAtomVSEPR("Li", 1, 0, 0);
+setAtomVSEPR("Na", 1, 0, 0);
+setAtomVSEPR("K", 1, 0, 0);
+setAtomVSEPR("Rb", 1, 0, 0);
+setAtomVSEPR("Cs", 1, 0, 0);
+setAtomVSEPR("Fr", 1, 0, 0);
+setAtomVSEPR("Be", 2, 0, 180);
+setAtomVSEPR("Mg", 2, 0, 180);
+setAtomVSEPR("Ca", 2, 0, 180);
+setAtomVSEPR("Sr", 2, 0, 180);
+setAtomVSEPR("Ba", 2, 0, 180);
+setAtomVSEPR("Ra", 2, 0, 180);
 ;// CONCATENATED MODULE: ./build/three.module.js
 /**
  * @license
@@ -3270,934 +3747,6 @@ class Vector3 {
     return v;
   }
 }
-;// CONCATENATED MODULE: ./Renderer/AtomDef.js
-/**
- * @file 원소의 정보를 정의한 클래스
- * @version 0.1
- */
-var AtomDef = {};
-AtomDef._atomDefList = [];
-AtomDef._atomNumList = [];
-
-/**
- * index에 해당하는 원자 정보를 반환한다
- * @param {Number} index 원자 인덱스
- */
-AtomDef.GetDefWithNumber = function (index) {
-  return AtomDef._atomNumList[index];
-};
-
-/**
- * id에 해당하는 원자 정보를 반환한다
- * @param {String} id 원자 아이디
- */
-AtomDef.GetDefWithID = function (id) {
-  return AtomDef._atomDefList[id.toUpperCase()];
-};
-
-/**
- * 한 원소의 특성을 정의한 클래스다. 이름, 반지름, 질량 등이 정의된다.
- * */
-class CAtomDef {
-  /**
-   * 원소를 정의한다
-   * @param {any} number 원소 번호
-   * @param {any} atom 원소 기호
-   * @param {any} kname 원소 이름 (한글)
-   * @param {any} name 원소 이름 (영문)
-   * @param {any} r 컬러 R
-   * @param {any} g 컬러 G
-   * @param {any} b 컬러 B
-   * @param {any} radius 반지름
-   * @param {any} metal 메탈
-   * @param {any} group 그룹
-   * @param {any} period 주기율
-   */
-  constructor(number, atom, kname, name, r, g, b, radius, metal, group, period) {
-    /// AtomDef의 ID이다. string
-    this._id = atom.toUpperCase();
-
-    /// 원소의 이름. string
-    this._atom_id = atom;
-
-    /// 원소의 반지름. 
-    this._radius = (radius + 100) / 500 * 1.;
-    this._empirical_radius = radius;
-
-    /// 원소의 이름. 영문
-    this._name = name;
-
-    /// 원소의 이름. 한글
-    this._korean_name = kname;
-
-    /// 원소의 컬러
-    this._color = [0, 0, 0];
-
-    /// 원소의 디퓨즈 컬러
-    this._diffuseColor = [0, 0, 0];
-
-    /// 원소의 emissive 컬러
-    this._emissiveColor = [0, 0, 0];
-
-    /// 원소의 specular 컬러
-    this._specularColor = [1, 1, 1];
-    this.setColor(r / 255, g / 255, b / 255);
-    this.setDefaultColor(r / 255, g / 255, b / 255);
-
-    /// 원소의 Ambient 컬러
-    this._ambientColor = [0.0, 0.0, 0.0];
-
-    /// 원소의 specular power
-    this._specularPower = 15;
-
-    /// 원소의 원자수
-    this._atom_number = number;
-
-    /// 메탈
-    this._metal = metal;
-
-    /// 원소의 주기
-    this._period = period;
-
-    /// 원소의 그룹
-    this._group = group;
-
-    /// 가질 수 있는 본드의 수
-    this._vsepr_type = 0;
-
-    /// lone pair 의 수
-    this._vsepr_lpair = 0;
-
-    /// 원소 결합시 각도
-    this._vsepr_angle = 0;
-
-    /// 원소 크기
-    this._atom_vis_size = 1;
-
-    /// 원소 가시화 여부
-    this._visible = true;
-  }
-
-  /**
-   * 색상을 정의한다
-   * @param {any} r red
-   * @param {any} g green
-   * @param {any} b blue
-   */
-  setColor(r, g, b) {
-    this._color = [r, g, b];
-    this._diffuseColor = [r, g, b];
-    this._emissiveColor = [r * 0.1, g * 0.1, b * 0.1];
-    this._specularColor = [1, 1, 1];
-  }
-  /**
-   * 기본 컬러를 정의한다
-   * @param {Number} r red
-   * @param {Number} g green
-   * @param {Number} b blue
-   */
-  setDefaultColor(r, g, b) {
-    this._defColor = [r, g, b];
-  }
-  /**
-   * 기본 원소 문자 크기를 정의한다
-   * @param {Number} size 크기
-   */
-  setNameSize(size) {
-    this._atom_vis_size = size;
-  }
-}
-;
-
-/**
- * 원소의 VSEPR 값을 정의
- * @param {String} atom 원소 기호
- * @param {String} type 타입
- * @param {Function} lone_pair long pair
- * @param {Function} angle 각도
- */
-function setAtomVSEPR(atom, type, lone_pair, angle) {
-  var atom_def = AtomDef._atomDefList[atom.toUpperCase()];
-  if (!atom_def) return;
-  atom_def._vsepr_type = type;
-  atom_def._vsepr_lpair = lone_pair;
-  atom_def._vsepr_angle = angle;
-}
-
-/**
- * 원소의 메탈 값을 정의
- * @param {String} atom 원소
- * @param {Number} metal 메탈 값
- */
-function setAtomMetal(atom, metal) {
-  var atom_def = AtomDef._atomDefList[atom.toUpperCase()];
-  if (!atom_def) return;
-  atom_def._metal = metal;
-}
-
-/**
-* 원소의 Isotope 값을 설정
-* @param {String} isotope 원소의 isotope
-* @param {String} atom
-*/
-function addIsotope(isotope, atom) {}
-
-/**
- * 원소의 정보를 정의한다
- * @param {Number} number
- * @param {String} atom
- * @param {String} kname
- * @param {String} name
- * @param {Number} r
- * @param {Number} g
- * @param {Number} b
- * @param {Number} radius
- * @param {Number} metal
- * @param {String} group
- * @param {Number} period
- */
-function setAtomData(number, atom, kname, name, r, g, b, radius, metal, group, period) {
-  var atom_def = new CAtomDef(number, atom, kname, name, r, g, b, radius, metal, group, period);
-  AtomDef._atomDefList[atom.toUpperCase()] = atom_def;
-  AtomDef._atomNumList[number] = atom_def;
-}
-
-///////////////////
-// setAtomData
-///////////////////
-
-setAtomData(1, "H", "수소", "Hydrogen", 255, 255, 255, 25, 0, 1, 1);
-setAtomData(2, "He", "헬륨", "Helium", 217, 255, 255, 120, 0, 18, 1);
-setAtomData(3, "Li", "리튬", "Lithium", 204, 128, 255, 145, 0, 1, 2);
-setAtomData(4, "Be", "베릴륨", "Beryllium", 194, 255, 0, 105, 0, 2, 2);
-setAtomData(5, "B", "붕소", "Boron", 255, 181, 181, 85, 0, 13, 2);
-setAtomData(6, "C", "탄소", "Carbon", 54, 54, 54, 70, 0, 14, 2);
-setAtomData(7, "N", "질소", "Nitrogen", 48, 80, 248, 65, 0, 15, 2);
-setAtomData(8, "O", "산소", "Oxygen", 255, 13, 13, 60, 0, 16, 2);
-setAtomData(9, "F", "플루오린", "Fluorine", 144, 224, 80, 50, 0, 17, 2);
-setAtomData(10, "Ne", "네온", "Neon", 179, 227, 245, 160, 0, 18, 2);
-setAtomData(11, "Na", "나트륨", "Sodium", 171, 92, 242, 180, 0, 1, 3);
-setAtomData(12, "Mg", "마그네슘", "Magnesium", 138, 255, 0, 150, 0, 2, 3);
-setAtomData(13, "Al", "알루미늄", "Aluminium", 191, 166, 166, 125, 0, 13, 3);
-setAtomData(14, "Si", "규소", "Silicon", 240, 200, 160, 110, 0, 14, 3);
-setAtomData(15, "P", "인", "Phosphorus", 255, 128, 0, 100, 0, 15, 3);
-setAtomData(16, "S", "황", "Sulfur", 255, 255, 48, 100, 0, 16, 3);
-setAtomData(17, "Cl", "염소", "Chlorine", 31, 240, 31, 100, 0, 17, 3);
-setAtomData(18, "Ar", "아르곤", "Argon", 128, 209, 227, 71, 0, 18, 3);
-setAtomData(19, "K", "칼륨", "Potassium", 143, 64, 212, 220, 0, 1, 4);
-setAtomData(20, "Ca", "칼슘", "Calcium", 61, 255, 0, 180, 0, 2, 4);
-setAtomData(21, "Sc", "스칸듐", "Scandium", 230, 230, 230, 160, 0, 3, 4);
-setAtomData(22, "Ti", "티타늄", "Titanium", 191, 194, 199, 140, 0, 4, 4);
-setAtomData(23, "V", "바나듐", "Vanadium", 166, 166, 171, 135, 0, 5, 4);
-setAtomData(24, "Cr", "크롬", "Chromium", 138, 153, 199, 140, 0, 6, 4);
-setAtomData(25, "Mn", "망가니즈", "Manganese", 156, 122, 199, 140, 0, 7, 4);
-setAtomData(26, "Fe", "철", "Iron", 224, 102, 51, 140, 0, 8, 4);
-setAtomData(27, "Co", "코발트", "Cobalt", 240, 144, 160, 135, 0, 9, 4);
-setAtomData(28, "Ni", "니켈", "Nickel", 80, 208, 80, 135, 0, 10, 4);
-setAtomData(29, "Cu", "구리", "Copper", 200, 128, 51, 135, 0, 11, 4);
-setAtomData(30, "Zn", "아연", "Zinc", 125, 128, 176, 135, 0, 12, 4);
-setAtomData(31, "Ga", "갈륨", "Gallium", 194, 143, 143, 130, 0, 13, 4);
-setAtomData(32, "Ge", "게르마늄", "Germanium", 102, 143, 143, 125, 0, 14, 4);
-setAtomData(33, "As", "비소", "Arsenic", 189, 128, 227, 115, 0, 15, 4);
-setAtomData(34, "Se", "셀레늄", "Selenium", 255, 161, 0, 115, 0, 16, 4);
-setAtomData(35, "Br", "브로민", "Bromine", 166, 41, 41, 115, 0, 17, 4);
-setAtomData(36, "Kr", "크립톤", "Krypton", 92, 184, 209, 115, 0, 18, 4);
-setAtomData(37, "Rb", "루비듐", "Rubidium", 112, 46, 176, 235, 0, 1, 5);
-setAtomData(38, "Sr", "스트론튬", "Strontium", 0, 255, 0, 200, 0, 2, 5);
-setAtomData(39, "Y", "이트륨", "Yttrium", 148, 255, 255, 180, 0, 3, 5);
-setAtomData(40, "Zr", "지르코늄", "Zirconium", 148, 224, 224, 155, 0, 4, 5);
-setAtomData(41, "Nb", "나이오븀", "Niobium", 115, 194, 201, 145, 0, 5, 5);
-setAtomData(42, "Mo", "몰리브데넘", "Molybdenum", 84, 181, 181, 145, 0, 6, 5);
-setAtomData(43, "Tc", "테크네튬", "Technetium", 59, 158, 158, 135, 0, 7, 5);
-setAtomData(44, "Ru", "루테늄", "Ruthenium", 36, 143, 143, 130, 0, 8, 5);
-setAtomData(45, "Rh", "로듐", "Rhodium", 10, 125, 140, 135, 0, 9, 5);
-setAtomData(46, "Pd", "팔라듐", "Palladium", 0, 105, 133, 140, 0, 10, 5);
-setAtomData(47, "Ag", "은", "Silver", 192, 192, 192, 160, 0, 11, 5);
-setAtomData(48, "Cd", "카드뮴", "Cadmium", 255, 217, 143, 155, 0, 12, 5);
-setAtomData(49, "In", "인듐", "Indium", 166, 117, 115, 155, 0, 13, 5);
-setAtomData(50, "Sn", "주석", "Tin", 102, 128, 128, 145, 0, 14, 5);
-setAtomData(51, "Sb", "안티모니", "Antimony", 158, 99, 181, 145, 0, 15, 5);
-setAtomData(52, "Te", "텔루륨", "Tellurium", 212, 122, 0, 140, 0, 16, 5);
-setAtomData(53, "I", "아이오딘", "Iodine", 148, 0, 148, 140, 0, 17, 5);
-setAtomData(54, "Xe", "제논", "Xenon", 66, 158, 176, 140, 0, 18, 5);
-setAtomData(55, "Cs", "세슘", "Caesium", 87, 23, 143, 260, 0, 1, 6);
-setAtomData(56, "Ba", "바륨", "Barium", 0, 201, 0, 215, 0, 2, 6);
-
-// Lantan Group - Period/Group Modified for Table.
-setAtomData(57, "La", "란타넘", "Lanthanum", 112, 212, 255, 195, 0, 3, 8);
-setAtomData(58, "Ce", "세륨", "Cerium", 255, 255, 199, 185, 0, 4, 8);
-setAtomData(59, "Pr", "프라세오디뮴", "Praseodymium", 217, 255, 199, 185, 0, 5, 8);
-setAtomData(60, "Nd", "네오디뮴", "Neodymium", 199, 255, 199, 185, 0, 6, 8);
-setAtomData(61, "Pm", "프로메튬", "Promethium", 163, 255, 199, 185, 0, 7, 8);
-setAtomData(62, "Sm", "사마륨", "Samarium", 143, 255, 199, 185, 0, 8, 8);
-setAtomData(63, "Eu", "유로퓸", "Europium", 97, 255, 199, 185, 0, 9, 8);
-setAtomData(64, "Gd", "가돌리늄", "Gadolinium", 69, 255, 199, 180, 0, 10, 8);
-setAtomData(65, "Tb", "터븀", "Terbium", 48, 255, 199, 175, 0, 11, 8);
-setAtomData(66, "Dy", "디스프로슘", "Dysprosium", 31, 255, 199, 175, 0, 12, 8);
-setAtomData(67, "Ho", "홀뮴", "Holmium", 0, 255, 156, 175, 0, 13, 8);
-setAtomData(68, "Er", "어븀", "Erbium", 0, 230, 117, 175, 0, 14, 8);
-setAtomData(69, "Tm", "툴륨", "Thulium", 0, 212, 82, 175, 0, 15, 8);
-setAtomData(70, "Yb", "이터븀", "Ytterbium", 0, 191, 56, 175, 0, 16, 8);
-setAtomData(71, "Lu", "루테튬", "Lutetium", 0, 171, 36, 175, 0, 17, 8);
-// end of Lantan Group
-
-setAtomData(72, "Hf", "하프늄", "Hafnium", 77, 194, 255, 155, 0, 4, 6);
-setAtomData(73, "Ta", "탄탈럼", "Tantalum", 77, 166, 255, 145, 0, 5, 6);
-setAtomData(74, "W", "텅스텐", "Tungsten", 33, 148, 214, 135, 0, 6, 6);
-setAtomData(75, "Re", "레늄", "Rhenium", 38, 125, 171, 135, 0, 7, 6);
-setAtomData(76, "Os", "오스뮴", "Osmium", 38, 102, 150, 130, 0, 8, 6);
-setAtomData(77, "Ir", "이리듐", "Iridium", 23, 84, 135, 135, 0, 9, 6);
-setAtomData(78, "Pt", "백금", "Platinum", 208, 208, 224, 135, 0, 10, 6);
-setAtomData(79, "Au", "금", "Gold", 255, 209, 35, 135, 0, 11, 6);
-setAtomData(80, "Hg", "수은", "Mercury", 184, 184, 208, 150, 0, 12, 6);
-setAtomData(81, "Tl", "탈륨", "Thallium", 166, 84, 77, 190, 0, 13, 6);
-setAtomData(82, "Pb", "납", "Lead", 87, 89, 97, 180, 0, 14, 6);
-setAtomData(83, "Bi", "비스무트", "Bismuth", 158, 79, 181, 160, 0, 15, 6);
-setAtomData(84, "Po", "폴로늄", "Polonium", 171, 92, 0, 190, 0, 16, 6);
-setAtomData(85, "At", "아스타틴", "Astatine", 117, 79, 69, 190, 0, 17, 6);
-setAtomData(86, "Rn", "라돈", "Radon", 66, 130, 150, 190, 0, 18, 6);
-setAtomData(87, "Fr", "프랑슘", "Francium", 66, 0, 102, 190, 0, 1, 7);
-setAtomData(88, "Ra", "라듐", "Radium", 0, 125, 0, 215, 0, 2, 7);
-
-// Actin Group - Period/Group Modified for Table.
-setAtomData(89, "Ac", "악티늄", "Actinium", 112, 171, 250, 195, 0, 3, 9);
-setAtomData(90, "Th", "토륨", "Thorium", 0, 186, 255, 180, 0, 4, 9);
-setAtomData(91, "Pa", "프로트악티늄", "Protactinium", 0, 161, 255, 180, 0, 5, 9);
-setAtomData(92, "U", "우라늄", "Uranium", 0, 143, 255, 175, 0, 6, 9);
-setAtomData(93, "Np", "넵투늄", "Neptunium", 0, 128, 255, 175, 0, 7, 9);
-setAtomData(94, "Pu", "플루토늄", "Plutonium", 0, 107, 255, 175, 0, 8, 9);
-setAtomData(95, "Am", "아메리슘", "Americium", 84, 92, 242, 175, 0, 9, 9);
-setAtomData(96, "Cm", "퀴륨", "Curium", 120, 92, 227, 175, 0, 10, 9);
-setAtomData(97, "Bk", "버클륨", "Berkelium", 138, 79, 227, 175, 0, 11, 9);
-setAtomData(98, "Cf", "캘리포늄", "Californium", 161, 54, 212, 175, 0, 12, 9);
-setAtomData(99, "Es", "아인슈타이늄", "Einsteinium", 179, 31, 212, 175, 0, 13, 9);
-setAtomData(100, "Fm", "페르뮴", "Fermium", 179, 31, 186, 175, 0, 14, 9);
-setAtomData(101, "Md", "멘델레븀", "Mendelevium", 179, 13, 166, 175, 0, 15, 9);
-setAtomData(102, "No", "노벨륨", "Nobelium", 189, 13, 135, 175, 0, 16, 9);
-setAtomData(103, "Lr", "로렌슘", "Lawrencium", 199, 0, 102, 175, 0, 17, 9);
-// end of Actin Group
-
-setAtomData(104, "Rf", "러더포듐", "Rutherfordium", 204, 0, 89, 175, 0, 4, 7);
-setAtomData(105, "Db", "더브늄", "Dubnium", 209, 0, 79, 175, 0, 5, 7);
-setAtomData(106, "Sg", "시보귬", "Seaborgium", 217, 0, 69, 175, 0, 6, 7);
-setAtomData(107, "Bh", "보륨", "Bohrium", 224, 0, 56, 175, 0, 7, 7);
-setAtomData(108, "Hs", "하슘", "Hassium", 230, 0, 46, 175, 0, 8, 7);
-setAtomData(109, "Mt", "마이트너륨", "Meitnerium", 235, 0, 38, 175, 0, 9, 7);
-setAtomData(110, "Ds", "다름슈타튬", "Darmstadtium", 128, 128, 128, 175, 0, 10, 7);
-setAtomData(111, "Rg", "뢴트게늄", "Roentgenium", 128, 128, 128, 175, 0, 11, 7);
-setAtomData(112, "Cn", "코페르니슘", "Copernicium", 128, 128, 128, 175, 0, 12, 7);
-setAtomData(113, "Nh", "니호늄", "Nihonium", 128, 128, 128, 175, 0, 13, 7);
-setAtomData(114, "Fl", "플레로븀", "Flerovium", 128, 128, 128, 175, 0, 14, 7);
-setAtomData(115, "Mc", "모스코븀", "Moscovium", 128, 128, 128, 175, 0, 15, 7);
-setAtomData(116, "Lv", "리버모륨", "Livermorium", 128, 128, 128, 175, 0, 16, 7);
-setAtomData(117, "Ts", "테네신", "Tennessine", 128, 128, 128, 175, 0, 17, 7);
-setAtomData(118, "Og", "오가네손", "Oganesson", 128, 128, 128, 175, 0, 18, 7);
-setAtomData(199, "?", "미정", "?", 28, 28, 28, 100, 0, 0, 0);
-setAtomData(200, "@", "@Anchor", "Anchor", 256, 0, 0, 10, 0, 0, 0);
-setAtomData(201, "#", "#Upvector", "Upvector", 0, 0, 255, 10, 0, 0, 0);
-setAtomData(211, "+1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(212, "+2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(213, "+3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(214, "+4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(215, "+5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(216, "+6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(217, "+7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(218, "+8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(219, "+9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(221, "-1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(222, "-2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(223, "-3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(224, "-4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(225, "-5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(226, "-6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(227, "-7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(228, "-8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-setAtomData(229, "-9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-
-// 0 : 비금속
-// 1 : 알카리 금속
-// 2 : 알카리 포금속
-// 3 : 전이 금속
-// 4 : 전이 후 금속
-// 5 : 준금속
-// 6 : 비활성 기체
-
-setAtomMetal("He", 6);
-setAtomMetal("Ne", 6);
-setAtomMetal("Ar", 6);
-setAtomMetal("Kr", 6);
-setAtomMetal("Xe", 6);
-setAtomMetal("Rn", 6);
-setAtomMetal("B", 5);
-setAtomMetal("Si", 5);
-setAtomMetal("Ge", 5);
-setAtomMetal("As", 5);
-setAtomMetal("Sb", 5);
-setAtomMetal("Te", 5);
-setAtomMetal("At", 5);
-setAtomMetal("Li", 1);
-setAtomMetal("Na", 1);
-setAtomMetal("K", 1);
-setAtomMetal("Rb", 1);
-setAtomMetal("Cs", 1);
-setAtomMetal("Fr", 1);
-setAtomMetal("Uue", 1);
-setAtomMetal("Be", 2);
-setAtomMetal("Mg", 2);
-setAtomMetal("Ca", 2);
-setAtomMetal("Sr", 2);
-setAtomMetal("Ba", 2);
-setAtomMetal("Ra", 2);
-setAtomMetal("Sc", 3);
-setAtomMetal("Ti", 3);
-setAtomMetal("V", 3);
-setAtomMetal("Cr", 3);
-setAtomMetal("Mn", 3);
-setAtomMetal("Fe", 3);
-setAtomMetal("Co", 3);
-setAtomMetal("Ni", 3);
-setAtomMetal("Cu", 3);
-setAtomMetal("Zn", 3);
-setAtomMetal("Y", 3);
-setAtomMetal("Zr", 3);
-setAtomMetal("Nb", 3);
-setAtomMetal("Mo", 3);
-setAtomMetal("Tc", 3);
-setAtomMetal("Ru", 3);
-setAtomMetal("Rh", 3);
-setAtomMetal("Pd", 3);
-setAtomMetal("Ag", 3);
-setAtomMetal("Cd", 3);
-setAtomMetal("Rf", 3);
-setAtomMetal("Db", 3);
-setAtomMetal("Sg", 3);
-setAtomMetal("Bh", 3);
-setAtomMetal("Hs", 3);
-setAtomMetal("Cn", 3);
-setAtomMetal("Hf", 3);
-setAtomMetal("Ta", 3);
-setAtomMetal("W", 3);
-setAtomMetal("Re", 3);
-setAtomMetal("Os", 3);
-setAtomMetal("Ir", 3);
-setAtomMetal("Pt", 3);
-setAtomMetal("Au", 3);
-setAtomMetal("Hg", 3);
-setAtomMetal("Al", 4);
-setAtomMetal("Ga", 4);
-setAtomMetal("In", 4);
-setAtomMetal("Sn", 4);
-setAtomMetal("Tl", 4);
-setAtomMetal("Pb", 4);
-setAtomMetal("Bi", 4);
-setAtomMetal("Po", 4);
-setAtomVSEPR("C", 4, 0, 109.5);
-setAtomVSEPR("Ge", 4, 0, 109.5);
-setAtomVSEPR("N", 4, 1, 109.5);
-setAtomVSEPR("P", 4, 1, 109.5);
-setAtomVSEPR("O", 4, 2, 109.5);
-setAtomVSEPR("S", 4, 2, 109.5);
-setAtomVSEPR("Se", 4, 2, 109.5);
-setAtomVSEPR("Te", 4, 2, 109.5);
-setAtomVSEPR("Po", 4, 2, 109.5);
-setAtomVSEPR("B", 3, 0, 120);
-setAtomVSEPR("Al", 3, 0, 120);
-setAtomVSEPR("Ga", 3, 0, 120);
-setAtomVSEPR("As", 1, 0, 0);
-setAtomVSEPR("F", 1, 0, 0);
-setAtomVSEPR("Cl", 1, 0, 0);
-setAtomVSEPR("Br", 1, 0, 0);
-setAtomVSEPR("I", 1, 0, 0);
-setAtomVSEPR("At", 1, 0, 0);
-setAtomVSEPR("Li", 1, 0, 0);
-setAtomVSEPR("Na", 1, 0, 0);
-setAtomVSEPR("K", 1, 0, 0);
-setAtomVSEPR("Rb", 1, 0, 0);
-setAtomVSEPR("Cs", 1, 0, 0);
-setAtomVSEPR("Fr", 1, 0, 0);
-setAtomVSEPR("Be", 2, 0, 180);
-setAtomVSEPR("Mg", 2, 0, 180);
-setAtomVSEPR("Ca", 2, 0, 180);
-setAtomVSEPR("Sr", 2, 0, 180);
-setAtomVSEPR("Ba", 2, 0, 180);
-setAtomVSEPR("Ra", 2, 0, 180);
-;// CONCATENATED MODULE: ./CoreCrystal/AtomDef.js
-/**
- * @file 원소의 정보를 정의한 클래스
- * @version 0.1
- */
-var AtomDef_AtomDef = {};
-AtomDef_AtomDef._atomDefList = [];
-AtomDef_AtomDef._atomNumList = [];
-
-/**
- * index에 해당하는 원자 정보를 반환한다
- * @param {Number} index 원자 인덱스
- * @returns {CAtomDef} 원자 인덱스에 해당하는 정의
- */
-AtomDef_AtomDef.GetDefWithNumber = function (index) {
-  return AtomDef_AtomDef._atomNumList[index];
-};
-
-/**
- * id에 해당하는 원자 정보를 반환한다
- * @param {String} id 원자 아이디
- * @returns {CAtomDef} 원자 아이디에 해당하는 정의
- */
-AtomDef_AtomDef.GetDefWithID = function (id) {
-  return AtomDef_AtomDef._atomDefList[id.toUpperCase()];
-};
-
-/**
- * 한 원소의 특성을 정의한 클래스다. 이름, 반지름, 질량 등이 정의된다.
- * */
-class AtomDef_CAtomDef {
-  /**
-   * 원소를 정의한다
-   * @param {Number} number 원소 번호
-   * @param {String} atom 원소 기호
-   * @param {String} kname 원소 이름 (한글)
-   * @param {String} name 원소 이름 (영문)
-   * @param {Number} r 컬러 R
-   * @param {Number} g 컬러 G
-   * @param {Number} b 컬러 B
-   * @param {Number} radius 반지름
-   * @param {Number} metal 메탈
-   * @param {Number} group 그룹
-   * @param {Number} period 주기율
-   */
-  constructor(number, atom, kname, name, r, g, b, radius, metal, group, period) {
-    /// AtomDef의 ID이다. string
-    this._id = atom.toUpperCase();
-
-    /// 원소의 이름. string
-    this._atom_id = atom;
-
-    /// 원소의 반지름. 
-    this._radius = (radius + 100) / 500 * 1.;
-    this._empirical_radius = radius;
-
-    /// 원소의 이름. 영문
-    this._name = name;
-
-    /// 원소의 이름. 한글
-    this._korean_name = kname;
-
-    /// 원소의 컬러
-    this._color = [0, 0, 0];
-
-    /// 원소의 디퓨즈 컬러
-    this._diffuseColor = [0, 0, 0];
-
-    /// 원소의 emissive 컬러
-    this._emissiveColor = [0, 0, 0];
-
-    /// 원소의 specular 컬러
-    this._specularColor = [1, 1, 1];
-    this.setColor(r / 255, g / 255, b / 255);
-    this.setDefaultColor(r / 255, g / 255, b / 255);
-
-    /// 원소의 Ambient 컬러
-    this._ambientColor = [0.0, 0.0, 0.0];
-
-    /// 원소의 specular power
-    this._specularPower = 15;
-
-    /// 원소의 원자수
-    this._atom_number = number;
-
-    /// 메탈
-    this._metal = metal;
-
-    /// 원소의 주기
-    this._period = period;
-
-    /// 원소의 그룹
-    this._group = group;
-
-    /// 가질 수 있는 본드의 수
-    this._vsepr_type = 0;
-
-    /// lone pair 의 수
-    this._vsepr_lpair = 0;
-
-    /// 원소 결합시 각도
-    this._vsepr_angle = 0;
-
-    /// 원소 크기
-    this._atom_vis_size = 1;
-
-    /// 원소 가시화 여부
-    this._visible = true;
-  }
-
-  /**
-   * 색상을 정의한다
-   * @param {Number} r red
-   * @param {Number} g green
-   * @param {Number} b blue
-   */
-  setColor(r, g, b) {
-    this._color = [r, g, b];
-    this._diffuseColor = [r, g, b];
-    this._emissiveColor = [r * 0.1, g * 0.1, b * 0.1];
-    this._specularColor = [1, 1, 1];
-  }
-  /**
-   * 기본 컬러를 정의한다
-   * @param {Number} r red
-   * @param {Number} g green
-   * @param {Number} b blue
-   */
-  setDefaultColor(r, g, b) {
-    this._defColor = [r, g, b];
-  }
-  /**
-   * 기본 원소 문자 크기를 정의한다
-   * @param {Number} size 크기
-   */
-  setNameSize(size) {
-    this._atom_vis_size = size;
-  }
-}
-;
-
-/**
- * 원소의 VSEPR 값을 정의
- * @param {String} atom 원소 기호
- * @param {String} type 타입
- * @param {Function} lone_pair long pair
- * @param {Function} angle 각도
- */
-function AtomDef_setAtomVSEPR(atom, type, lone_pair, angle) {
-  var atom_def = AtomDef_AtomDef._atomDefList[atom.toUpperCase()];
-  if (!atom_def) return;
-  atom_def._vsepr_type = type;
-  atom_def._vsepr_lpair = lone_pair;
-  atom_def._vsepr_angle = angle;
-}
-
-/**
- * 원소의 메탈 값을 정의
- * @param {String} atom 원소
- * @param {Number} metal 메탈 값
- */
-function AtomDef_setAtomMetal(atom, metal) {
-  var atom_def = AtomDef_AtomDef._atomDefList[atom.toUpperCase()];
-  if (!atom_def) return;
-  atom_def._metal = metal;
-}
-
-/**
-* 원소의 Isotope 값을 설정
-* @param {String} isotope 원소의 isotope
-* @param {String} atom
-*/
-function AtomDef_addIsotope(isotope, atom) {}
-
-/**
- * 원소의 정보를 정의한다
- * @param {Number} number
- * @param {String} atom
- * @param {String} kname
- * @param {String} name
- * @param {Number} r
- * @param {Number} g
- * @param {Number} b
- * @param {Number} radius
- * @param {Number} metal
- * @param {String} group
- * @param {Number} period
- */
-function AtomDef_setAtomData(number, atom, kname, name, r, g, b, radius, metal, group, period) {
-  var atom_def = new AtomDef_CAtomDef(number, atom, kname, name, r, g, b, radius, metal, group, period);
-  AtomDef_AtomDef._atomDefList[atom.toUpperCase()] = atom_def;
-  AtomDef_AtomDef._atomNumList[number] = atom_def;
-}
-
-///////////////////
-// setAtomData
-///////////////////
-
-AtomDef_setAtomData(1, "H", "수소", "Hydrogen", 180, 180, 180, 25, 0, 1, 1);
-AtomDef_setAtomData(2, "He", "헬륨", "Helium", 217, 235, 235, 120, 0, 18, 1);
-AtomDef_setAtomData(3, "Li", "리튬", "Lithium", 204, 128, 255, 145, 0, 1, 2);
-AtomDef_setAtomData(4, "Be", "베릴륨", "Beryllium", 194, 255, 0, 105, 0, 2, 2);
-AtomDef_setAtomData(5, "B", "붕소", "Boron", 255, 181, 181, 85, 0, 13, 2);
-AtomDef_setAtomData(6, "C", "탄소", "Carbon", 94, 94, 94, 70, 0, 14, 2);
-AtomDef_setAtomData(7, "N", "질소", "Nitrogen", 48, 80, 248, 65, 0, 15, 2);
-AtomDef_setAtomData(8, "O", "산소", "Oxygen", 255, 13, 13, 60, 0, 16, 2);
-AtomDef_setAtomData(9, "F", "플루오린", "Fluorine", 144, 224, 80, 50, 0, 17, 2);
-AtomDef_setAtomData(10, "Ne", "네온", "Neon", 179, 227, 245, 160, 0, 18, 2);
-AtomDef_setAtomData(11, "Na", "나트륨", "Sodium", 171, 92, 242, 180, 0, 1, 3);
-AtomDef_setAtomData(12, "Mg", "마그네슘", "Magnesium", 138, 255, 0, 150, 0, 2, 3);
-AtomDef_setAtomData(13, "Al", "알루미늄", "Aluminium", 191, 166, 166, 125, 0, 13, 3);
-AtomDef_setAtomData(14, "Si", "규소", "Silicon", 240, 200, 160, 110, 0, 14, 3);
-AtomDef_setAtomData(15, "P", "인", "Phosphorus", 255, 128, 0, 100, 0, 15, 3);
-AtomDef_setAtomData(16, "S", "황", "Sulfur", 255, 255, 48, 100, 0, 16, 3);
-AtomDef_setAtomData(17, "Cl", "염소", "Chlorine", 31, 240, 31, 100, 0, 17, 3);
-AtomDef_setAtomData(18, "Ar", "아르곤", "Argon", 128, 209, 227, 71, 0, 18, 3);
-AtomDef_setAtomData(19, "K", "칼륨", "Potassium", 143, 64, 212, 220, 0, 1, 4);
-AtomDef_setAtomData(20, "Ca", "칼슘", "Calcium", 61, 255, 0, 180, 0, 2, 4);
-AtomDef_setAtomData(21, "Sc", "스칸듐", "Scandium", 170, 170, 170, 160, 0, 3, 4);
-AtomDef_setAtomData(22, "Ti", "티타늄", "Titanium", 191, 194, 199, 140, 0, 4, 4);
-AtomDef_setAtomData(23, "V", "바나듐", "Vanadium", 166, 166, 171, 135, 0, 5, 4);
-AtomDef_setAtomData(24, "Cr", "크롬", "Chromium", 138, 153, 199, 140, 0, 6, 4);
-AtomDef_setAtomData(25, "Mn", "망가니즈", "Manganese", 156, 122, 199, 140, 0, 7, 4);
-AtomDef_setAtomData(26, "Fe", "철", "Iron", 224, 102, 51, 140, 0, 8, 4);
-AtomDef_setAtomData(27, "Co", "코발트", "Cobalt", 240, 144, 160, 135, 0, 9, 4);
-AtomDef_setAtomData(28, "Ni", "니켈", "Nickel", 80, 208, 80, 135, 0, 10, 4);
-AtomDef_setAtomData(29, "Cu", "구리", "Copper", 200, 128, 51, 135, 0, 11, 4);
-AtomDef_setAtomData(30, "Zn", "아연", "Zinc", 125, 128, 176, 135, 0, 12, 4);
-AtomDef_setAtomData(31, "Ga", "갈륨", "Gallium", 194, 143, 143, 130, 0, 13, 4);
-AtomDef_setAtomData(32, "Ge", "게르마늄", "Germanium", 102, 143, 143, 125, 0, 14, 4);
-AtomDef_setAtomData(33, "As", "비소", "Arsenic", 189, 128, 227, 115, 0, 15, 4);
-AtomDef_setAtomData(34, "Se", "셀레늄", "Selenium", 255, 161, 0, 115, 0, 16, 4);
-AtomDef_setAtomData(35, "Br", "브로민", "Bromine", 166, 41, 41, 115, 0, 17, 4);
-AtomDef_setAtomData(36, "Kr", "크립톤", "Krypton", 92, 184, 209, 115, 0, 18, 4);
-AtomDef_setAtomData(37, "Rb", "루비듐", "Rubidium", 112, 46, 176, 235, 0, 1, 5);
-AtomDef_setAtomData(38, "Sr", "스트론튬", "Strontium", 0, 255, 0, 200, 0, 2, 5);
-AtomDef_setAtomData(39, "Y", "이트륨", "Yttrium", 148, 255, 255, 180, 0, 3, 5);
-AtomDef_setAtomData(40, "Zr", "지르코늄", "Zirconium", 148, 224, 224, 155, 0, 4, 5);
-AtomDef_setAtomData(41, "Nb", "나이오븀", "Niobium", 115, 194, 201, 145, 0, 5, 5);
-AtomDef_setAtomData(42, "Mo", "몰리브데넘", "Molybdenum", 84, 181, 181, 145, 0, 6, 5);
-AtomDef_setAtomData(43, "Tc", "테크네튬", "Technetium", 59, 158, 158, 135, 0, 7, 5);
-AtomDef_setAtomData(44, "Ru", "루테늄", "Ruthenium", 36, 143, 143, 130, 0, 8, 5);
-AtomDef_setAtomData(45, "Rh", "로듐", "Rhodium", 10, 125, 140, 135, 0, 9, 5);
-AtomDef_setAtomData(46, "Pd", "팔라듐", "Palladium", 0, 105, 133, 140, 0, 10, 5);
-AtomDef_setAtomData(47, "Ag", "은", "Silver", 192, 192, 192, 160, 0, 11, 5);
-AtomDef_setAtomData(48, "Cd", "카드뮴", "Cadmium", 255, 217, 143, 155, 0, 12, 5);
-AtomDef_setAtomData(49, "In", "인듐", "Indium", 166, 117, 115, 155, 0, 13, 5);
-AtomDef_setAtomData(50, "Sn", "주석", "Tin", 102, 128, 128, 145, 0, 14, 5);
-AtomDef_setAtomData(51, "Sb", "안티모니", "Antimony", 158, 99, 181, 145, 0, 15, 5);
-AtomDef_setAtomData(52, "Te", "텔루륨", "Tellurium", 212, 122, 0, 140, 0, 16, 5);
-AtomDef_setAtomData(53, "I", "아이오딘", "Iodine", 148, 0, 148, 140, 0, 17, 5);
-AtomDef_setAtomData(54, "Xe", "제논", "Xenon", 66, 158, 176, 140, 0, 18, 5);
-AtomDef_setAtomData(55, "Cs", "세슘", "Caesium", 87, 23, 143, 260, 0, 1, 6);
-AtomDef_setAtomData(56, "Ba", "바륨", "Barium", 0, 201, 0, 215, 0, 2, 6);
-
-// Lantan Group - Period/Group Modified for Table.
-AtomDef_setAtomData(57, "La", "란타넘", "Lanthanum", 112, 212, 255, 195, 0, 3, 8);
-AtomDef_setAtomData(58, "Ce", "세륨", "Cerium", 255, 255, 199, 185, 0, 4, 8);
-AtomDef_setAtomData(59, "Pr", "프라세오디뮴", "Praseodymium", 217, 255, 199, 185, 0, 5, 8);
-AtomDef_setAtomData(60, "Nd", "네오디뮴", "Neodymium", 199, 255, 199, 185, 0, 6, 8);
-AtomDef_setAtomData(61, "Pm", "프로메튬", "Promethium", 163, 255, 199, 185, 0, 7, 8);
-AtomDef_setAtomData(62, "Sm", "사마륨", "Samarium", 143, 255, 199, 185, 0, 8, 8);
-AtomDef_setAtomData(63, "Eu", "유로퓸", "Europium", 97, 255, 199, 185, 0, 9, 8);
-AtomDef_setAtomData(64, "Gd", "가돌리늄", "Gadolinium", 69, 255, 199, 180, 0, 10, 8);
-AtomDef_setAtomData(65, "Tb", "터븀", "Terbium", 48, 255, 199, 175, 0, 11, 8);
-AtomDef_setAtomData(66, "Dy", "디스프로슘", "Dysprosium", 31, 255, 199, 175, 0, 12, 8);
-AtomDef_setAtomData(67, "Ho", "홀뮴", "Holmium", 0, 255, 156, 175, 0, 13, 8);
-AtomDef_setAtomData(68, "Er", "어븀", "Erbium", 0, 230, 117, 175, 0, 14, 8);
-AtomDef_setAtomData(69, "Tm", "툴륨", "Thulium", 0, 212, 82, 175, 0, 15, 8);
-AtomDef_setAtomData(70, "Yb", "이터븀", "Ytterbium", 0, 191, 56, 175, 0, 16, 8);
-AtomDef_setAtomData(71, "Lu", "루테튬", "Lutetium", 0, 171, 36, 175, 0, 17, 8);
-// end of Lantan Group
-
-AtomDef_setAtomData(72, "Hf", "하프늄", "Hafnium", 77, 194, 255, 155, 0, 4, 6);
-AtomDef_setAtomData(73, "Ta", "탄탈럼", "Tantalum", 77, 166, 255, 145, 0, 5, 6);
-AtomDef_setAtomData(74, "W", "텅스텐", "Tungsten", 33, 148, 214, 135, 0, 6, 6);
-AtomDef_setAtomData(75, "Re", "레늄", "Rhenium", 38, 125, 171, 135, 0, 7, 6);
-AtomDef_setAtomData(76, "Os", "오스뮴", "Osmium", 38, 102, 150, 130, 0, 8, 6);
-AtomDef_setAtomData(77, "Ir", "이리듐", "Iridium", 23, 84, 135, 135, 0, 9, 6);
-AtomDef_setAtomData(78, "Pt", "백금", "Platinum", 208, 208, 224, 135, 0, 10, 6);
-AtomDef_setAtomData(79, "Au", "금", "Gold", 255, 209, 35, 135, 0, 11, 6);
-AtomDef_setAtomData(80, "Hg", "수은", "Mercury", 184, 184, 208, 150, 0, 12, 6);
-AtomDef_setAtomData(81, "Tl", "탈륨", "Thallium", 166, 84, 77, 190, 0, 13, 6);
-AtomDef_setAtomData(82, "Pb", "납", "Lead", 87, 89, 97, 180, 0, 14, 6);
-AtomDef_setAtomData(83, "Bi", "비스무트", "Bismuth", 158, 79, 181, 160, 0, 15, 6);
-AtomDef_setAtomData(84, "Po", "폴로늄", "Polonium", 171, 92, 0, 190, 0, 16, 6);
-AtomDef_setAtomData(85, "At", "아스타틴", "Astatine", 117, 79, 69, 190, 0, 17, 6);
-AtomDef_setAtomData(86, "Rn", "라돈", "Radon", 66, 130, 150, 190, 0, 18, 6);
-AtomDef_setAtomData(87, "Fr", "프랑슘", "Francium", 66, 0, 102, 190, 0, 1, 7);
-AtomDef_setAtomData(88, "Ra", "라듐", "Radium", 0, 125, 0, 215, 0, 2, 7);
-
-// Actin Group - Period/Group Modified for Table.
-AtomDef_setAtomData(89, "Ac", "악티늄", "Actinium", 112, 171, 250, 195, 0, 3, 9);
-AtomDef_setAtomData(90, "Th", "토륨", "Thorium", 0, 186, 255, 180, 0, 4, 9);
-AtomDef_setAtomData(91, "Pa", "프로트악티늄", "Protactinium", 0, 161, 255, 180, 0, 5, 9);
-AtomDef_setAtomData(92, "U", "우라늄", "Uranium", 0, 143, 255, 175, 0, 6, 9);
-AtomDef_setAtomData(93, "Np", "넵투늄", "Neptunium", 0, 128, 255, 175, 0, 7, 9);
-AtomDef_setAtomData(94, "Pu", "플루토늄", "Plutonium", 0, 107, 255, 175, 0, 8, 9);
-AtomDef_setAtomData(95, "Am", "아메리슘", "Americium", 84, 92, 242, 175, 0, 9, 9);
-AtomDef_setAtomData(96, "Cm", "퀴륨", "Curium", 120, 92, 227, 175, 0, 10, 9);
-AtomDef_setAtomData(97, "Bk", "버클륨", "Berkelium", 138, 79, 227, 175, 0, 11, 9);
-AtomDef_setAtomData(98, "Cf", "캘리포늄", "Californium", 161, 54, 212, 175, 0, 12, 9);
-AtomDef_setAtomData(99, "Es", "아인슈타이늄", "Einsteinium", 179, 31, 212, 175, 0, 13, 9);
-AtomDef_setAtomData(100, "Fm", "페르뮴", "Fermium", 179, 31, 186, 175, 0, 14, 9);
-AtomDef_setAtomData(101, "Md", "멘델레븀", "Mendelevium", 179, 13, 166, 175, 0, 15, 9);
-AtomDef_setAtomData(102, "No", "노벨륨", "Nobelium", 189, 13, 135, 175, 0, 16, 9);
-AtomDef_setAtomData(103, "Lr", "로렌슘", "Lawrencium", 199, 0, 102, 175, 0, 17, 9);
-// end of Actin Group
-
-AtomDef_setAtomData(104, "Rf", "러더포듐", "Rutherfordium", 204, 0, 89, 175, 0, 4, 7);
-AtomDef_setAtomData(105, "Db", "더브늄", "Dubnium", 209, 0, 79, 175, 0, 5, 7);
-AtomDef_setAtomData(106, "Sg", "시보귬", "Seaborgium", 217, 0, 69, 175, 0, 6, 7);
-AtomDef_setAtomData(107, "Bh", "보륨", "Bohrium", 224, 0, 56, 175, 0, 7, 7);
-AtomDef_setAtomData(108, "Hs", "하슘", "Hassium", 230, 0, 46, 175, 0, 8, 7);
-AtomDef_setAtomData(109, "Mt", "마이트너륨", "Meitnerium", 235, 0, 38, 175, 0, 9, 7);
-AtomDef_setAtomData(110, "Ds", "다름슈타튬", "Darmstadtium", 128, 128, 128, 175, 0, 10, 7);
-AtomDef_setAtomData(111, "Rg", "뢴트게늄", "Roentgenium", 128, 128, 128, 175, 0, 11, 7);
-AtomDef_setAtomData(112, "Cn", "코페르니슘", "Copernicium", 128, 128, 128, 175, 0, 12, 7);
-AtomDef_setAtomData(113, "Nh", "니호늄", "Nihonium", 128, 128, 128, 175, 0, 13, 7);
-AtomDef_setAtomData(114, "Fl", "플레로븀", "Flerovium", 128, 128, 128, 175, 0, 14, 7);
-AtomDef_setAtomData(115, "Mc", "모스코븀", "Moscovium", 128, 128, 128, 175, 0, 15, 7);
-AtomDef_setAtomData(116, "Lv", "리버모륨", "Livermorium", 128, 128, 128, 175, 0, 16, 7);
-AtomDef_setAtomData(117, "Ts", "테네신", "Tennessine", 128, 128, 128, 175, 0, 17, 7);
-AtomDef_setAtomData(118, "Og", "오가네손", "Oganesson", 128, 128, 128, 175, 0, 18, 7);
-AtomDef_setAtomData(199, "?", "미정", "?", 28, 28, 28, 100, 0, 0, 0);
-AtomDef_setAtomData(200, "@", "@Anchor", "Anchor", 256, 0, 0, 10, 0, 0, 0);
-AtomDef_setAtomData(201, "#", "#Upvector", "Upvector", 0, 0, 255, 10, 0, 0, 0);
-AtomDef_setAtomData(211, "+1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(212, "+2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(213, "+3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(214, "+4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(215, "+5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(216, "+6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(217, "+7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(218, "+8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(219, "+9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(221, "-1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(222, "-2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(223, "-3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(224, "-4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(225, "-5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(226, "-6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(227, "-7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(228, "-8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-AtomDef_setAtomData(229, "-9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
-
-// 0 : 비금속
-// 1 : 알카리 금속
-// 2 : 알카리 포금속
-// 3 : 전이 금속
-// 4 : 전이 후 금속
-// 5 : 준금속
-// 6 : 비활성 기체
-
-AtomDef_setAtomMetal("He", 6);
-AtomDef_setAtomMetal("Ne", 6);
-AtomDef_setAtomMetal("Ar", 6);
-AtomDef_setAtomMetal("Kr", 6);
-AtomDef_setAtomMetal("Xe", 6);
-AtomDef_setAtomMetal("Rn", 6);
-AtomDef_setAtomMetal("B", 5);
-AtomDef_setAtomMetal("Si", 5);
-AtomDef_setAtomMetal("Ge", 5);
-AtomDef_setAtomMetal("As", 5);
-AtomDef_setAtomMetal("Sb", 5);
-AtomDef_setAtomMetal("Te", 5);
-AtomDef_setAtomMetal("At", 5);
-AtomDef_setAtomMetal("Li", 1);
-AtomDef_setAtomMetal("Na", 1);
-AtomDef_setAtomMetal("K", 1);
-AtomDef_setAtomMetal("Rb", 1);
-AtomDef_setAtomMetal("Cs", 1);
-AtomDef_setAtomMetal("Fr", 1);
-AtomDef_setAtomMetal("Uue", 1);
-AtomDef_setAtomMetal("Be", 2);
-AtomDef_setAtomMetal("Mg", 2);
-AtomDef_setAtomMetal("Ca", 2);
-AtomDef_setAtomMetal("Sr", 2);
-AtomDef_setAtomMetal("Ba", 2);
-AtomDef_setAtomMetal("Ra", 2);
-AtomDef_setAtomMetal("Sc", 3);
-AtomDef_setAtomMetal("Ti", 3);
-AtomDef_setAtomMetal("V", 3);
-AtomDef_setAtomMetal("Cr", 3);
-AtomDef_setAtomMetal("Mn", 3);
-AtomDef_setAtomMetal("Fe", 3);
-AtomDef_setAtomMetal("Co", 3);
-AtomDef_setAtomMetal("Ni", 3);
-AtomDef_setAtomMetal("Cu", 3);
-AtomDef_setAtomMetal("Zn", 3);
-AtomDef_setAtomMetal("Y", 3);
-AtomDef_setAtomMetal("Zr", 3);
-AtomDef_setAtomMetal("Nb", 3);
-AtomDef_setAtomMetal("Mo", 3);
-AtomDef_setAtomMetal("Tc", 3);
-AtomDef_setAtomMetal("Ru", 3);
-AtomDef_setAtomMetal("Rh", 3);
-AtomDef_setAtomMetal("Pd", 3);
-AtomDef_setAtomMetal("Ag", 3);
-AtomDef_setAtomMetal("Cd", 3);
-AtomDef_setAtomMetal("Rf", 3);
-AtomDef_setAtomMetal("Db", 3);
-AtomDef_setAtomMetal("Sg", 3);
-AtomDef_setAtomMetal("Bh", 3);
-AtomDef_setAtomMetal("Hs", 3);
-AtomDef_setAtomMetal("Cn", 3);
-AtomDef_setAtomMetal("Hf", 3);
-AtomDef_setAtomMetal("Ta", 3);
-AtomDef_setAtomMetal("W", 3);
-AtomDef_setAtomMetal("Re", 3);
-AtomDef_setAtomMetal("Os", 3);
-AtomDef_setAtomMetal("Ir", 3);
-AtomDef_setAtomMetal("Pt", 3);
-AtomDef_setAtomMetal("Au", 3);
-AtomDef_setAtomMetal("Hg", 3);
-AtomDef_setAtomMetal("Al", 4);
-AtomDef_setAtomMetal("Ga", 4);
-AtomDef_setAtomMetal("In", 4);
-AtomDef_setAtomMetal("Sn", 4);
-AtomDef_setAtomMetal("Tl", 4);
-AtomDef_setAtomMetal("Pb", 4);
-AtomDef_setAtomMetal("Bi", 4);
-AtomDef_setAtomMetal("Po", 4);
-AtomDef_setAtomVSEPR("C", 4, 0, 109.5);
-AtomDef_setAtomVSEPR("Ge", 4, 0, 109.5);
-AtomDef_setAtomVSEPR("N", 4, 1, 109.5);
-AtomDef_setAtomVSEPR("P", 4, 1, 109.5);
-AtomDef_setAtomVSEPR("O", 4, 2, 109.5);
-AtomDef_setAtomVSEPR("S", 4, 2, 109.5);
-AtomDef_setAtomVSEPR("Se", 4, 2, 109.5);
-AtomDef_setAtomVSEPR("Te", 4, 2, 109.5);
-AtomDef_setAtomVSEPR("Po", 4, 2, 109.5);
-AtomDef_setAtomVSEPR("B", 3, 0, 120);
-AtomDef_setAtomVSEPR("Al", 3, 0, 120);
-AtomDef_setAtomVSEPR("Ga", 3, 0, 120);
-AtomDef_setAtomVSEPR("As", 1, 0, 0);
-AtomDef_setAtomVSEPR("F", 1, 0, 0);
-AtomDef_setAtomVSEPR("Cl", 1, 0, 0);
-AtomDef_setAtomVSEPR("Br", 1, 0, 0);
-AtomDef_setAtomVSEPR("I", 1, 0, 0);
-AtomDef_setAtomVSEPR("At", 1, 0, 0);
-AtomDef_setAtomVSEPR("Li", 1, 0, 0);
-AtomDef_setAtomVSEPR("Na", 1, 0, 0);
-AtomDef_setAtomVSEPR("K", 1, 0, 0);
-AtomDef_setAtomVSEPR("Rb", 1, 0, 0);
-AtomDef_setAtomVSEPR("Cs", 1, 0, 0);
-AtomDef_setAtomVSEPR("Fr", 1, 0, 0);
-AtomDef_setAtomVSEPR("Be", 2, 0, 180);
-AtomDef_setAtomVSEPR("Mg", 2, 0, 180);
-AtomDef_setAtomVSEPR("Ca", 2, 0, 180);
-AtomDef_setAtomVSEPR("Sr", 2, 0, 180);
-AtomDef_setAtomVSEPR("Ba", 2, 0, 180);
-AtomDef_setAtomVSEPR("Ra", 2, 0, 180);
-;// CONCATENATED MODULE: ./Renderer/log.js
-var log_mode = 3;
-
-// type : 0 -> error
-// type : 1 -> warning
-// type : 2 -> 기타
-
-/**
- * 로그 메시지를 출력한다.
- * @param {Number} type 로그 타입
- * @param {String} message 로그 메시지
- */
-function rayLog(type, message) {
-  if (type >= log_mode) return;
-  console.log(message);
-}
-
-/**
- * 로드 모드를 설정한다.
- * @param {Number} mode 로그 모드
- */
-function rayLogSetMode(mode) {
-  log_mode = mode;
-}
 ;// CONCATENATED MODULE: ./Renderer/ptMesh.js
 
 
@@ -5767,6 +5316,457 @@ class ptSpline {
     }
   }
 }
+;// CONCATENATED MODULE: ./Renderer/AtomDef.js
+/**
+ * @file 원소의 정보를 정의한 클래스
+ * @version 0.1
+ */
+var AtomDef_AtomDef = {};
+AtomDef_AtomDef._atomDefList = [];
+AtomDef_AtomDef._atomNumList = [];
+
+/**
+ * index에 해당하는 원자 정보를 반환한다
+ * @param {Number} index 원자 인덱스
+ */
+AtomDef_AtomDef.GetDefWithNumber = function (index) {
+  return AtomDef_AtomDef._atomNumList[index];
+};
+
+/**
+ * id에 해당하는 원자 정보를 반환한다
+ * @param {String} id 원자 아이디
+ */
+AtomDef_AtomDef.GetDefWithID = function (id) {
+  return AtomDef_AtomDef._atomDefList[id.toUpperCase()];
+};
+
+/**
+ * 한 원소의 특성을 정의한 클래스다. 이름, 반지름, 질량 등이 정의된다.
+ * */
+class AtomDef_CAtomDef {
+  /**
+   * 원소를 정의한다
+   * @param {any} number 원소 번호
+   * @param {any} atom 원소 기호
+   * @param {any} kname 원소 이름 (한글)
+   * @param {any} name 원소 이름 (영문)
+   * @param {any} r 컬러 R
+   * @param {any} g 컬러 G
+   * @param {any} b 컬러 B
+   * @param {any} radius 반지름
+   * @param {any} metal 메탈
+   * @param {any} group 그룹
+   * @param {any} period 주기율
+   */
+  constructor(number, atom, kname, name, r, g, b, radius, metal, group, period) {
+    /// AtomDef의 ID이다. string
+    this._id = atom.toUpperCase();
+
+    /// 원소의 이름. string
+    this._atom_id = atom;
+
+    /// 원소의 반지름. 
+    this._radius = (radius + 100) / 500 * 1.;
+    this._empirical_radius = radius;
+
+    /// 원소의 이름. 영문
+    this._name = name;
+
+    /// 원소의 이름. 한글
+    this._korean_name = kname;
+
+    /// 원소의 컬러
+    this._color = [0, 0, 0];
+
+    /// 원소의 디퓨즈 컬러
+    this._diffuseColor = [0, 0, 0];
+
+    /// 원소의 emissive 컬러
+    this._emissiveColor = [0, 0, 0];
+
+    /// 원소의 specular 컬러
+    this._specularColor = [1, 1, 1];
+    this.setColor(r / 255, g / 255, b / 255);
+    this.setDefaultColor(r / 255, g / 255, b / 255);
+
+    /// 원소의 Ambient 컬러
+    this._ambientColor = [0.0, 0.0, 0.0];
+
+    /// 원소의 specular power
+    this._specularPower = 15;
+
+    /// 원소의 원자수
+    this._atom_number = number;
+
+    /// 메탈
+    this._metal = metal;
+
+    /// 원소의 주기
+    this._period = period;
+
+    /// 원소의 그룹
+    this._group = group;
+
+    /// 가질 수 있는 본드의 수
+    this._vsepr_type = 0;
+
+    /// lone pair 의 수
+    this._vsepr_lpair = 0;
+
+    /// 원소 결합시 각도
+    this._vsepr_angle = 0;
+
+    /// 원소 크기
+    this._atom_vis_size = 1;
+
+    /// 원소 가시화 여부
+    this._visible = true;
+  }
+
+  /**
+   * 색상을 정의한다
+   * @param {any} r red
+   * @param {any} g green
+   * @param {any} b blue
+   */
+  setColor(r, g, b) {
+    this._color = [r, g, b];
+    this._diffuseColor = [r, g, b];
+    this._emissiveColor = [r * 0.1, g * 0.1, b * 0.1];
+    this._specularColor = [1, 1, 1];
+  }
+  /**
+   * 기본 컬러를 정의한다
+   * @param {Number} r red
+   * @param {Number} g green
+   * @param {Number} b blue
+   */
+  setDefaultColor(r, g, b) {
+    this._defColor = [r, g, b];
+  }
+  /**
+   * 기본 원소 문자 크기를 정의한다
+   * @param {Number} size 크기
+   */
+  setNameSize(size) {
+    this._atom_vis_size = size;
+  }
+}
+;
+
+/**
+ * 원소의 VSEPR 값을 정의
+ * @param {String} atom 원소 기호
+ * @param {String} type 타입
+ * @param {Function} lone_pair long pair
+ * @param {Function} angle 각도
+ */
+function AtomDef_setAtomVSEPR(atom, type, lone_pair, angle) {
+  var atom_def = AtomDef_AtomDef._atomDefList[atom.toUpperCase()];
+  if (!atom_def) return;
+  atom_def._vsepr_type = type;
+  atom_def._vsepr_lpair = lone_pair;
+  atom_def._vsepr_angle = angle;
+}
+
+/**
+ * 원소의 메탈 값을 정의
+ * @param {String} atom 원소
+ * @param {Number} metal 메탈 값
+ */
+function AtomDef_setAtomMetal(atom, metal) {
+  var atom_def = AtomDef_AtomDef._atomDefList[atom.toUpperCase()];
+  if (!atom_def) return;
+  atom_def._metal = metal;
+}
+
+/**
+* 원소의 Isotope 값을 설정
+* @param {String} isotope 원소의 isotope
+* @param {String} atom
+*/
+function AtomDef_addIsotope(isotope, atom) {}
+
+/**
+ * 원소의 정보를 정의한다
+ * @param {Number} number
+ * @param {String} atom
+ * @param {String} kname
+ * @param {String} name
+ * @param {Number} r
+ * @param {Number} g
+ * @param {Number} b
+ * @param {Number} radius
+ * @param {Number} metal
+ * @param {String} group
+ * @param {Number} period
+ */
+function AtomDef_setAtomData(number, atom, kname, name, r, g, b, radius, metal, group, period) {
+  var atom_def = new AtomDef_CAtomDef(number, atom, kname, name, r, g, b, radius, metal, group, period);
+  AtomDef_AtomDef._atomDefList[atom.toUpperCase()] = atom_def;
+  AtomDef_AtomDef._atomNumList[number] = atom_def;
+}
+
+///////////////////
+// setAtomData
+///////////////////
+
+AtomDef_setAtomData(1, "H", "수소", "Hydrogen", 255, 255, 255, 25, 0, 1, 1);
+AtomDef_setAtomData(2, "He", "헬륨", "Helium", 217, 255, 255, 120, 0, 18, 1);
+AtomDef_setAtomData(3, "Li", "리튬", "Lithium", 204, 128, 255, 145, 0, 1, 2);
+AtomDef_setAtomData(4, "Be", "베릴륨", "Beryllium", 194, 255, 0, 105, 0, 2, 2);
+AtomDef_setAtomData(5, "B", "붕소", "Boron", 255, 181, 181, 85, 0, 13, 2);
+AtomDef_setAtomData(6, "C", "탄소", "Carbon", 54, 54, 54, 70, 0, 14, 2);
+AtomDef_setAtomData(7, "N", "질소", "Nitrogen", 48, 80, 248, 65, 0, 15, 2);
+AtomDef_setAtomData(8, "O", "산소", "Oxygen", 255, 13, 13, 60, 0, 16, 2);
+AtomDef_setAtomData(9, "F", "플루오린", "Fluorine", 144, 224, 80, 50, 0, 17, 2);
+AtomDef_setAtomData(10, "Ne", "네온", "Neon", 179, 227, 245, 160, 0, 18, 2);
+AtomDef_setAtomData(11, "Na", "나트륨", "Sodium", 171, 92, 242, 180, 0, 1, 3);
+AtomDef_setAtomData(12, "Mg", "마그네슘", "Magnesium", 138, 255, 0, 150, 0, 2, 3);
+AtomDef_setAtomData(13, "Al", "알루미늄", "Aluminium", 191, 166, 166, 125, 0, 13, 3);
+AtomDef_setAtomData(14, "Si", "규소", "Silicon", 240, 200, 160, 110, 0, 14, 3);
+AtomDef_setAtomData(15, "P", "인", "Phosphorus", 255, 128, 0, 100, 0, 15, 3);
+AtomDef_setAtomData(16, "S", "황", "Sulfur", 255, 255, 48, 100, 0, 16, 3);
+AtomDef_setAtomData(17, "Cl", "염소", "Chlorine", 31, 240, 31, 100, 0, 17, 3);
+AtomDef_setAtomData(18, "Ar", "아르곤", "Argon", 128, 209, 227, 71, 0, 18, 3);
+AtomDef_setAtomData(19, "K", "칼륨", "Potassium", 143, 64, 212, 220, 0, 1, 4);
+AtomDef_setAtomData(20, "Ca", "칼슘", "Calcium", 61, 255, 0, 180, 0, 2, 4);
+AtomDef_setAtomData(21, "Sc", "스칸듐", "Scandium", 230, 230, 230, 160, 0, 3, 4);
+AtomDef_setAtomData(22, "Ti", "티타늄", "Titanium", 191, 194, 199, 140, 0, 4, 4);
+AtomDef_setAtomData(23, "V", "바나듐", "Vanadium", 166, 166, 171, 135, 0, 5, 4);
+AtomDef_setAtomData(24, "Cr", "크롬", "Chromium", 138, 153, 199, 140, 0, 6, 4);
+AtomDef_setAtomData(25, "Mn", "망가니즈", "Manganese", 156, 122, 199, 140, 0, 7, 4);
+AtomDef_setAtomData(26, "Fe", "철", "Iron", 224, 102, 51, 140, 0, 8, 4);
+AtomDef_setAtomData(27, "Co", "코발트", "Cobalt", 240, 144, 160, 135, 0, 9, 4);
+AtomDef_setAtomData(28, "Ni", "니켈", "Nickel", 80, 208, 80, 135, 0, 10, 4);
+AtomDef_setAtomData(29, "Cu", "구리", "Copper", 200, 128, 51, 135, 0, 11, 4);
+AtomDef_setAtomData(30, "Zn", "아연", "Zinc", 125, 128, 176, 135, 0, 12, 4);
+AtomDef_setAtomData(31, "Ga", "갈륨", "Gallium", 194, 143, 143, 130, 0, 13, 4);
+AtomDef_setAtomData(32, "Ge", "게르마늄", "Germanium", 102, 143, 143, 125, 0, 14, 4);
+AtomDef_setAtomData(33, "As", "비소", "Arsenic", 189, 128, 227, 115, 0, 15, 4);
+AtomDef_setAtomData(34, "Se", "셀레늄", "Selenium", 255, 161, 0, 115, 0, 16, 4);
+AtomDef_setAtomData(35, "Br", "브로민", "Bromine", 166, 41, 41, 115, 0, 17, 4);
+AtomDef_setAtomData(36, "Kr", "크립톤", "Krypton", 92, 184, 209, 115, 0, 18, 4);
+AtomDef_setAtomData(37, "Rb", "루비듐", "Rubidium", 112, 46, 176, 235, 0, 1, 5);
+AtomDef_setAtomData(38, "Sr", "스트론튬", "Strontium", 0, 255, 0, 200, 0, 2, 5);
+AtomDef_setAtomData(39, "Y", "이트륨", "Yttrium", 148, 255, 255, 180, 0, 3, 5);
+AtomDef_setAtomData(40, "Zr", "지르코늄", "Zirconium", 148, 224, 224, 155, 0, 4, 5);
+AtomDef_setAtomData(41, "Nb", "나이오븀", "Niobium", 115, 194, 201, 145, 0, 5, 5);
+AtomDef_setAtomData(42, "Mo", "몰리브데넘", "Molybdenum", 84, 181, 181, 145, 0, 6, 5);
+AtomDef_setAtomData(43, "Tc", "테크네튬", "Technetium", 59, 158, 158, 135, 0, 7, 5);
+AtomDef_setAtomData(44, "Ru", "루테늄", "Ruthenium", 36, 143, 143, 130, 0, 8, 5);
+AtomDef_setAtomData(45, "Rh", "로듐", "Rhodium", 10, 125, 140, 135, 0, 9, 5);
+AtomDef_setAtomData(46, "Pd", "팔라듐", "Palladium", 0, 105, 133, 140, 0, 10, 5);
+AtomDef_setAtomData(47, "Ag", "은", "Silver", 192, 192, 192, 160, 0, 11, 5);
+AtomDef_setAtomData(48, "Cd", "카드뮴", "Cadmium", 255, 217, 143, 155, 0, 12, 5);
+AtomDef_setAtomData(49, "In", "인듐", "Indium", 166, 117, 115, 155, 0, 13, 5);
+AtomDef_setAtomData(50, "Sn", "주석", "Tin", 102, 128, 128, 145, 0, 14, 5);
+AtomDef_setAtomData(51, "Sb", "안티모니", "Antimony", 158, 99, 181, 145, 0, 15, 5);
+AtomDef_setAtomData(52, "Te", "텔루륨", "Tellurium", 212, 122, 0, 140, 0, 16, 5);
+AtomDef_setAtomData(53, "I", "아이오딘", "Iodine", 148, 0, 148, 140, 0, 17, 5);
+AtomDef_setAtomData(54, "Xe", "제논", "Xenon", 66, 158, 176, 140, 0, 18, 5);
+AtomDef_setAtomData(55, "Cs", "세슘", "Caesium", 87, 23, 143, 260, 0, 1, 6);
+AtomDef_setAtomData(56, "Ba", "바륨", "Barium", 0, 201, 0, 215, 0, 2, 6);
+
+// Lantan Group - Period/Group Modified for Table.
+AtomDef_setAtomData(57, "La", "란타넘", "Lanthanum", 112, 212, 255, 195, 0, 3, 8);
+AtomDef_setAtomData(58, "Ce", "세륨", "Cerium", 255, 255, 199, 185, 0, 4, 8);
+AtomDef_setAtomData(59, "Pr", "프라세오디뮴", "Praseodymium", 217, 255, 199, 185, 0, 5, 8);
+AtomDef_setAtomData(60, "Nd", "네오디뮴", "Neodymium", 199, 255, 199, 185, 0, 6, 8);
+AtomDef_setAtomData(61, "Pm", "프로메튬", "Promethium", 163, 255, 199, 185, 0, 7, 8);
+AtomDef_setAtomData(62, "Sm", "사마륨", "Samarium", 143, 255, 199, 185, 0, 8, 8);
+AtomDef_setAtomData(63, "Eu", "유로퓸", "Europium", 97, 255, 199, 185, 0, 9, 8);
+AtomDef_setAtomData(64, "Gd", "가돌리늄", "Gadolinium", 69, 255, 199, 180, 0, 10, 8);
+AtomDef_setAtomData(65, "Tb", "터븀", "Terbium", 48, 255, 199, 175, 0, 11, 8);
+AtomDef_setAtomData(66, "Dy", "디스프로슘", "Dysprosium", 31, 255, 199, 175, 0, 12, 8);
+AtomDef_setAtomData(67, "Ho", "홀뮴", "Holmium", 0, 255, 156, 175, 0, 13, 8);
+AtomDef_setAtomData(68, "Er", "어븀", "Erbium", 0, 230, 117, 175, 0, 14, 8);
+AtomDef_setAtomData(69, "Tm", "툴륨", "Thulium", 0, 212, 82, 175, 0, 15, 8);
+AtomDef_setAtomData(70, "Yb", "이터븀", "Ytterbium", 0, 191, 56, 175, 0, 16, 8);
+AtomDef_setAtomData(71, "Lu", "루테튬", "Lutetium", 0, 171, 36, 175, 0, 17, 8);
+// end of Lantan Group
+
+AtomDef_setAtomData(72, "Hf", "하프늄", "Hafnium", 77, 194, 255, 155, 0, 4, 6);
+AtomDef_setAtomData(73, "Ta", "탄탈럼", "Tantalum", 77, 166, 255, 145, 0, 5, 6);
+AtomDef_setAtomData(74, "W", "텅스텐", "Tungsten", 33, 148, 214, 135, 0, 6, 6);
+AtomDef_setAtomData(75, "Re", "레늄", "Rhenium", 38, 125, 171, 135, 0, 7, 6);
+AtomDef_setAtomData(76, "Os", "오스뮴", "Osmium", 38, 102, 150, 130, 0, 8, 6);
+AtomDef_setAtomData(77, "Ir", "이리듐", "Iridium", 23, 84, 135, 135, 0, 9, 6);
+AtomDef_setAtomData(78, "Pt", "백금", "Platinum", 208, 208, 224, 135, 0, 10, 6);
+AtomDef_setAtomData(79, "Au", "금", "Gold", 255, 209, 35, 135, 0, 11, 6);
+AtomDef_setAtomData(80, "Hg", "수은", "Mercury", 184, 184, 208, 150, 0, 12, 6);
+AtomDef_setAtomData(81, "Tl", "탈륨", "Thallium", 166, 84, 77, 190, 0, 13, 6);
+AtomDef_setAtomData(82, "Pb", "납", "Lead", 87, 89, 97, 180, 0, 14, 6);
+AtomDef_setAtomData(83, "Bi", "비스무트", "Bismuth", 158, 79, 181, 160, 0, 15, 6);
+AtomDef_setAtomData(84, "Po", "폴로늄", "Polonium", 171, 92, 0, 190, 0, 16, 6);
+AtomDef_setAtomData(85, "At", "아스타틴", "Astatine", 117, 79, 69, 190, 0, 17, 6);
+AtomDef_setAtomData(86, "Rn", "라돈", "Radon", 66, 130, 150, 190, 0, 18, 6);
+AtomDef_setAtomData(87, "Fr", "프랑슘", "Francium", 66, 0, 102, 190, 0, 1, 7);
+AtomDef_setAtomData(88, "Ra", "라듐", "Radium", 0, 125, 0, 215, 0, 2, 7);
+
+// Actin Group - Period/Group Modified for Table.
+AtomDef_setAtomData(89, "Ac", "악티늄", "Actinium", 112, 171, 250, 195, 0, 3, 9);
+AtomDef_setAtomData(90, "Th", "토륨", "Thorium", 0, 186, 255, 180, 0, 4, 9);
+AtomDef_setAtomData(91, "Pa", "프로트악티늄", "Protactinium", 0, 161, 255, 180, 0, 5, 9);
+AtomDef_setAtomData(92, "U", "우라늄", "Uranium", 0, 143, 255, 175, 0, 6, 9);
+AtomDef_setAtomData(93, "Np", "넵투늄", "Neptunium", 0, 128, 255, 175, 0, 7, 9);
+AtomDef_setAtomData(94, "Pu", "플루토늄", "Plutonium", 0, 107, 255, 175, 0, 8, 9);
+AtomDef_setAtomData(95, "Am", "아메리슘", "Americium", 84, 92, 242, 175, 0, 9, 9);
+AtomDef_setAtomData(96, "Cm", "퀴륨", "Curium", 120, 92, 227, 175, 0, 10, 9);
+AtomDef_setAtomData(97, "Bk", "버클륨", "Berkelium", 138, 79, 227, 175, 0, 11, 9);
+AtomDef_setAtomData(98, "Cf", "캘리포늄", "Californium", 161, 54, 212, 175, 0, 12, 9);
+AtomDef_setAtomData(99, "Es", "아인슈타이늄", "Einsteinium", 179, 31, 212, 175, 0, 13, 9);
+AtomDef_setAtomData(100, "Fm", "페르뮴", "Fermium", 179, 31, 186, 175, 0, 14, 9);
+AtomDef_setAtomData(101, "Md", "멘델레븀", "Mendelevium", 179, 13, 166, 175, 0, 15, 9);
+AtomDef_setAtomData(102, "No", "노벨륨", "Nobelium", 189, 13, 135, 175, 0, 16, 9);
+AtomDef_setAtomData(103, "Lr", "로렌슘", "Lawrencium", 199, 0, 102, 175, 0, 17, 9);
+// end of Actin Group
+
+AtomDef_setAtomData(104, "Rf", "러더포듐", "Rutherfordium", 204, 0, 89, 175, 0, 4, 7);
+AtomDef_setAtomData(105, "Db", "더브늄", "Dubnium", 209, 0, 79, 175, 0, 5, 7);
+AtomDef_setAtomData(106, "Sg", "시보귬", "Seaborgium", 217, 0, 69, 175, 0, 6, 7);
+AtomDef_setAtomData(107, "Bh", "보륨", "Bohrium", 224, 0, 56, 175, 0, 7, 7);
+AtomDef_setAtomData(108, "Hs", "하슘", "Hassium", 230, 0, 46, 175, 0, 8, 7);
+AtomDef_setAtomData(109, "Mt", "마이트너륨", "Meitnerium", 235, 0, 38, 175, 0, 9, 7);
+AtomDef_setAtomData(110, "Ds", "다름슈타튬", "Darmstadtium", 128, 128, 128, 175, 0, 10, 7);
+AtomDef_setAtomData(111, "Rg", "뢴트게늄", "Roentgenium", 128, 128, 128, 175, 0, 11, 7);
+AtomDef_setAtomData(112, "Cn", "코페르니슘", "Copernicium", 128, 128, 128, 175, 0, 12, 7);
+AtomDef_setAtomData(113, "Nh", "니호늄", "Nihonium", 128, 128, 128, 175, 0, 13, 7);
+AtomDef_setAtomData(114, "Fl", "플레로븀", "Flerovium", 128, 128, 128, 175, 0, 14, 7);
+AtomDef_setAtomData(115, "Mc", "모스코븀", "Moscovium", 128, 128, 128, 175, 0, 15, 7);
+AtomDef_setAtomData(116, "Lv", "리버모륨", "Livermorium", 128, 128, 128, 175, 0, 16, 7);
+AtomDef_setAtomData(117, "Ts", "테네신", "Tennessine", 128, 128, 128, 175, 0, 17, 7);
+AtomDef_setAtomData(118, "Og", "오가네손", "Oganesson", 128, 128, 128, 175, 0, 18, 7);
+AtomDef_setAtomData(199, "?", "미정", "?", 28, 28, 28, 100, 0, 0, 0);
+AtomDef_setAtomData(200, "@", "@Anchor", "Anchor", 256, 0, 0, 10, 0, 0, 0);
+AtomDef_setAtomData(201, "#", "#Upvector", "Upvector", 0, 0, 255, 10, 0, 0, 0);
+AtomDef_setAtomData(211, "+1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(212, "+2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(213, "+3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(214, "+4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(215, "+5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(216, "+6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(217, "+7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(218, "+8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(219, "+9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(221, "-1", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(222, "-2", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(223, "-3", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(224, "-4", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(225, "-5", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(226, "-6", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(227, "-7", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(228, "-8", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+AtomDef_setAtomData(229, "-9", "+1", "+1", 255, 255, 255, 10, 7, 0, 0);
+
+// 0 : 비금속
+// 1 : 알카리 금속
+// 2 : 알카리 포금속
+// 3 : 전이 금속
+// 4 : 전이 후 금속
+// 5 : 준금속
+// 6 : 비활성 기체
+
+AtomDef_setAtomMetal("He", 6);
+AtomDef_setAtomMetal("Ne", 6);
+AtomDef_setAtomMetal("Ar", 6);
+AtomDef_setAtomMetal("Kr", 6);
+AtomDef_setAtomMetal("Xe", 6);
+AtomDef_setAtomMetal("Rn", 6);
+AtomDef_setAtomMetal("B", 5);
+AtomDef_setAtomMetal("Si", 5);
+AtomDef_setAtomMetal("Ge", 5);
+AtomDef_setAtomMetal("As", 5);
+AtomDef_setAtomMetal("Sb", 5);
+AtomDef_setAtomMetal("Te", 5);
+AtomDef_setAtomMetal("At", 5);
+AtomDef_setAtomMetal("Li", 1);
+AtomDef_setAtomMetal("Na", 1);
+AtomDef_setAtomMetal("K", 1);
+AtomDef_setAtomMetal("Rb", 1);
+AtomDef_setAtomMetal("Cs", 1);
+AtomDef_setAtomMetal("Fr", 1);
+AtomDef_setAtomMetal("Uue", 1);
+AtomDef_setAtomMetal("Be", 2);
+AtomDef_setAtomMetal("Mg", 2);
+AtomDef_setAtomMetal("Ca", 2);
+AtomDef_setAtomMetal("Sr", 2);
+AtomDef_setAtomMetal("Ba", 2);
+AtomDef_setAtomMetal("Ra", 2);
+AtomDef_setAtomMetal("Sc", 3);
+AtomDef_setAtomMetal("Ti", 3);
+AtomDef_setAtomMetal("V", 3);
+AtomDef_setAtomMetal("Cr", 3);
+AtomDef_setAtomMetal("Mn", 3);
+AtomDef_setAtomMetal("Fe", 3);
+AtomDef_setAtomMetal("Co", 3);
+AtomDef_setAtomMetal("Ni", 3);
+AtomDef_setAtomMetal("Cu", 3);
+AtomDef_setAtomMetal("Zn", 3);
+AtomDef_setAtomMetal("Y", 3);
+AtomDef_setAtomMetal("Zr", 3);
+AtomDef_setAtomMetal("Nb", 3);
+AtomDef_setAtomMetal("Mo", 3);
+AtomDef_setAtomMetal("Tc", 3);
+AtomDef_setAtomMetal("Ru", 3);
+AtomDef_setAtomMetal("Rh", 3);
+AtomDef_setAtomMetal("Pd", 3);
+AtomDef_setAtomMetal("Ag", 3);
+AtomDef_setAtomMetal("Cd", 3);
+AtomDef_setAtomMetal("Rf", 3);
+AtomDef_setAtomMetal("Db", 3);
+AtomDef_setAtomMetal("Sg", 3);
+AtomDef_setAtomMetal("Bh", 3);
+AtomDef_setAtomMetal("Hs", 3);
+AtomDef_setAtomMetal("Cn", 3);
+AtomDef_setAtomMetal("Hf", 3);
+AtomDef_setAtomMetal("Ta", 3);
+AtomDef_setAtomMetal("W", 3);
+AtomDef_setAtomMetal("Re", 3);
+AtomDef_setAtomMetal("Os", 3);
+AtomDef_setAtomMetal("Ir", 3);
+AtomDef_setAtomMetal("Pt", 3);
+AtomDef_setAtomMetal("Au", 3);
+AtomDef_setAtomMetal("Hg", 3);
+AtomDef_setAtomMetal("Al", 4);
+AtomDef_setAtomMetal("Ga", 4);
+AtomDef_setAtomMetal("In", 4);
+AtomDef_setAtomMetal("Sn", 4);
+AtomDef_setAtomMetal("Tl", 4);
+AtomDef_setAtomMetal("Pb", 4);
+AtomDef_setAtomMetal("Bi", 4);
+AtomDef_setAtomMetal("Po", 4);
+AtomDef_setAtomVSEPR("C", 4, 0, 109.5);
+AtomDef_setAtomVSEPR("Ge", 4, 0, 109.5);
+AtomDef_setAtomVSEPR("N", 4, 1, 109.5);
+AtomDef_setAtomVSEPR("P", 4, 1, 109.5);
+AtomDef_setAtomVSEPR("O", 4, 2, 109.5);
+AtomDef_setAtomVSEPR("S", 4, 2, 109.5);
+AtomDef_setAtomVSEPR("Se", 4, 2, 109.5);
+AtomDef_setAtomVSEPR("Te", 4, 2, 109.5);
+AtomDef_setAtomVSEPR("Po", 4, 2, 109.5);
+AtomDef_setAtomVSEPR("B", 3, 0, 120);
+AtomDef_setAtomVSEPR("Al", 3, 0, 120);
+AtomDef_setAtomVSEPR("Ga", 3, 0, 120);
+AtomDef_setAtomVSEPR("As", 1, 0, 0);
+AtomDef_setAtomVSEPR("F", 1, 0, 0);
+AtomDef_setAtomVSEPR("Cl", 1, 0, 0);
+AtomDef_setAtomVSEPR("Br", 1, 0, 0);
+AtomDef_setAtomVSEPR("I", 1, 0, 0);
+AtomDef_setAtomVSEPR("At", 1, 0, 0);
+AtomDef_setAtomVSEPR("Li", 1, 0, 0);
+AtomDef_setAtomVSEPR("Na", 1, 0, 0);
+AtomDef_setAtomVSEPR("K", 1, 0, 0);
+AtomDef_setAtomVSEPR("Rb", 1, 0, 0);
+AtomDef_setAtomVSEPR("Cs", 1, 0, 0);
+AtomDef_setAtomVSEPR("Fr", 1, 0, 0);
+AtomDef_setAtomVSEPR("Be", 2, 0, 180);
+AtomDef_setAtomVSEPR("Mg", 2, 0, 180);
+AtomDef_setAtomVSEPR("Ca", 2, 0, 180);
+AtomDef_setAtomVSEPR("Sr", 2, 0, 180);
+AtomDef_setAtomVSEPR("Ba", 2, 0, 180);
+AtomDef_setAtomVSEPR("Ra", 2, 0, 180);
 ;// CONCATENATED MODULE: ./Renderer/Util.js
 
 
@@ -18341,8 +18341,8 @@ class GeomMole {
     if (!atomB) {
       return null;
     }
-    let atomADef = AtomDef.GetDefWithNumber(atomA.GetAtomNumber());
-    let atomBDef = AtomDef.GetDefWithNumber(atomB.GetAtomNumber());
+    let atomADef = AtomDef_AtomDef.GetDefWithNumber(atomA.GetAtomNumber());
+    let atomBDef = AtomDef_AtomDef.GetDefWithNumber(atomB.GetAtomNumber());
     let aa = new three_module_Vector3(atomA.GetX(), atomA.GetY(), atomA.GetZ());
     let bb = new three_module_Vector3(atomB.GetX(), atomB.GetY(), atomB.GetZ());
     let ionic = geom.GetTag("i");
@@ -18443,7 +18443,7 @@ class GeomMole {
    */
   static genAtom(gr, geom, parent) {
     const atomid = geom.GetAtomNumber();
-    let adef = AtomDef._atomNumList[atomid];
+    let adef = AtomDef_AtomDef._atomNumList[atomid];
     const center = geom.GetCenter();
     let pos = new three_module_Vector3(center[0], center[1], center[2]);
     let mesh = GeomMole.createAtomMesh(pos, 0.3, adef);
@@ -18471,7 +18471,7 @@ class GeomMole {
     if (GeomMole._atomRenderType == 1) {
       geometry = GeomMole._letterAtomGeom[atomid];
       if (!geometry) {
-        let adef = AtomDef.GetDefWithNumber(atomid);
+        let adef = AtomDef_AtomDef.GetDefWithNumber(atomid);
         geometry = GeomMole.createAtomGeometryWithLetter(adef._atom_id, renderer._font);
         GeomMole._letterAtomGeom[atomid] = geometry;
       }
@@ -19821,6 +19821,421 @@ class iBond {
     this.generate();
   }
 }
+;// CONCATENATED MODULE: ./CoreCrystal/iVector.js
+
+
+
+
+var geom1 = new CylinderGeometry(1, 1, 1, 32);
+var geom2 = new ConeGeometry(1, 1, 32);
+
+/**
+ * Instanced Vector 클래스
+ * */
+class iVector_iVector {
+  /**
+   * 생성자
+   * iAtom과 tVector에 매칭되는 iVector를 생성한다.
+   * @param {any} tvector
+   * @param {any} iatom
+   * @param {any} cs
+   */
+  constructor(tvector, iatom, cs) {
+    this._number = 0;
+    this._iatom = iatom;
+    this._parent = null;
+    this._tvector = tvector;
+    this._number = 0;
+  }
+
+  /**
+   * iVector mesh를 생성한다.
+   * @param {CStructure} cs
+   * @returns {THREE.Mesh} 생성된 iVector Mesh
+   */
+  generateMesh(cs) {
+    let color = new Color();
+    color.fromArray(this._tvector._color, 0);
+    let v1 = new three_module_Vector3();
+    v1.fromArray(this._tvector._vector, 0);
+    v1 = cs._unitcell._axis.transform(v1);
+    let mat = new MeshLambertMaterial({
+      color: color,
+      transparent: false,
+      vertexColors: false
+    });
+    let mesh = new Group();
+    const len = v1.length();
+    let mesh1 = new three_module_Mesh(geom1, mat);
+    mesh1.scale.fromArray([this._tvector._radius, len * 2, this._tvector._radius], 0);
+    mesh.add(mesh1);
+    let mesh2 = new three_module_Mesh(geom2, mat);
+    mesh.add(mesh2);
+    let radius = this._tvector._radius * 3;
+    mesh2.scale.fromArray([radius, radius, radius], 0);
+    mesh2.position.fromArray([0, len, 0], 0);
+    mesh.lookAt(v1);
+    mesh.position.copy(this._iatom._position2);
+    return mesh;
+  }
+
+  /**
+   * 주어진 iVector를 복사한다.
+   * @param {iVector} iVector 복사하려는 iVector
+   * @returns {iVector} this
+   */
+  cloneFromiVector(iVector) {
+    Object.assign(this, iVector);
+    //this._vector = new THREE.Vector3(this._vector.x, this._vector.y, this._vector.z);
+    //this._color = new THREE.Color(this._color.x, this._color.y, this._color.z);
+
+    return this;
+  }
+}
+;// CONCATENATED MODULE: ./CoreCrystal/aVector.js
+
+
+
+
+// tVector를 사용하여 실제 벡터를 정의
+// tvector와 unitcell과 index를 사용하여 정의
+
+/**
+ * tVector 클래스를 통해 iVector를 생성하는데 필요한 클래스
+ * */
+class aVector {
+  /**
+   * tvector를 지정한다.
+   * @param {tVector} tvector aVector에 대한 정의
+   */
+  constructor(tvector) {
+    this._def = tvector;
+    this._index = -1;
+    this._catom = null;
+  }
+
+  /**
+   * catom을 지정한다.
+   * @param {cAtom} catom
+   */
+  setCAtom(catom) {
+    this._catom = catom;
+    this._unitcellPos = null;
+  }
+
+  /**
+   * vector가 추가될 위치와 인덱스를 지정한다.
+   * @param {Array} opos unitcell 상의 위치
+   * @param {Number} index iAtom index
+   */
+  setiAtomPos(opos, index) {
+    this._index = index;
+    this._unitcellPos = opos;
+  }
+
+  /**
+   * tvector를 지정한다.
+   * @param {tVector} tvector aVector의 정의
+   */
+  setDef(tvector) {
+    this._def = tvector;
+  }
+
+  /**
+   * number를 지정한다.
+   * @param {Number} number
+   */
+  setNumber(number) {
+    this._number = number;
+  }
+
+  /**
+   * unitcell 위치를 지정한다.
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} z
+   */
+  setUnitcellLoc(x, y, z) {
+    this._unitcellPos = [x, y, z];
+  }
+
+  /**
+   * aVector 비교 함수
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} z
+   * @param {Number} index
+   * @returns {Boolean} 일치 여부
+   */
+  isIt(x, y, z, index) {
+    return this._unitcellPos[0] == x && this._unitcellPos[1] == y && this._unitcellPos[2] == z && this._iatom._index == index;
+  }
+
+  /**
+   * ivector를 생성한다.
+   * @param {iAtom} iatom
+   * @param {CStructure} cs
+   * @returns {iVector} 생성된 ivector
+   */
+  generateIVector(iatom, cs) {
+    let iv = new iVector_iVector(this._def, iatom, cs);
+    return iv;
+  }
+
+  /**
+   * aVector를 통해 iVector를 생성한다.
+   * @returns {iVector} 생성된 ivector
+   * */
+  generate() {
+    let iv = new iVector_iVector(this._def, this._color);
+    return iv;
+  }
+
+  /**
+   * clone method
+   * @param {CAtom} catom
+   * @returns {CAtom} cloned catom
+   */
+  clone(catom) {
+    let clone = new aVector(this._def.clone());
+    clone._catom = catom;
+    clone._index = this._index;
+    if (this._unitcellPos) clone._unitcellPos = this._unitcellPos.clone();else clone._unitcellPos = null;
+    clone._number = this._number;
+    return clone;
+  }
+
+  /**
+   * aVector를 저장하려는 형태로 반환한다.
+   * @returns {Object} aVector 데이터
+   * */
+  createData4Save() {
+    let dat = {};
+    dat._def = this._def;
+    dat._index = this._index;
+    dat._unitcellPos = this._unitcellPos;
+    return dat;
+  }
+}
+;// CONCATENATED MODULE: ./CoreCrystal/CAtom.js
+
+
+
+
+
+/**
+ * Crystal Atom 클래스
+ * */
+class CAtom {
+  /**
+   * 생성자
+   * */
+  constructor() {
+    this._position = new Vector3();
+    this._id = 0; // id
+    this._idx = -1; // 테이블 상에서 구분하기 위한 id
+    this._index4cstructure = -1; // cstructure의 index
+    this._def = null;
+    this._type = 0;
+    this._label = "";
+    this._charge = 0;
+    this._visible = true;
+    this._avectors = [];
+    this._vectorIdx = [];
+    this._occ = null;
+    this._anisotype = null;
+    this._isotype = null;
+    this._su = [];
+    this._anisoU = [];
+    this._anisoBeta = [];
+    this._isoU = null;
+    this._isoB = null;
+    this._color = [1, 1, 1];
+  }
+
+  /**
+   * clone method
+   * @returns {CAtom} cloned catom
+   * */
+  clone() {
+    this.prepare4Save();
+    let clone = new CAtom();
+    clone._position = this._position.clone();
+    clone._id = this._id;
+    clone._idx = this._idx;
+    clone._def = this._def;
+    clone._type = this._type;
+    clone._label = this._label;
+    clone._charge = this._charge;
+    clone._visible = this._visible;
+    clone._vectorIdx = this._vectorIdx;
+    clone._index4cstructure = this._index4cstructure;
+    clone._occ = this._occ;
+    clone._anisotype = this._anisotype;
+    clone._isotype = this._isotype;
+    clone._su = this._su;
+    clone._anisoU = this._anisoU;
+    clone._anisoBeta = this._anisoBeta;
+    clone._isoU = this._isoU;
+    clone._isoB = this._isoB;
+    clone._color = this._color.slice();
+    for (let i = 0; i < this._avectors.length; i++) {
+      clone._avectors.push(this._avectors[i].clone(this));
+    }
+    return clone;
+  }
+
+  /**
+   * 데이터 저장을 위한 선행 과정
+   * */
+  prepare4Save() {
+    this._vectorIdx = [];
+    for (let i = 0; i < this._avectors.length; i++) {
+      this._vectorIdx.push(this._avectors[i]._number);
+    }
+  }
+
+  /**
+   * cstructure로부터 avector를 추출한다.
+   * @param {CStructure} cstructure 
+   */
+  restoreFromLoad(cstructure) {
+    this._avectors = [];
+    for (let i = 0; i < this._vectorIdx.length; i++) {
+      let idx = this._vectorIdx[i];
+      this._avectors.push(cstructure._avectors[idx]);
+    }
+  }
+
+  /**
+   * tvector를 사용하는 avector를 모두 제거한다.
+   * @param {tVector} tvector aVector가 참조하는 tVector
+   * @returns {Boolean} aVector의 정의가 주어진 tVector와 일치하는 경우
+   */
+  removeVectorWithTemplate(tvector) {
+    for (let i = 0; i < this._avectors.length; i++) {
+      if (this._avectors[i]._def == tvector) {
+        this._avectors.splice(i, 1);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * avector를 추가한다.
+   * @param {aVector} avector 추가할 aVector
+   */
+  addVector(avector) {
+    for (let i = 0; i < this._avectors.length; i++) {
+      if (this._avectors[i] === avector) return;
+    }
+    this._avectors.push(avector);
+  }
+
+  /**
+   * avector를 제거한다.
+   * @param {any} avector
+   */
+  removeVector(avector) {
+    const idx = this._avectors.indexOf(avector);
+    if (idx > -1) this._avectors.splice(idx, 1);
+  }
+
+  /**
+   * atom id와 def를 설정한다.
+   * @param {any} atom_id
+   */
+  setAtomID(atom_number) {
+    this._id = atom_number;
+    this._def = AtomDef.GetDefWithNumber(atom_number);
+    this._color = this._def._color.slice();
+  }
+  setAtomNumber(atom_number) {
+    this._id = atom_number;
+    this._def = AtomDef.GetDefWithNumber(atom_number);
+    this._color = this._def._color.slice();
+  }
+
+  /**
+   * symbol에 해당하는 atom으로 데이터를 설정한다.
+   * @param {any} atom_symbol
+   */
+  setAtomWithSymbol(atom_symbol) {
+    let def = AtomDef.GetDefWithID(atom_symbol);
+    this._id = def._atom_number;
+    this._def = def;
+  }
+
+  /**
+   * json으로부터 catom 데이터를 설정한다.
+   * @param {any} atom_json
+   */
+  setFromJSON(atom_json) {
+    this._position = new THREE.Vector3(atom_json._position.x, atom_json._position.y, atom_json.position.z);
+    this._id = atom_json._id;
+    this._idx = atomjson._idx;
+    this._def = atom_json._def;
+    this._type = atom_json._type;
+    this._label = atom_json._label;
+    this._charge = atom_json._charge;
+    this._visible = atom_json._visible;
+    this._avectors = [];
+    for (let i = 0; i < atom_json._avectors.length; ++i) {
+      let v = new Vector3(atom_json._avectors[i]._vector._x, atom_json._avectors[i]._vector._y, atom_json._avectors[i]._vector._z);
+    }
+    this._vectorIdx = atom_json._vectorIdx;
+  }
+
+  /**
+   * atom으로부터 데이터를 설정한다.
+   * @param {CAtom} atom
+   * @returns {CAtom} this
+   */
+  cloneFromAtom(atom) {
+    Object.assign(this, atom);
+    this._position = new Vector3(this._position._x, this._position._y, this._position._z);
+    return this;
+  }
+
+  /**
+   * 벡터 데이터를 모두 삭제한다.
+   * */
+  clearVectors() {
+    this._avectors = [];
+    this._vectorIdx = [];
+  }
+
+  /**
+   * catom을 저장하려는 형태로 변환한다.
+   * @returns {Object} CAtom data
+   * */
+  createData4Save() {
+    let dat = {};
+    dat._id = this._id;
+    // dat._idx = this._idx;
+    dat._def = this._def;
+    dat._type = this._type;
+    dat._label = this._label;
+    dat._charge = this._charge;
+    dat._visible - this._visible;
+    dat._position = this._position;
+    dat._vectorIdx = this._vectorIdx;
+    dat._index4cstructure = this._index4cstructure;
+    dat._occ = this._occ;
+    dat._anisotype = this._anisotype;
+    dat._isotype = this._isotype;
+    dat._su = this._su;
+    dat._anisoU = this._anisoU;
+    dat._anisoBeta = this._anisoBeta;
+    dat._isoU = this._isoU;
+    dat._isoB = this._isoB;
+    dat._color = this._color.slice();
+    dat._avectors = [];
+    for (let i = 0; i < this._avectors.length; ++i) dat._avectors.push(this._avectors[i].createData4Save());
+    return dat;
+  }
+}
 ;// CONCATENATED MODULE: ./CoreCrystal/CBond.js
 
 
@@ -19902,9 +20317,9 @@ class CBond {
    */
   condition(atom1, atom2) {
     let res = false;
-    let adef1 = AtomDef.GetDefWithNumber(this._A1);
-    let adef2 = AtomDef.GetDefWithNumber(this._A2);
-    if (isNaN(atom1._def._id) && atom1._def._id === AtomDef.GetDefWithID(this._A1)._atom_number && isNaN(atom2._def._id) && atom2._def._id === AtomDef.GetDefWithID(this._A2)._atom_number) res = true;else {
+    let adef1 = AtomDef_AtomDef.GetDefWithNumber(this._A1);
+    let adef2 = AtomDef_AtomDef.GetDefWithNumber(this._A2);
+    if (isNaN(atom1._def._id) && atom1._def._id === AtomDef_AtomDef.GetDefWithID(this._A1)._atom_number && isNaN(atom2._def._id) && atom2._def._id === AtomDef_AtomDef.GetDefWithID(this._A2)._atom_number) res = true;else {
       if (adef1 && adef2) {
         if (atom1._def._id === adef1._atom_number && atom2._def._id === adef2._atom_number) res = true;else if (atom1._def._id === adef2._atom_number && atom2._def._id === adef1._atom_number) {
           res = true;
@@ -24618,421 +25033,6 @@ class CStructure {
     this._latticePlaneObj.generateWithPlanes(this._latticePlanes, lpsize);
   }
 }
-;// CONCATENATED MODULE: ./CoreCrystal/iVector.js
-
-
-
-
-var geom1 = new CylinderGeometry(1, 1, 1, 32);
-var geom2 = new ConeGeometry(1, 1, 32);
-
-/**
- * Instanced Vector 클래스
- * */
-class iVector_iVector {
-  /**
-   * 생성자
-   * iAtom과 tVector에 매칭되는 iVector를 생성한다.
-   * @param {any} tvector
-   * @param {any} iatom
-   * @param {any} cs
-   */
-  constructor(tvector, iatom, cs) {
-    this._number = 0;
-    this._iatom = iatom;
-    this._parent = null;
-    this._tvector = tvector;
-    this._number = 0;
-  }
-
-  /**
-   * iVector mesh를 생성한다.
-   * @param {CStructure} cs
-   * @returns {THREE.Mesh} 생성된 iVector Mesh
-   */
-  generateMesh(cs) {
-    let color = new Color();
-    color.fromArray(this._tvector._color, 0);
-    let v1 = new three_module_Vector3();
-    v1.fromArray(this._tvector._vector, 0);
-    v1 = cs._unitcell._axis.transform(v1);
-    let mat = new MeshLambertMaterial({
-      color: color,
-      transparent: false,
-      vertexColors: false
-    });
-    let mesh = new Group();
-    const len = v1.length();
-    let mesh1 = new three_module_Mesh(geom1, mat);
-    mesh1.scale.fromArray([this._tvector._radius, len * 2, this._tvector._radius], 0);
-    mesh.add(mesh1);
-    let mesh2 = new three_module_Mesh(geom2, mat);
-    mesh.add(mesh2);
-    let radius = this._tvector._radius * 3;
-    mesh2.scale.fromArray([radius, radius, radius], 0);
-    mesh2.position.fromArray([0, len, 0], 0);
-    mesh.lookAt(v1);
-    mesh.position.copy(this._iatom._position2);
-    return mesh;
-  }
-
-  /**
-   * 주어진 iVector를 복사한다.
-   * @param {iVector} iVector 복사하려는 iVector
-   * @returns {iVector} this
-   */
-  cloneFromiVector(iVector) {
-    Object.assign(this, iVector);
-    //this._vector = new THREE.Vector3(this._vector.x, this._vector.y, this._vector.z);
-    //this._color = new THREE.Color(this._color.x, this._color.y, this._color.z);
-
-    return this;
-  }
-}
-;// CONCATENATED MODULE: ./CoreCrystal/aVector.js
-
-
-
-
-// tVector를 사용하여 실제 벡터를 정의
-// tvector와 unitcell과 index를 사용하여 정의
-
-/**
- * tVector 클래스를 통해 iVector를 생성하는데 필요한 클래스
- * */
-class aVector {
-  /**
-   * tvector를 지정한다.
-   * @param {tVector} tvector aVector에 대한 정의
-   */
-  constructor(tvector) {
-    this._def = tvector;
-    this._index = -1;
-    this._catom = null;
-  }
-
-  /**
-   * catom을 지정한다.
-   * @param {cAtom} catom
-   */
-  setCAtom(catom) {
-    this._catom = catom;
-    this._unitcellPos = null;
-  }
-
-  /**
-   * vector가 추가될 위치와 인덱스를 지정한다.
-   * @param {Array} opos unitcell 상의 위치
-   * @param {Number} index iAtom index
-   */
-  setiAtomPos(opos, index) {
-    this._index = index;
-    this._unitcellPos = opos;
-  }
-
-  /**
-   * tvector를 지정한다.
-   * @param {tVector} tvector aVector의 정의
-   */
-  setDef(tvector) {
-    this._def = tvector;
-  }
-
-  /**
-   * number를 지정한다.
-   * @param {Number} number
-   */
-  setNumber(number) {
-    this._number = number;
-  }
-
-  /**
-   * unitcell 위치를 지정한다.
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} z
-   */
-  setUnitcellLoc(x, y, z) {
-    this._unitcellPos = [x, y, z];
-  }
-
-  /**
-   * aVector 비교 함수
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} z
-   * @param {Number} index
-   * @returns {Boolean} 일치 여부
-   */
-  isIt(x, y, z, index) {
-    return this._unitcellPos[0] == x && this._unitcellPos[1] == y && this._unitcellPos[2] == z && this._iatom._index == index;
-  }
-
-  /**
-   * ivector를 생성한다.
-   * @param {iAtom} iatom
-   * @param {CStructure} cs
-   * @returns {iVector} 생성된 ivector
-   */
-  generateIVector(iatom, cs) {
-    let iv = new iVector_iVector(this._def, iatom, cs);
-    return iv;
-  }
-
-  /**
-   * aVector를 통해 iVector를 생성한다.
-   * @returns {iVector} 생성된 ivector
-   * */
-  generate() {
-    let iv = new iVector_iVector(this._def, this._color);
-    return iv;
-  }
-
-  /**
-   * clone method
-   * @param {CAtom} catom
-   * @returns {CAtom} cloned catom
-   */
-  clone(catom) {
-    let clone = new aVector(this._def.clone());
-    clone._catom = catom;
-    clone._index = this._index;
-    if (this._unitcellPos) clone._unitcellPos = this._unitcellPos.clone();else clone._unitcellPos = null;
-    clone._number = this._number;
-    return clone;
-  }
-
-  /**
-   * aVector를 저장하려는 형태로 반환한다.
-   * @returns {Object} aVector 데이터
-   * */
-  createData4Save() {
-    let dat = {};
-    dat._def = this._def;
-    dat._index = this._index;
-    dat._unitcellPos = this._unitcellPos;
-    return dat;
-  }
-}
-;// CONCATENATED MODULE: ./CoreCrystal/CAtom.js
-
-
-
-
-
-/**
- * Crystal Atom 클래스
- * */
-class CAtom {
-  /**
-   * 생성자
-   * */
-  constructor() {
-    this._position = new Vector3();
-    this._id = 0; // id
-    this._idx = -1; // 테이블 상에서 구분하기 위한 id
-    this._index4cstructure = -1; // cstructure의 index
-    this._def = null;
-    this._type = 0;
-    this._label = "";
-    this._charge = 0;
-    this._visible = true;
-    this._avectors = [];
-    this._vectorIdx = [];
-    this._occ = null;
-    this._anisotype = null;
-    this._isotype = null;
-    this._su = [];
-    this._anisoU = [];
-    this._anisoBeta = [];
-    this._isoU = null;
-    this._isoB = null;
-    this._color = [1, 1, 1];
-  }
-
-  /**
-   * clone method
-   * @returns {CAtom} cloned catom
-   * */
-  clone() {
-    this.prepare4Save();
-    let clone = new CAtom();
-    clone._position = this._position.clone();
-    clone._id = this._id;
-    clone._idx = this._idx;
-    clone._def = this._def;
-    clone._type = this._type;
-    clone._label = this._label;
-    clone._charge = this._charge;
-    clone._visible = this._visible;
-    clone._vectorIdx = this._vectorIdx;
-    clone._index4cstructure = this._index4cstructure;
-    clone._occ = this._occ;
-    clone._anisotype = this._anisotype;
-    clone._isotype = this._isotype;
-    clone._su = this._su;
-    clone._anisoU = this._anisoU;
-    clone._anisoBeta = this._anisoBeta;
-    clone._isoU = this._isoU;
-    clone._isoB = this._isoB;
-    clone._color = this._color.slice();
-    for (let i = 0; i < this._avectors.length; i++) {
-      clone._avectors.push(this._avectors[i].clone(this));
-    }
-    return clone;
-  }
-
-  /**
-   * 데이터 저장을 위한 선행 과정
-   * */
-  prepare4Save() {
-    this._vectorIdx = [];
-    for (let i = 0; i < this._avectors.length; i++) {
-      this._vectorIdx.push(this._avectors[i]._number);
-    }
-  }
-
-  /**
-   * cstructure로부터 avector를 추출한다.
-   * @param {CStructure} cstructure 
-   */
-  restoreFromLoad(cstructure) {
-    this._avectors = [];
-    for (let i = 0; i < this._vectorIdx.length; i++) {
-      let idx = this._vectorIdx[i];
-      this._avectors.push(cstructure._avectors[idx]);
-    }
-  }
-
-  /**
-   * tvector를 사용하는 avector를 모두 제거한다.
-   * @param {tVector} tvector aVector가 참조하는 tVector
-   * @returns {Boolean} aVector의 정의가 주어진 tVector와 일치하는 경우
-   */
-  removeVectorWithTemplate(tvector) {
-    for (let i = 0; i < this._avectors.length; i++) {
-      if (this._avectors[i]._def == tvector) {
-        this._avectors.splice(i, 1);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * avector를 추가한다.
-   * @param {aVector} avector 추가할 aVector
-   */
-  addVector(avector) {
-    for (let i = 0; i < this._avectors.length; i++) {
-      if (this._avectors[i] === avector) return;
-    }
-    this._avectors.push(avector);
-  }
-
-  /**
-   * avector를 제거한다.
-   * @param {any} avector
-   */
-  removeVector(avector) {
-    const idx = this._avectors.indexOf(avector);
-    if (idx > -1) this._avectors.splice(idx, 1);
-  }
-
-  /**
-   * atom id와 def를 설정한다.
-   * @param {any} atom_id
-   */
-  setAtomID(atom_number) {
-    this._id = atom_number;
-    this._def = AtomDef_AtomDef.GetDefWithNumber(atom_number);
-    this._color = this._def._color.slice();
-  }
-  setAtomNumber(atom_number) {
-    this._id = atom_number;
-    this._def = AtomDef_AtomDef.GetDefWithNumber(atom_number);
-    this._color = this._def._color.slice();
-  }
-
-  /**
-   * symbol에 해당하는 atom으로 데이터를 설정한다.
-   * @param {any} atom_symbol
-   */
-  setAtomWithSymbol(atom_symbol) {
-    let def = AtomDef_AtomDef.GetDefWithID(atom_symbol);
-    this._id = def._atom_number;
-    this._def = def;
-  }
-
-  /**
-   * json으로부터 catom 데이터를 설정한다.
-   * @param {any} atom_json
-   */
-  setFromJSON(atom_json) {
-    this._position = new THREE.Vector3(atom_json._position.x, atom_json._position.y, atom_json.position.z);
-    this._id = atom_json._id;
-    this._idx = atomjson._idx;
-    this._def = atom_json._def;
-    this._type = atom_json._type;
-    this._label = atom_json._label;
-    this._charge = atom_json._charge;
-    this._visible = atom_json._visible;
-    this._avectors = [];
-    for (let i = 0; i < atom_json._avectors.length; ++i) {
-      let v = new Vector3(atom_json._avectors[i]._vector._x, atom_json._avectors[i]._vector._y, atom_json._avectors[i]._vector._z);
-    }
-    this._vectorIdx = atom_json._vectorIdx;
-  }
-
-  /**
-   * atom으로부터 데이터를 설정한다.
-   * @param {CAtom} atom
-   * @returns {CAtom} this
-   */
-  cloneFromAtom(atom) {
-    Object.assign(this, atom);
-    this._position = new Vector3(this._position._x, this._position._y, this._position._z);
-    return this;
-  }
-
-  /**
-   * 벡터 데이터를 모두 삭제한다.
-   * */
-  clearVectors() {
-    this._avectors = [];
-    this._vectorIdx = [];
-  }
-
-  /**
-   * catom을 저장하려는 형태로 변환한다.
-   * @returns {Object} CAtom data
-   * */
-  createData4Save() {
-    let dat = {};
-    dat._id = this._id;
-    // dat._idx = this._idx;
-    dat._def = this._def;
-    dat._type = this._type;
-    dat._label = this._label;
-    dat._charge = this._charge;
-    dat._visible - this._visible;
-    dat._position = this._position;
-    dat._vectorIdx = this._vectorIdx;
-    dat._index4cstructure = this._index4cstructure;
-    dat._occ = this._occ;
-    dat._anisotype = this._anisotype;
-    dat._isotype = this._isotype;
-    dat._su = this._su;
-    dat._anisoU = this._anisoU;
-    dat._anisoBeta = this._anisoBeta;
-    dat._isoU = this._isoU;
-    dat._isoB = this._isoB;
-    dat._color = this._color.slice();
-    dat._avectors = [];
-    for (let i = 0; i < this._avectors.length; ++i) dat._avectors.push(this._avectors[i].createData4Save());
-    return dat;
-  }
-}
 ;// CONCATENATED MODULE: ./CoreCrystal/BondData.js
 
 
@@ -25065,10 +25065,10 @@ class BondData {
       let num = str.substring(0, 3);
       let a1 = str.substring(3, 9);
       let aa1 = a1.replace(/ /g, "");
-      obj._a1 = AtomDef_AtomDef.GetDefWithID(aa1);
+      obj._a1 = AtomDef.GetDefWithID(aa1);
       let a2 = str.substring(9, 15);
       let aa2 = a2.replace(/ /g, "");
-      obj._a2 = AtomDef_AtomDef.GetDefWithID(aa2);
+      obj._a2 = AtomDef.GetDefWithID(aa2);
       obj._min = str.substring(15, 26) * 1;
       obj._max = str.substring(26, 37) * 1;
       _data.push(obj);
@@ -25134,7 +25134,7 @@ function parseType(value) {
   let newValue = Number(value);
   if (isNaN(newValue)) {
     newValue = value;
-    if (value[0] === "\'") {
+    if (value[0] === "'") {
       newValue = value.slice(1, value.length - 1);
     }
   }
@@ -25190,12 +25190,12 @@ function loopReader(strings = [new String()], obj) {
   for (; curser < strings.length; curser++) {
     for (let i = 0; i < keys.length; i++) {
       let v = new String();
-      if (strings[curser][0] !== '\'') {
+      if (strings[curser][0] !== "'") {
         v = strings[curser].slice(0, strings[curser].indexOf(" ") === -1 ? strings[curser].length : strings[curser].indexOf(" "));
         strings[curser] = strings[curser].slice(strings[curser].indexOf(" ")).trim();
       } else {
-        v = strings[curser].slice(0, strings[curser].indexOf("\'", 1) + 1);
-        strings[curser] = strings[curser].slice(strings[curser].indexOf("\'", 1) + 1).trim();
+        v = strings[curser].slice(0, strings[curser].indexOf("'", 1) + 1);
+        strings[curser] = strings[curser].slice(strings[curser].indexOf("'", 1) + 1).trim();
       }
       obj[keys[i]].push(parseType(v));
     }
@@ -25311,7 +25311,8 @@ class fileCIF {
   static toString(cs) {
     let str = "";
     let sbuf = "";
-    sbuf = "'" + cs._name + "'\n";
+    sbuf = cs._name + "\n";
+    // sbuf = "'"+cs._name + "'\n";
     str += sbuf + "\n";
     sbuf = "_cell_length_a   " + cs._unitcell._axis._la;
     str += sbuf + "\n";
@@ -28704,7 +28705,7 @@ class crystalEditBondDialog {
     // 현재 존재하는 원자 이름들을 가져와 배열에 넣기
     let atomNameList = [];
     for (let i = 0; i < atoms.length; ++i) {
-      let atomName = AtomDef.GetDefWithNumber(atoms[i]._id)._atom_id;
+      let atomName = AtomDef_AtomDef.GetDefWithNumber(atoms[i]._id)._atom_id;
       atomNameList.push(atomName);
     }
 
@@ -30663,7 +30664,7 @@ class crystalEditDataDialog {
    * @param {CAtom} catom catom
    */
   UpdateSelectedAtomTableRow(selectedAtomRow, catom) {
-    $(selectedAtomRow).find("#" + this._name + "_atom_name").html(AtomDef.GetDefWithNumber(catom._id)._atom_id);
+    $(selectedAtomRow).find("#" + this._name + "_atom_name").html(AtomDef_AtomDef.GetDefWithNumber(catom._id)._atom_id);
     $(selectedAtomRow).find("#" + this._name + "_label_name").html(catom._label);
     $(selectedAtomRow).find("#" + this._name + "_pos_x").html(catom._position._x);
     $(selectedAtomRow).find("#" + this._name + "_pos_y").html(catom._position._y);
@@ -30737,7 +30738,7 @@ class crystalEditDataDialog {
    * @param {CAtom} catom 
    */
   SetInputByCAtom(catom) {
-    $(this._input_symbol).val(AtomDef.GetDefWithNumber(catom._id)._atom_id);
+    $(this._input_symbol).val(AtomDef_AtomDef.GetDefWithNumber(catom._id)._atom_id);
     $(this._input_label).val(catom._label);
     $(this._input_pos_x).val(catom._position._x);
     $(this._input_pos_y).val(catom._position._y);
@@ -30818,7 +30819,7 @@ class crystalEditDataDialog {
     this._variable["abc"] = [parseFloat($(crystalEditDataDialog.I._input_alpha).val()), parseFloat($(crystalEditDataDialog.I._input_beta).val()), parseFloat($(crystalEditDataDialog.I._input_gamma).val())];
     this._variable["atom"] = $("#" + this._name + "_atom_symbol").val();
     if (this._variable["atom"] === "") this._variable["atom"] = "H";
-    this._variable["id"] = AtomDef.GetDefWithID(this._variable["atom"])._atom_number;
+    this._variable["id"] = AtomDef_AtomDef.GetDefWithID(this._variable["atom"])._atom_number;
     this._variable["label"] = $(this._input_label).val();
     this._variable["x"] = parseFloat($(this._input_pos_x).val());
     this._variable["y"] = parseFloat($(this._input_pos_y).val());
@@ -30841,7 +30842,7 @@ class crystalEditDataDialog {
     this._variable["shapeColor"] = this._selectedShapeColor;
     // this._variable["alpha"] = parseFloat($(this._input_alpha_background).val());
 
-    if ($(this._input_catom_color).val()) this._variable["catomColor"] = crystalVariable.HexStringtoColor($(this._input_catom_color).val());else this._variable["catomColor"] = AtomDef.GetDefWithNumber(1)._color;
+    if ($(this._input_catom_color).val()) this._variable["catomColor"] = crystalVariable.HexStringtoColor($(this._input_catom_color).val());else this._variable["catomColor"] = AtomDef_AtomDef.GetDefWithNumber(1)._color;
     let anisoStr = $(this._selectAnisotropic).val();
     let isoStr = $(this._selectIsotropic).val();
     switch (anisoStr) {
@@ -30899,7 +30900,7 @@ class crystalEditDataDialog {
    */
   UpdateTableByCS(cs) {
     for (let i = 0; i < cs._atoms.length; ++i) {
-      this.AddAtomToTable(cs.assignAtomIdx(), cs._atoms[i]._id, AtomDef.GetDefWithNumber(cs._atoms[i]._id)._id, cs._atoms[i]._label, cs._atoms[i]._position._x, cs._atoms[i]._position._y, cs._atoms[i]._position._z, 0, 0);
+      this.AddAtomToTable(cs.assignAtomIdx(), cs._atoms[i]._id, AtomDef_AtomDef.GetDefWithNumber(cs._atoms[i]._id)._id, cs._atoms[i]._label, cs._atoms[i]._position._x, cs._atoms[i]._position._y, cs._atoms[i]._position._z, 0, 0);
     }
     for (let i = 0; i < cs._crystalPlanes.length; ++i) {
       this.AddShapeToTable(cs.assignShapeId(), cs._crystalPlanes[i]._h, cs._crystalPlanes[i]._k, cs._crystalPlanes[i]._l, cs._crystalPlanes[i]._d, cs._crystalPlanes[i]._color, 100, true);
@@ -31497,7 +31498,7 @@ class crystalEditVectorsCrystalGraphicSitesTab {
     this._crystal_graphic_site_table.clearAll();
     for (let i = 0; i < this._app._csManager._cs._atoms.length; ++i) {
       let atom = this._app._csManager._cs._atoms[i];
-      this.AddCrystalloGraphicToTable(atom._idx, AtomDef_AtomDef.GetDefWithNumber(atom._id)._id, atom._label, atom._position._x, atom._position._y, atom._position._z);
+      this.AddCrystalloGraphicToTable(atom._idx, AtomDef.GetDefWithNumber(atom._id)._id, atom._label, atom._position._x, atom._position._y, atom._position._z);
     }
   }
 
@@ -31561,7 +31562,7 @@ class crystalEditVectorsIndividualAtomTab {
     this._individual_atom_table.clearAll();
     for (let i = 0; i < this._app._csManager._cs._iatomList.length; ++i) {
       let iatom = this._app._csManager._cs._iatomList[i];
-      if (iatom._visible) this.AddIndividualAtomToTable(i, AtomDef_AtomDef.GetDefWithNumber(iatom._def._id)._id, iatom._def._label, iatom._position.x, iatom._position.y, iatom._position.z);
+      if (iatom._visible) this.AddIndividualAtomToTable(i, AtomDef.GetDefWithNumber(iatom._def._id)._id, iatom._def._label, iatom._position.x, iatom._position.y, iatom._position.z);
     }
   }
 
@@ -32634,8 +32635,8 @@ class crystalPeriodicDialog {
       ihtml[idx] = "<div class='pTableSpace' id='" + name + "_ptee_" + i + "'></div>";
       idx++;
     }
-    for (var ai in AtomDef_AtomDef._atomDefList) {
-      var aDef = AtomDef_AtomDef._atomDefList[ai];
+    for (var ai in AtomDef._atomDefList) {
+      var aDef = AtomDef._atomDefList[ai];
       if (aDef._group === 0 || aDef._period === 0) continue;
       if (aDef._atom_number) {
         var idx = aDef._group - 1 + 18 * (aDef._period - 1);
@@ -32664,7 +32665,7 @@ class crystalPeriodicDialog {
             if (atom_id) {
               rayLog(3, "[DlgPeriodicTable] clicked atom " + atom_id);
               $('#' + crystalPeriodicDialog.I._app._dlgEditData._name + "_atom_symbol").val(atom_id);
-              let color = AtomDef_AtomDef.GetDefWithID(atom_id.toUpperCase())._color;
+              let color = AtomDef.GetDefWithID(atom_id.toUpperCase())._color;
               $('#' + crystalPeriodicDialog.I._app._dlgEditData._name + "_catom_color_picker").val(crystalVariable.HTMLColorRGB(color));
               $('#' + crystalPeriodicDialog.I._app._dlgEditData._name + "_catom_color_picker").css("background-color", "rgb(" + color[0] * 255 + "," + color[1] * 255 + "," + color[2] * 255 + ")");
               // tr 갱신하기
@@ -33442,12 +33443,12 @@ class crystalPropertyObject {
      */
     let atomDict = {};
     for (let atom of csManager._cs._atoms) {
-      let atomDef = AtomDef.GetDefWithNumber(atom._id);
+      let atomDef = AtomDef_AtomDef.GetDefWithNumber(atom._id);
       if (!atomDict[atomDef._atom_number]) atomDict[atomDef._atom_number] = [];
       atomDict[atomDef._atom_number].push(atom);
     }
     for (let key in atomDict) {
-      let atomDef = AtomDef.GetDefWithNumber(key);
+      let atomDef = AtomDef_AtomDef.GetDefWithNumber(key);
       let visibleChk = true;
       for (let atom of atomDict[key]) {
         if (atom._visible === false) {
@@ -33468,7 +33469,7 @@ class crystalPropertyObject {
       $("#" + this._name + "_" + atomDef._id + "_object_data_visible_parent").prop("checked", visibleChk);
       for (let atom of atomDict[key]) {
         // 특정 atom임을 구분할 수 있는 정보가 필요하다.
-        let atomDef = AtomDef.GetDefWithNumber(atom._id);
+        let atomDef = AtomDef_AtomDef.GetDefWithNumber(atom._id);
         let childHTML = "\
                 	<tr class='sortable' id='" + this._name + "_" + atomDef._id + "_object_data_child" + "_" + atom._idx + "' style='display:none'>\
                 	<td class='position cryUI_Normal_Td' style='display:none'></td>\
@@ -34220,7 +34221,7 @@ class crystalStructureManager {
     this._app._dlgEditData._atomTable.clearAll();
     for (let i = 0; i < this._cs._atoms.length; ++i) {
       let atom = this._cs._atoms[i];
-      this._app._dlgEditData.AddAtomToTable(atom._idx, atom._id, AtomDef.GetDefWithNumber(atom._id)._atom_id, atom._label, atom._position._x, atom._position._y, atom._position._z, 0, 0);
+      this._app._dlgEditData.AddAtomToTable(atom._idx, atom._id, AtomDef_AtomDef.GetDefWithNumber(atom._id)._atom_id, atom._label, atom._position._x, atom._position._y, atom._position._z, 0, 0);
     }
 
     // bond table
@@ -34745,7 +34746,7 @@ class crystalTopMenu {
     crystalTopMenu.I = this;
 
     // File 최상위 메뉴 버튼
-    this._topFile = document.getElementById(name + "_topMenu_file");
+    // this._topFile = document.getElementById(name + "_topMenu_file");
 
     // File 서브 메뉴 아이템
     this._menuFile = document.getElementById(name + "_subMenu_file");
@@ -34791,33 +34792,37 @@ class crystalTopMenu {
         crystalTopMenu.I.HandleMenuItem(item);
       }
     });
-    $(this._topFile).on("mouseenter", function (event) {
+
+    // $(this._topFile).on("mouseenter", function (event) {
+    //   crystalTopMenu.I.HandleMouseEnterTopMenu(0);
+    // });
+
+    $(this._topEdit).on("mouseenter", function (event) {
       crystalTopMenu.I.HandleMouseEnterTopMenu(0);
     });
-    $(this._topEdit).on("mouseenter", function (event) {
+    $(this._topData).on("mouseenter", function (event) {
       crystalTopMenu.I.HandleMouseEnterTopMenu(1);
     });
-    $(this._topData).on("mouseenter", function (event) {
+    $(this._topView).on("mouseenter", function (event) {
       crystalTopMenu.I.HandleMouseEnterTopMenu(2);
     });
-    $(this._topView).on("mouseenter", function (event) {
-      crystalTopMenu.I.HandleMouseEnterTopMenu(3);
-    });
-    $(this._topFile).on("click", function (event) {
+
+    // $(this._topFile).on("click", function (event) {
+    //   event.preventDefault();
+    //   crystalTopMenu.I.HandleClickTopMenu(0);
+    // });
+
+    $(this._topEdit).on("click", function (event) {
       event.preventDefault();
       crystalTopMenu.I.HandleClickTopMenu(0);
     });
-    $(this._topEdit).on("click", function (event) {
+    $(this._topData).on("click", function (event) {
       event.preventDefault();
       crystalTopMenu.I.HandleClickTopMenu(1);
     });
-    $(this._topData).on("click", function (event) {
-      event.preventDefault();
-      crystalTopMenu.I.HandleClickTopMenu(2);
-    });
     $(this._topView).on("click", function (event) {
       event.preventDefault();
-      crystalTopMenu.I.HandleClickTopMenu(3);
+      crystalTopMenu.I.HandleClickTopMenu(2);
     });
     window.addEventListener("click", function (event) {
       if (!crystalTopMenu.I._onClick) crystalTopMenu.I.UpdateSubMenus(-1);
@@ -34835,14 +34840,24 @@ class crystalTopMenu {
   _appElementHTML(name) {
     let ihtml = [];
     let idx = 0;
-    ihtml[idx] = "<div class='cryUI_TopMenuItem' id='" + name + "_topMenu_file'>File</div>";
-    idx++;
+
+    // ihtml[idx] =
+    //   "<div class='cryUI_TopMenuItem' id='" +
+    //   name +
+    //   "_topMenu_file'>File</div>";
+    // idx++;
 
     // File 서브 메뉴
-    ihtml[idx] = "<ul class='cryUI_TopMenuSubMenu' id='" + name + "_subMenu_file' style='display:none'>";
-    idx++;
-    ihtml[idx] = "<li id='" + name + "_menu_file_new' value='file_new'><div>New</div></li>";
-    idx++;
+    // ihtml[idx] =
+    //   "<ul class='cryUI_TopMenuSubMenu' id='" +
+    //   name +
+    //   "_subMenu_file' style='display:none'>";
+    // idx++;
+    // ihtml[idx] =
+    //   "<li id='" +
+    //   name +
+    //   "_menu_file_new' value='file_new'><div>New</div></li>";
+    // idx++;
     /*        
         ihtml[idx] = "<li id='" + name + "_menu_file_open_cif' value='file_open_cif'><div>Open CIF</div></li>";
         idx++;
@@ -34858,28 +34873,46 @@ class crystalTopMenu {
     //   "_menu_file_save' value='file_save'><div>Save KCS</div></li>"
     // idx++
 
-    ihtml[idx] = "<li id='" + name + "_menu_file_import'><div>Import</div>";
-    idx++;
-    ihtml[idx] = "<ul><li value='file_import_cif'><div><span id='" + name + "_menu_file_import_cif'></span>Import CIF</div></li>";
-    idx++;
-    ihtml[idx] = "<li value='file_import_mol'><div><span id='" + name + "_menu_file_import_mol'></span>Import MOL</div></li>";
-    idx++;
-    ihtml[idx] = "</ul></li>";
-    idx++;
-    ihtml[idx] = "<li id='" + name + "_menu_file_export'><div>Export</div>";
-    idx++;
-    ihtml[idx] = "<ul><li value='file_export_cif'><div><span id='" + name + "_menu_file_export_cif'></span>Export CIF</div></li>";
-    idx++;
-    ihtml[idx] = "<li value='file_export_mol'><div><span id='" + name + "_menu_file_export_mol'></span>Export MOL</div></li>";
-    idx++;
-    ihtml[idx] = "<li value='file_export_obj'><div><span id='" + name + "_menu_file_export_obj'></span>Export OBJ</div></li>";
-    idx++;
-    ihtml[idx] = "</ul></li>";
-    idx++;
-    ihtml[idx] = "<li id='" + name + "_menu_file_save_render_image' value='file_save_render_image'><div>Save Render Image</div></li>";
-    idx++;
-    ihtml[idx] = "</ul>";
-    idx++;
+    // ihtml[idx] = "<li id='" + name + "_menu_file_import'><div>Import</div>";
+    // idx++;
+    // ihtml[idx] =
+    //   "<ul><li value='file_import_cif'><div><span id='" +
+    //   name +
+    //   "_menu_file_import_cif'></span>Import CIF</div></li>";
+    // idx++;
+    // ihtml[idx] =
+    //   "<li value='file_import_mol'><div><span id='" +
+    //   name +
+    //   "_menu_file_import_mol'></span>Import MOL</div></li>";
+    // idx++;
+    // ihtml[idx] = "</ul></li>";
+    // idx++;
+    // ihtml[idx] = "<li id='" + name + "_menu_file_export'><div>Export</div>";
+    // idx++;
+    // ihtml[idx] =
+    //   "<ul><li value='file_export_cif'><div><span id='" +
+    //   name +
+    //   "_menu_file_export_cif'></span>Export CIF</div></li>";
+    // idx++;
+    // ihtml[idx] =
+    //   "<li value='file_export_mol'><div><span id='" +
+    //   name +
+    //   "_menu_file_export_mol'></span>Export MOL</div></li>";
+    // idx++;
+    // ihtml[idx] =
+    //   "<li value='file_export_obj'><div><span id='" +
+    //   name +
+    //   "_menu_file_export_obj'></span>Export OBJ</div></li>";
+    // idx++;
+    // ihtml[idx] = "</ul></li>";
+    // idx++;
+    // ihtml[idx] =
+    //   "<li id='" +
+    //   name +
+    //   "_menu_file_save_render_image' value='file_save_render_image'><div>Save Render Image</div></li>";
+    // idx++;
+    // ihtml[idx] = "</ul>";
+    // idx++;
 
     // Edit 서브 메뉴
     ihtml[idx] = "<div class='cryUI_TopMenuItem' id='" + name + "_topMenu_edit'>Edit</div>";
@@ -34947,7 +34980,7 @@ class crystalTopMenu {
    * Menu 위치를 계산한다.
    * */
   CalcSubMenuPos() {
-    this._menuFile.style.left = $(this._topFile).offset().left + "px";
+    // this._menuFile.style.left = $(this._topFile).offset().left + "px";
     this._menuEdit.style.left = $(this._topEdit).offset().left + "px";
     this._menuData.style.left = $(this._topData).offset().left + "px";
     this._menuView.style.left = $(this._topView).offset().left + "px";
@@ -35025,10 +35058,10 @@ class crystalTopMenu {
    * @param {Number} idx 메뉴 인덱스
    */
   UpdateSubMenus(idx) {
-    this._menuFile.style.display = idx === 0 ? "" : "none";
-    this._menuEdit.style.display = idx === 1 ? "" : "none";
-    this._menuData.style.display = idx === 2 ? "" : "none";
-    this._menuView.style.display = idx === 3 ? "" : "none";
+    // this._menuFile.style.display = idx === 0 ? "" : "none";
+    this._menuEdit.style.display = idx === 0 ? "" : "none";
+    this._menuData.style.display = idx === 1 ? "" : "none";
+    this._menuView.style.display = idx === 2 ? "" : "none";
     this._onMode = idx >= 0;
   }
 
@@ -38137,6 +38170,9 @@ class crystalEditor {
     };
     fileReader.readAsText(file);
   }
+  GetCIFString() {
+    return Loader_Loader.saveFile("cif", this._csManager._cs);
+  }
   ExportCIF(filename, cs) {
     let data = Loader_Loader.saveFile("cif", cs);
     let blob = new Blob([data], {
@@ -38152,9 +38188,43 @@ class crystalEditor {
   }
   SaveAsServer() {
     let cs = this._csManager._cs;
-    const data = Loader_Loader.saveFile("mol", cs);
+    const data = Loader_Loader.saveFile("cif", cs);
     this._bModified = false;
     return data;
+  }
+  async LoadCifFile(data) {
+    await crystalEditor.I._dlgProgress.ShowDialog();
+    await crystalEditor.I._dlgProgress.SetMsg("Import CS from CIF File...");
+    await crystalEditor.I._dlgProgress.SetProgress(0);
+    crystalEditor.I._dlgNewConfirm.OnApply();
+    Loader_Loader.loadFile("cif", data, crystalEditor.I._csManager._cs);
+    await crystalEditor.I._dlgProgress.SetProgress(0.1);
+    crystalEditor.I._3dRender.Clear();
+    await crystalEditor.I._dlgProgress.SetProgress(0.2);
+    crystalEditor.I._csManager._cs.generate();
+    await crystalEditor.I._dlgProgress.SetProgress(0.6);
+    crystalEditor.I.UpdateStructureProperty();
+    crystalEditor.I.UpdateRenderOptions();
+    await crystalEditor.I._dlgProgress.SetProgress(0.7);
+    crystalEditor.I._dlgEditData.UpdateTableByCS(crystalEditor.I._csManager._cs);
+    crystalEditor.I._dlgEditData.UpdateUnitcellByCS(crystalEditor.I._csManager._cs);
+    crystalEditor.I._dlgEditBond.UpdateTableByCS(crystalEditor.I._csManager._cs);
+    crystalEditor.I._dlgEditData.UpdateCrystalColor();
+    crystalEditor.I._dlgEditLatticePlane.UpdateTableByCS(crystalEditor.I._csManager._cs);
+    crystalEditor.I._dlgEditBond.UpdateTable();
+    crystalEditor.I._dlgBoundarySetting.UpdateBoundary();
+    crystalEditor.I._property.UpdateUI();
+    await crystalEditor.I._dlgProgress.SetProgress(0.8);
+    crystalEditor.I._dlgEditVectors.UpdateTable();
+    crystalEditor.I._dlgEditVectors.RestoreAddedVectorFromCS();
+    await crystalEditor.I._dlgProgress.SetProgress(0.9);
+    crystalEditor.I._3dRender._renderer._scene.children.pop();
+    crystalEditor.I._3dRender._renderer._scene.add(crystalEditor.I._csManager._cs._groupMesh);
+    crystalEditor.I._3dRender._renderer.autofitCameraObjList([crystalEditor.I._csManager._cs.getMesh()], 100);
+    await crystalEditor.I._dlgProgress.SetProgress(1);
+    crystalEditor.I._dlgProgress.CloseDialog();
+    crystalEditor.I._bModified = true;
+    crystalEditor.I._csManager.ClearUndo();
   }
   async LoadMolFile(data) {
     await crystalEditor.I._dlgProgress.ShowDialog();
@@ -38237,7 +38307,7 @@ class crystalEditor {
     let res = crystalVariable.parse(txt);
     for (let i = 0; i < res.length; ++i) {
       let atomTxt = res[i];
-      let id = AtomDef_AtomDef.GetDefWithID(atomTxt.atom)._atom_number;
+      let id = AtomDef.GetDefWithID(atomTxt.atom)._atom_number;
       let atom = crystalEditor.I._dlgEditData.createAtom(crystalEditor.I._csManager._cs.assignAtomIdx(), id, "", atomTxt.a, atomTxt.b, atomTxt.c);
       crystalEditDataDialog.I._app._csManager._cs.addAtom(atom);
       crystalEditDataDialog.I.AddAtomToTable(atom._idx, id, atomTxt.atom, "", atomTxt.a, atomTxt.b, atomTxt.c, atomTxt.u, 0);
@@ -38346,7 +38416,6 @@ class crystalEditor {
 ;// CONCATENATED MODULE: ./CrystalEditor/run.js
 
 
-
 const SVR_LOG_MODE = 4;
 rayLogSetMode(SVR_LOG_MODE);
 const dap = document.getElementById("cryapp");
@@ -38360,6 +38429,18 @@ window.crystalEditor = {
   },
   LoadMolFile: data => {
     cryApp.LoadMolFile(data);
+  },
+  LoadCifFile: data => {
+    cryApp.LoadCifFile(data);
+  },
+  GetCifString: () => {
+    return cryApp.GetCIFString();
+  },
+  ExportCifFile: () => {
+    cryApp.MenuExportCIF();
+  },
+  ImportCifFile: () => {
+    cryApp.MenuImportCIF();
   }
 };
 /******/ })()

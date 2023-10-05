@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 
-import { loadMolFile } from "@/lib/cristalEditor"
+import { loadCifFile } from "@/lib/cristalEditor"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -37,7 +37,7 @@ export function PresetSelector({ ...props }) {
   const [selectedInputfile, setSelectedInputfile] = useState<Inputfile>()
 
   useEffect(() => {
-    fetch("/api/input?exe=mol")
+    fetch("/api/input?exe=cif")
       .then((res) => res.json())
       .then((data) => {
         setInputfileRes(data)
@@ -51,7 +51,7 @@ export function PresetSelector({ ...props }) {
         .then((data) => {
           console.log(data)
           if (data?.ok) {
-            loadMolFile(data.content)
+            loadCifFile(data.content)
           }
         })
     }

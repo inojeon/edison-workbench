@@ -37,7 +37,7 @@ export default function EnterInputParameter({
         })
     }
   }, [])
-  // console.log(inputSchema)
+  console.log(inputSchema)
 
   return (
     <Card>
