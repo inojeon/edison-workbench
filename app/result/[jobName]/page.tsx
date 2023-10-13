@@ -28,11 +28,9 @@ export default function IndexPage() {
   const jobName = usePathname().split("/")[2]
   const { data, error, isLoading } = useSWR(
     `/api/detailjob/${jobName}`,
-    fetcher,
-    { refreshInterval: 2000 }
+    fetcher
+    // { refreshInterval: 2000 }
   )
-
-  console.log(seletedResultFile)
 
   return (
     <section className="container mt-4">

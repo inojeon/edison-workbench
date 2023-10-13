@@ -43,6 +43,7 @@ export default function CreateNewJob() {
       inputParameter,
     }))
   }
+  console.log(jobDetail)
   const submitJob = () => {
     fetch(`/api/jobs`, {
       method: "POST",

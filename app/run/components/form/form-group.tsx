@@ -76,35 +76,3 @@ const FormGroup = ({ ...props }) => {
 }
 
 export default FormGroup
-
-interface FormGroupProp {
-  name: string
-  inputObject: JsonObjectSchema
-  control: Control<FieldValues>
-  // control: Control<TFieldValues extends FieldValues = FieldValues, TContex >
-}
-
-function FormGroup22({ name, inputObject, control }: FormGroupProp) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{name}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <FormField
-          control={control}
-          name="SETUP.job_type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>SETUP.path</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </CardContent>
-    </Card>
-  )
-}

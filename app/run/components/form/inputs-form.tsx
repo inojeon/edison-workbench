@@ -22,18 +22,24 @@ interface InputsFormProps {
 }
 
 const getRootObjectProperties = (jsonSchema: JSONSchema4) => {
-  let result = []
+  let results = []
   if (jsonSchema.properties) {
     for (const [key, value] of Object.entries(jsonSchema.properties)) {
       if (value.type == "object") {
-        result.push({
+        results.push({
           name: key,
           properties: value,
         })
       }
     }
   }
-  return result
+
+  for (const result of results) {
+    console.log(result)
+  }
+
+  console.log(results)
+  return results
 }
 
 export default function InputsForm({

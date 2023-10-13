@@ -7,17 +7,17 @@ export interface SciApp {
 export const sciApps: SciApp[] = [
   {
     id: "qe_test",
-    name: "Quantum Espresso",
+    name: "Quantum Espresso - bandgap",
     type: "single",
   },
   {
-    id: "qe_test_mpi",
-    name: "Quantum Espresso - MPI",
-    type: "parallel",
+    id: "qe_dos",
+    name: "Quantum Espresso - dos",
+    type: "single",
   },
   {
     id: "siesta",
-    name: "SIESTA",
+    name: "SIESTA(not yet)",
     type: "single",
   },
 ]
