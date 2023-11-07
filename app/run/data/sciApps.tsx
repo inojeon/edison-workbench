@@ -6,7 +6,7 @@ export interface SciApp {
 
 export const sciApps: SciApp[] = [
   {
-    id: "qe_test",
+    id: "qe_band",
     name: "Quantum Espresso - bandgap",
     type: "single",
   },
